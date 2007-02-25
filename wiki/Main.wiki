@@ -1,4 +1,4 @@
-#summary Sound Editor library for !ActionScript 3.0
+#summary Sound Editor library for ActionScript 3.0
 
 = Introduction =
 
