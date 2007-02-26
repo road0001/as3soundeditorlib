@@ -1,4 +1,4 @@
-package com.audeto.as3soundeditorlib.utils
+package com.tobydietrich.soundeditor.utils
 {
    import flash.text.TextField;
    import flash.text.TextFormat;

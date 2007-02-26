@@ -1,4 +1,4 @@
-package com.audeto.as3soundeditorlib.sound
+package com.tobydietrich.soundeditor.sound
 {
    import flash.media.Sound;
    import flash.media.SoundChannel;

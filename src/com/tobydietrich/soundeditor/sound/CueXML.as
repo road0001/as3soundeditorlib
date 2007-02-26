@@ -1,7 +1,7 @@
 /**
  * Loads a cue XML file and signals the Audeto class.
  */
-package com.audeto.as3soundeditorlib.sound
+package com.tobydietrich.soundeditor.sound
 {
    import flash.display.Sprite;
    import flash.net.URLLoader;

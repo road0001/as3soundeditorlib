@@ -1,10 +1,10 @@
 
-package com.audeto.as3soundeditorlib.sound
+package com.tobydietrich.soundeditor.sound
 {
-   import com.audeto.as3soundeditorlib.player.*;
-   import com.audeto.as3soundeditorlib.utils.*;
+   import com.tobydietrich.soundeditor.player.*;
+   import com.tobydietrich.soundeditor.utils.*;
    import flash.display.Sprite;
-   import com.audeto.as3soundeditorlib.SpectrumApp;
+   import com.tobydietrich.soundeditor.SpectrumApp;
 
    public class SpectrumPlayer extends Sprite implements Playable
    {

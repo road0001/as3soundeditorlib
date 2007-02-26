@@ -1,8 +1,8 @@
-package com.audeto.as3soundeditorlib
+package com.tobydietrich.soundeditor
 {
-   import com.audeto.as3soundeditorlib.sound.*;
-   import com.audeto.as3soundeditorlib.player.*;
-   import com.audeto.as3soundeditorlib.utils.*;
+   import com.tobydietrich.soundeditor.sound.*;
+   import com.tobydietrich.soundeditor.player.*;
+   import com.tobydietrich.soundeditor.utils.*;
    import flash.events.TimerEvent;
    import flash.utils.Timer;
    import flash.display.Sprite;
