@@ -1,11 +1,11 @@
-package com.audeto.as3soundeditorlib.sound
+package com.tobydietrich.soundeditor.sound
 {
    import flash.events.*;
    import flash.media.Sound;
    import flash.media.SoundChannel;
    import flash.net.*;
    import flash.display.Sprite;
-   import com.audeto.as3soundeditorlib.player.*;
+   import com.tobydietrich.soundeditor.player.*;
 
    public class SoundTrack implements Playable
    {

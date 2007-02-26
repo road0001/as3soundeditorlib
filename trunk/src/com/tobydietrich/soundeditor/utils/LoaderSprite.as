@@ -1,7 +1,7 @@
 /***
  * Displays a little progress bar
  */
-package com.audeto.as3soundeditorlib.utils
+package com.tobydietrich.soundeditor.utils
 {
 	import flash.display.Sprite;
 	import flash.text.TextField;

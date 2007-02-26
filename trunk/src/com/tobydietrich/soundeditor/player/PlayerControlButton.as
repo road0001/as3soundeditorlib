@@ -1,4 +1,4 @@
-package com.audeto.as3soundeditorlib.player
+package com.tobydietrich.soundeditor.player
 {
 	import flash.display.Sprite;
 
