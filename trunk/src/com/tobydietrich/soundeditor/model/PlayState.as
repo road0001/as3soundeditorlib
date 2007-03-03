@@ -1,4 +1,7 @@
-package com.tobydietrich.soundeditor.player
+/***
+ * An enumeration of play states
+ */
+ package com.tobydietrich.soundeditor.model
 {
 	public class PlayState
 	{

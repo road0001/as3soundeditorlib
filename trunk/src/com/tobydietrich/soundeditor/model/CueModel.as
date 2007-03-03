@@ -1,72 +1,19 @@
 /**
- * Loads a cue XML file and signals the Audeto class.
+ * This is a set of cue points.
  */
-package com.tobydietrich.soundeditor.sound
+package com.tobydietrich.soundeditor.model
 {
-   import flash.display.Sprite;
-   import flash.net.URLLoader;
-   import flash.net.URLRequest;
-   import flash.net.URLRequestHeader;
-   import flash.events.*;
-   import flash.utils.Timer;
-   import flash.geom.Rectangle;
-   import flash.display.Shape;
-   import flash.display.DisplayObject;
-   import flash.text.TextField;
-   import flash.text.TextFormat;
-   import flash.text.TextFieldAutoSize;
-   import flash.media.Sound;
-   import flash.media.SoundChannel;
-
-   public class CueXML
+   public class CueModel
    {
-      private var myParent:SoundClient;
-
-      // stores the CueXML file
-      public var xmlCue:XML = new XML();
+      // stores the CueModel file
+      public var myXML:XML = new XML();
 
       // how many cue points are there?
       public var numCuePoints:int;
 
-      // check if the inputs are loaded.
-      private var xmlCueIsLoaded:Boolean = false;
 
-      public function CueXML(parent:SoundClient, xmlCue_URL:String) {
-         myParent = parent;
-
-         var xmlCueURL:URLRequest = new URLRequest(xmlCue_URL);
-         var cueLoader:URLLoader = new URLLoader(xmlCueURL);
-         cueLoader.addEventListener(Event.COMPLETE, xmlCueLoaded);
-         cueLoader.addEventListener(ProgressEvent.PROGRESS, checkCueLoadProgress);
-         cueLoader.addEventListener(IOErrorEvent.IO_ERROR, cueIoErrorHandler);
-      }
-
-      public function get isLoaded():Boolean {
-         return xmlCueIsLoaded;
-      }
-
-      // call when the CueXML is loaded
-      private function xmlCueLoaded(event:Event):void {
-         var loader:URLLoader = URLLoader(event.target);
-         xmlCue = XML(loader.data);
-         //trace("Cue Data loaded.");
-         xmlCueIsLoaded = true;
-         myParent.checkForCompletion();
-      }
-      
-      public function cueIoErrorHandler(event:Event):void {
-         trace("Cue ioErrorHandler: " + event);
-      }
-      
-
-      public function checkCueLoadProgress(event:ProgressEvent):void {
-         var nLoaded:Number = event.bytesLoaded;
-         var nTotal:Number = event.bytesTotal;
-         var nFraction:Number = 0;
-         if (nTotal>0) {
-            nFraction = nLoaded/nTotal;
-         }
-        myParent.cueLoaderProgress = nFraction;
+      public function CueModel(m_xml:XML) {
+		 myXML = m_xml;
       }
       
       private function get endCueTime():int { 
@@ -78,7 +25,7 @@ package com.tobydietrich.soundeditor.sound
       private function get lastMeasure():XML {
       	var max_elt:XML = null;
       	var elt:XML = null;
-      	for each(elt in xmlCue.CuePoint) {
+      	for each(elt in myXML.CuePoint) {
       		if(!isNaN(Number(elt.Name))) {
 	      		if(max_elt == null) { 
 	      		   max_elt = elt; 
@@ -95,7 +42,7 @@ package com.tobydietrich.soundeditor.sound
       */
       private function getMeasureFromTime(time:int):XML { 
       	// the value is simply the last time that is less than the given time.
-      	var myList:XMLList = xmlCue.CuePoint.(Time <= time);
+      	var myList:XMLList = myXML.CuePoint.(Time <= time);
       	var elt:XML = null;
       	for each(elt in myList) {
       		;
@@ -108,7 +55,7 @@ package com.tobydietrich.soundeditor.sound
       */
       private function getMeasureFromMeasureNumber(num:int):XML {
       	//trace('this function is deprecated: there may be more than one such measure');
-      	var myList:XMLList = xmlCue.CuePoint.(Name == num.toString());
+      	var myList:XMLList = myXML.CuePoint.(Name == num.toString());
       	var elt:XML = null;
       	for each(elt in myList) {
       		return elt;
@@ -121,7 +68,7 @@ package com.tobydietrich.soundeditor.sound
       * Given the measure number, get the measure information
       */
       private function getMeasureFromCueName(name:String):XML {
-      	var myList:XMLList = xmlCue.CuePoint.(Name == name);
+      	var myList:XMLList = myXML.CuePoint.(Name == name);
       	var elt:XML = null;
       	for each(elt in myList) {
       		return elt;
