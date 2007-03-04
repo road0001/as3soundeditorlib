@@ -19,45 +19,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
  * THE SOFTWARE.
  */
-/** 
- * This is basically an array
- */
-package com.tobydietrich.soundeditor.model
+
+package com.tobydietrich.soundeditor.view
 {
-	import flash.events.EventDispatcher;
-	
-	public class SpectrumModel extends EventDispatcher
-	{
-		private var myArrayLeft:Array = new Array();
-		private var myArrayRight:Array = new Array();
-		
-		public function SpectrumModel() {
-			
-		}
-		
-		public function getLeftPeak(time:int):Number {
-			return getPeak(myArrayLeft, time);
-		}
-		
-		public function getRightPeak(time:int):Number {
-			return getPeak(myArrayRight, time);
-		}
-		
-		private function getPeak(myArray:Array, time:int):Number {
-			// TODO: have it return the previous time, or something??
-			if (myArray[time] == null) { 
-			   return 0; 
-			} else {
-			   return myArray[time];
-			}
-		}
-		
-		public function addPeak(leftPeak:Number, rightPeak:Number, 
-		 time:Number):void {
-			myArrayLeft[time] = leftPeak;
-			myArrayRight[time] = rightPeak;
-		   dispatchEvent(new SpectrumModelEvent(SpectrumModelEvent.ADD_TIME, 
-		    false, false, time));
-		}
-	}
+   import flash.display.Sprite;
+      import flash.text.TextField;
+   import flash.text.TextFormat;
+   import flash.text.TextFieldAutoSize;
+
+   public class ButtonLabel extends Sprite
+   {
+      public function ButtonLabel(labelText:String)
+      {
+		   var labelFormat:TextFormat = new TextFormat("Verdana", 8, 0xFFFFFF);
+           var label:TextField = new TextField();
+           label.text = labelText;
+           label.defaultTextFormat = labelFormat;
+           label.x = -10;
+           label.y = -10;
+           addChild(label);
+      }
+   }
 }
