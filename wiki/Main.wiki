@@ -1,4 +1,5 @@
 #summary Sound Editor library for ActionScript 3.0
+#labels Featured
 
 = Introduction =
 
@@ -7,12 +8,11 @@ The sound editor library will provide a graphical representation of sound file, 
 
 = Details =
 
-I need a flash component that allows a user to define cue points for an MP3 file. Thus, I am working on this. The .001 version code provides a way to draw the graph.
+I need a flash component that allows a user to define cue points for an MP3 file. Thus, I am working on this.
 
 The graph is of time (x-axis) versus volume (y-axis, with the right channel above the axis and the left channel below). I am obtaining the volume from a playing !SoundChannel. My first attempt to speed up the drawing will be to draw several different intervals in parallel (i.e. several different !SoundChannels). It would be nice to generate the graph without using the sound playing functionality. I do not want to make external calls, since I want the flash application to be standalone.
 
 = Contact =
 
-Charles Dietrich
-
-info -at- audeto.com
+Charles "Toby" Dietrich
+http://www.tobydietrich.com/contact
