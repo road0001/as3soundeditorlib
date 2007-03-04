@@ -19,45 +19,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
  * THE SOFTWARE.
  */
-/** 
- * This is basically an array
- */
-package com.tobydietrich.soundeditor.model
+package com.tobydietrich.soundeditor.view
 {
-	import flash.events.EventDispatcher;
+	import com.tobydietrich.soundeditor.controller.MusicController;
+	import com.tobydietrich.soundeditor.utils.PopupLabel;
 	
-	public class SpectrumModel extends EventDispatcher
+	import flash.display.Sprite;
+	import flash.text.TextField;
+
+	public class ButtonView extends Sprite
 	{
-		private var myArrayLeft:Array = new Array();
-		private var myArrayRight:Array = new Array();
-		
-		public function SpectrumModel() {
-			
-		}
-		
-		public function getLeftPeak(time:int):Number {
-			return getPeak(myArrayLeft, time);
-		}
-		
-		public function getRightPeak(time:int):Number {
-			return getPeak(myArrayRight, time);
-		}
-		
-		private function getPeak(myArray:Array, time:int):Number {
-			// TODO: have it return the previous time, or something??
-			if (myArray[time] == null) { 
-			   return 0; 
-			} else {
-			   return myArray[time];
-			}
-		}
-		
-		public function addPeak(leftPeak:Number, rightPeak:Number, 
-		 time:Number):void {
-			myArrayLeft[time] = leftPeak;
-			myArrayRight[time] = rightPeak;
-		   dispatchEvent(new SpectrumModelEvent(SpectrumModelEvent.ADD_TIME, 
-		    false, false, time));
+	    static public var BUTTON_COLOR:uint = 0xFFFFFFF;
+	    static public var BUTTON_ALPHA:Number = 0.2;
+	    static public var BUTTON_SIZE:int = 10;
+	    static public var REWIND_BUTTON_COLOR:uint = 0x00FF00;
+	    static public var FORWARD_BUTTON_COLOR:uint = 0x00FF00;
+		static public var PLAY_BUTTON_COLOR:uint = 0x00FF00;
+		static public var PAUSE_BUTTON_COLOR:uint = 0xFF0000;
+	    
+	    protected var myMusicController:MusicController;
+	    	
+	    protected var buttonSprite:Sprite;
+	    	
+		public function ButtonView(musicController:MusicController) {
+			super();
+			myMusicController = musicController;
+			buttonSprite = new Sprite();
+			buttonSprite.graphics.beginFill(BUTTON_COLOR, BUTTON_ALPHA);
+			buttonSprite.graphics.drawCircle(0, 0, BUTTON_SIZE);
+			buttonSprite.graphics.endFill();
+			addChild(buttonSprite);
 		}
 	}
 }

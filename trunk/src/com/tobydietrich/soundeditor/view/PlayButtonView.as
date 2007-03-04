@@ -1,59 +1,69 @@
 /***
- * A player control, complete with silly graphics
+ *Copyright (c) 2007 Charles M. Dietrich
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the  "Software"), to 
+ * deal in the Software without restriction, including without limitation the 
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or 
+ * sell copies of the Software, and to permit persons to whom the Software is 
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in 
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
+ */
+/***
+ * A play/pause button
  */
 package com.tobydietrich.soundeditor.view
 {
-	import flash.display.Sprite;
-	import flash.events.*;
 	import com.tobydietrich.soundeditor.controller.MusicController;
+	
+	import flash.display.Sprite;
+	import flash.events.MouseEvent;
+	import com.tobydietrich.soundeditor.model.PlayableModelEvent;
 
-	public class PlayButtonView extends Sprite
-	{
-		static public var BUTTON_COLOR:uint = 0x000000;
-		static public var PLAY_BUTTON_COLOR:uint = 0x00FF00;
-		static public var PAUSE_BUTTON_COLOR:uint = 0xFF0000;
-	   static public var BUTTON_SIZE:int = 20;
-		
-		private var myMusicController:MusicController;
-		
+	public class PlayButtonView extends ButtonView
+	{	
 		private var playButton:Sprite;
 		private var pauseButton:Sprite;
 		
 		public function PlayButtonView(musicController:MusicController) {
-			myMusicController = musicController;
-			var buttonSprite:Sprite = new Sprite();
-			buttonSprite.graphics.beginFill(BUTTON_COLOR);
-			buttonSprite.graphics.drawCircle(0, 0, BUTTON_SIZE);
-			buttonSprite.graphics.endFill();
+			super(musicController);
+			
+			playButton = new ButtonLabel('>');
+			addChildAt(playButton, 0);
+			
+			pauseButton = new ButtonLabel('||');
+			addChildAt(pauseButton, 0);
+			
+		   musicController.soundModel.addEventListener(PlayableModelEvent.CHANGE,
+			 eChange);
+			musicController.soundModel.ping();
 			buttonSprite.addEventListener(MouseEvent.CLICK, ePlayPause);
-			addChild(buttonSprite);
-			
-			playButton = new Sprite();
-			playButton.graphics.beginFill(PLAY_BUTTON_COLOR);
-			playButton.graphics.drawCircle(0, 0, BUTTON_SIZE/3);
-			playButton.graphics.endFill();
-			addChild(playButton);
-			
-			pauseButton = new Sprite();
-			pauseButton.graphics.beginFill(PAUSE_BUTTON_COLOR);
-			pauseButton.graphics.drawCircle(0, 0, BUTTON_SIZE/3);
-			pauseButton.graphics.endFill();
-			addChild(pauseButton);
-			pauseButton.visible = false;
-			
-			
-
 		}
 		
 		private function ePlayPause(event:MouseEvent):void {
+		   trace('pressed play/pause');
 			if(myMusicController.soundModel.playing) {
-				myMusicController.pause();
+				myMusicController.soundModel.pause();
 			} else {
-			    myMusicController.play();
+			    myMusicController.soundModel.play();
 			}
 		    playButton.visible = !myMusicController.soundModel.playing;
 		    pauseButton.visible = myMusicController.soundModel.playing;
 		}
 		
+		private function eChange(event:PlayableModelEvent):void {
+		    playButton.visible = !myMusicController.soundModel.playing;
+		    pauseButton.visible = myMusicController.soundModel.playing;
+		}
 	}
 }

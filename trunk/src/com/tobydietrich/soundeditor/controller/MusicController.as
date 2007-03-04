@@ -1,115 +1,65 @@
 /***
+ *Copyright (c) 2007 Charles M. Dietrich
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the  "Software"), to 
+ * deal in the Software without restriction, including without limitation the 
+ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or 
+ * sell copies of the Software, and to permit persons to whom the Software is 
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in 
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
+ * THE SOFTWARE.
+ */
+/***
  * A controller for the music
  */
   package com.tobydietrich.soundeditor.controller
 {
-	import flash.media.Sound;
-	import flash.media.SoundChannel;
-	import com.tobydietrich.soundeditor.model.*;
-	import flash.events.*;
-	import flash.media.SoundTransform;
-	import flash.utils.Timer;
-	
-	public class MusicController extends EventDispatcher implements IPlayableController
+
+	import com.tobydietrich.soundeditor.model.SoundModel;
+	import com.tobydietrich.soundeditor.model.PlayableModelEvent;
+		import flash.utils.Timer;
+		import flash.events.EventDispatcher;
+		import flash.events.TimerEvent;
+
+	public class MusicController extends EventDispatcher
 	{
-		static private var TIMER_DELAY:int = 10;
+	   private var TIMER_DELAY:int = 10;
+	   
+	   private var timer:Timer;
 		
 		private var mySoundModel:SoundModel;
-		
-		private var myVolume:Number = 1.0;
-		
-		private var timer:Timer;
-		
+
 		public function MusicController(soundModel:SoundModel) {
 		   mySoundModel = soundModel;
+		   mySoundModel.addEventListener(PlayableModelEvent.CHANGE, eChange);
+		   timer = new Timer(TIMER_DELAY);
+         timer.addEventListener(TimerEvent.TIMER, eTimer);
 		}
 		
 		public function get soundModel():SoundModel {
 			return mySoundModel;
 		}
 		
-	  public function set fractionComplete(fraction:Number):void {
-         if(mySoundModel.soundChannel != null) {
-            mySoundModel.soundChannel.stop();
-         }
-         mySoundModel.position = fraction*mySoundModel.length;
-      }
-
-      public function stop():void
-      {
-         if(mySoundModel.soundChannel != null) {
-            mySoundModel.soundChannel.stop();
-         }
-         mySoundModel.playState = PlayState.STOPPED;
-      }
-
-      public function rewindAll():void
-      {
-         // maybe start playing again??
-         stop();
-      }
-
-      public function pause():void
-      {
-      	 mySoundModel.position = mySoundModel.soundChannel.position;
-      	 if(mySoundModel.soundChannel != null) {
-            mySoundModel.soundChannel.stop();
-         }
-         mySoundModel.playState = PlayState.PAUSED;
-         if(mySoundModel.position==0) {
-            mySoundModel.playPosition = PlayPosition.AT_BEGINNING;
-         } else if(mySoundModel.position==mySoundModel.length) {
-            mySoundModel.playPosition = PlayPosition.AT_END;
-         } else {
-            mySoundModel.playPosition = PlayPosition.IN_MIDDLE;
-         }
-
-      }
-
-      public function play():void
-      {
-         if(mySoundModel.playState == PlayState.PLAYING) {
-            return;
-         }
-         if(mySoundModel.playState==PlayState.STOPPED) {
-            rewindAll();
-         }
-         mySoundModel.soundChannel = mySoundModel.sound.play(mySoundModel.position, 0, new SoundTransform(myVolume));
-         mySoundModel.playState = PlayState.PLAYING;
-         mySoundModel.playPosition = PlayPosition.IN_MIDDLE;
-         timer = new Timer(TIMER_DELAY);
-         timer.addEventListener(TimerEvent.TIMER, eTimer);
-         timer.start();
-         mySoundModel.soundChannel.addEventListener(Event.SOUND_COMPLETE, eComplete);
-      }
-
-      public function forwardAll():void
-      {
-         mySoundModel.position = mySoundModel.length;
-         mySoundModel.playState = PlayState.STOPPED;
-         mySoundModel.playPosition = PlayPosition.AT_END;
-         if(mySoundModel.soundChannel != null) {
-            mySoundModel.soundChannel.stop();
-         }
-      }
-      
-      private function eComplete(event:Event):void {
-      	// we are at the end, we are stopped, etc.
-			forwardAll();
-			timer.stop();
-			dispatchEvent(event);
-      }
-      
-      private function eTimer(event:TimerEvent):void {
-      	dispatchEvent(event);
-      }
-      
-      public function get volume():Number {
-      	return myVolume;
-      }
-      
-      public function set volume(newVolume:Number):void {
-      	myVolume = newVolume;
-      }
+		private function eChange(event:PlayableModelEvent):void {
+		   if(event.target.playing) {
+            timer.start();
+		   } else {
+		      timer.stop();
+		   }
+		}
+		
+		private function eTimer(event:TimerEvent):void {
+		   dispatchEvent(new PlayableModelEvent(PlayableModelEvent.PROGRESS));
+		}
 	}
 }

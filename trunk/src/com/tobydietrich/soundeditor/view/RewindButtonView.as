@@ -19,45 +19,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
  * THE SOFTWARE.
  */
-/** 
- * This is basically an array
+/***
+ * A rewind button
  */
-package com.tobydietrich.soundeditor.model
+package com.tobydietrich.soundeditor.view
 {
-	import flash.events.EventDispatcher;
+	import com.tobydietrich.soundeditor.controller.MusicController;
 	
-	public class SpectrumModel extends EventDispatcher
+	import flash.display.Sprite;
+	import flash.events.MouseEvent;
+	import com.tobydietrich.soundeditor.model.PlayableModelEvent;
+
+	public class RewindButtonView extends ButtonView
 	{
-		private var myArrayLeft:Array = new Array();
-		private var myArrayRight:Array = new Array();
+		private var rewindButton:Sprite;
 		
-		public function SpectrumModel() {
+		public function RewindButtonView(musicController:MusicController) {
+			super(musicController);
+		   
+		   rewindButton = new ButtonLabel('<<');
+			addChildAt(rewindButton, 0);
 			
+			musicController.soundModel.addEventListener(PlayableModelEvent.CHANGE,
+			 eChange);
+			musicController.soundModel.ping();
+			buttonSprite.addEventListener(MouseEvent.CLICK, eRewind);
 		}
 		
-		public function getLeftPeak(time:int):Number {
-			return getPeak(myArrayLeft, time);
+		private function eRewind(event:MouseEvent):void {
+		   trace('pressed rewind');
+			myMusicController.soundModel.rewindAll();
+		   rewindButton.visible = !myMusicController.soundModel.atStart;
 		}
 		
-		public function getRightPeak(time:int):Number {
-			return getPeak(myArrayRight, time);
-		}
-		
-		private function getPeak(myArray:Array, time:int):Number {
-			// TODO: have it return the previous time, or something??
-			if (myArray[time] == null) { 
-			   return 0; 
-			} else {
-			   return myArray[time];
-			}
-		}
-		
-		public function addPeak(leftPeak:Number, rightPeak:Number, 
-		 time:Number):void {
-			myArrayLeft[time] = leftPeak;
-			myArrayRight[time] = rightPeak;
-		   dispatchEvent(new SpectrumModelEvent(SpectrumModelEvent.ADD_TIME, 
-		    false, false, time));
+		private function eChange(event:PlayableModelEvent):void {
+		    rewindButton.visible = !myMusicController.soundModel.atStart;
 		}
 	}
 }
