@@ -26,7 +26,7 @@ package com.tobydietrich.soundeditor.view
 {
 	import flash.display.Sprite;
 	import flash.text.TextField;
-	import com.tobydietrich.soundeditor.controller.*;
+	import com.tobydietrich.soundeditor.model.*;
 	import com.tobydietrich.soundeditor.utils.*;
 	import flash.events.Event;
 	import flash.events.ProgressEvent;
@@ -40,13 +40,14 @@ package com.tobydietrich.soundeditor.view
 		static private var FG_COLOR:uint = 0x00FF00;
 
 		private var progressBar:Sprite;
+		private var myLoaderModel:LoaderModel;
 		
-		private var myLoaderController:LoaderController;
-		
-		public function LoaderView(loaderController:LoaderController) {
-		   myLoaderController = loaderController;
+		public function LoaderView(loaderModel:LoaderModel) {
+			myLoaderModel = loaderModel;
+			loaderModel.addEventListener(ProgressEvent.PROGRESS, eUpdate);
+			loaderModel.addEventListener(Event.COMPLETE, eComplete);
 		   var label:TextField = 
-		      PopupLabel.createPopupLabel(myLoaderController.name + " load progress");
+		      PopupLabel.createPopupLabel(loaderModel.name + " load progress");
 		   addChild(label);
 		   
 		   var box:Sprite = new Sprite();
@@ -61,17 +62,18 @@ package com.tobydietrich.soundeditor.view
 		   progressBar.scaleX = 0;
 		   progressBar.graphics.endFill();
 		   box.addChild(progressBar);
-		   
-		   myLoaderController.addEventListener(Event.COMPLETE, eComplete);
-		   myLoaderController.addEventListener(ProgressEvent.PROGRESS, eProgress);
+	   }
+	   
+	   private function get loaderModel():LoaderModel {
+	   	return myLoaderModel;
+	   }
+	   
+	   private function eUpdate(event:ProgressEvent):void {
+	   	   progressBar.scaleX = loaderModel.fractionLoaded;
 	   }
 	   
 	   private function eComplete(event:Event):void {
 	   	progressBar.scaleX = 1;
-	   }
-	   
-	   private function eProgress(event:ProgressEvent):void {
-	   	progressBar.scaleX = myLoaderController.fractionLoaded;
 	   }
 	}
 }

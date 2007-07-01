@@ -19,20 +19,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
  * THE SOFTWARE.
  */
-package com.tobydietrich.soundeditor.controller
-{
-	import com.tobydietrich.soundeditor.utils.PrototypeError;
-	import flash.events.EventDispatcher;
+package com.tobydietrich.soundeditor.model {
+	import flash.events.IEventDispatcher;
 	
-	public class LoaderController extends EventDispatcher
-	{
-		public function get name():String {
-			throw new PrototypeError();
-		}
-		
-		public function get fractionLoaded():Number {
-			throw new PrototypeError();
-		}
-		
+	
+	public interface LoaderModel extends IEventDispatcher {
+		 function get name():String;	
+		 function get url():String;
+		 function get fractionLoaded():Number;
+		 function get isComplete():Boolean;
 	}
 }

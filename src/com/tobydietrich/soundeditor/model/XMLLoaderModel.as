@@ -20,24 +20,29 @@
  * THE SOFTWARE.
  */ 
  /**
- * This is a set of cue points.
+ * This loads XML
  */
-package com.tobydietrich.soundeditor.controller
+package com.tobydietrich.soundeditor.model
 {
    import flash.events.*;
    import flash.net.URLLoader;
    import flash.net.URLRequest;
+   import com.tobydietrich.soundeditor.view.LoaderView;
 
-   public class CueLoaderController extends LoaderController
+   public class XMLLoaderModel extends EventDispatcher implements LoaderModel 
    {
    	
-   	private var myName:String = 'Cue Loader';
-   	
+   	private var myName:String;
+   	private var myURL:String;
       private var myXML:XML = new XML();
 
       private var myFractionLoaded:Number = 0;
 
-      public function CueLoaderController(url:String) {
+	  private var myIsComplete:Boolean = false;
+	  
+      public function XMLLoaderModel (name:String, url:String) {
+      	myName = name;
+      	myURL = url;
          var request:URLRequest = new URLRequest(url);
          var loader:URLLoader = new URLLoader(request);
          loader.addEventListener(Event.COMPLETE, eComplete);
@@ -48,6 +53,7 @@ package com.tobydietrich.soundeditor.controller
       private function eComplete(event:Event):void {
          var loader:URLLoader = URLLoader(event.target);
          myXML = XML(loader.data);
+      	myIsComplete = true;   
          dispatchEvent(event);
       }
       
@@ -63,17 +69,24 @@ package com.tobydietrich.soundeditor.controller
          dispatchEvent(event);
       }
       
-      public override function get fractionLoaded():Number {
+      public function get fractionLoaded():Number {
       	return myFractionLoaded;
       }
       
-      public function get cuePoints():XML { 
+      public function get xml():XML { 
       	return myXML;
       }
       
-      public override function get name():String {
+      public function get name():String {
       	return myName;
       }
-0
+      
+      public function get url():String {
+      	return myURL;
+      }
+      
+      public function get isComplete():Boolean {
+      	return myIsComplete;
+      }
 }
 }
