@@ -30,14 +30,14 @@ package com.tobydietrich.soundeditor.view
    import com.tobydietrich.soundeditor.model.*;
    import flash.events.Event;
 
-   public class AppView extends Sprite
+   public class SoundEditor extends Sprite
    {
    	// loaders
-   	private var myCueLoaderController:CueLoaderController;
+   	private var myCueLoaderModel:XMLLoaderModel;
    	// for the playhead
-   	private var mySoundLoaderController:SoundLoaderController;
+   	private var mySoundLoaderModel:SoundLoaderModel;
    	// to generate the spectrum
-   	private var mySpectrumSoundLoaderController:SoundLoaderController;
+   	private var mySpectrumSoundLoaderModel:SoundLoaderModel;
    	
    	// loader views
       private var myCueLoaderView:LoaderView;
@@ -71,22 +71,22 @@ private var myCueController:CueController;
       private var myForwardButtonView:ForwardButtonView;
 
 /* Constructor */
-      public function AppView(sndURL:String, cueURL:String) {
+      public function SoundEditor(sndURL:String, cueURL:String) {
       	
       	
       //loaders
-      	myCueLoaderController = new CueLoaderController(cueURL);
-      	myCueLoaderController.addEventListener(Event.COMPLETE, eCueLoaded);
-      	mySoundLoaderController = new SoundLoaderController(sndURL);
-      	mySoundLoaderController.addEventListener(Event.COMPLETE, eSoundLoaded);
-      	mySpectrumSoundLoaderController = new SoundLoaderController(sndURL);
-      	mySpectrumSoundLoaderController.addEventListener(Event.COMPLETE, eSpectrumSoundLoaded);
+      	myCueLoaderModel = new XMLLoaderModel("cue", cueURL);
+      	myCueLoaderModel.addEventListener(Event.COMPLETE, eCueLoaded);
+      	mySoundLoaderModel = new SoundLoaderModel("mp3", sndURL);
+      	mySoundLoaderModel.addEventListener(Event.COMPLETE, eSoundLoaded);
+      	mySpectrumSoundLoaderModel = new SoundLoaderModel("mp3 for spectrum", sndURL);
+      	mySpectrumSoundLoaderModel.addEventListener(Event.COMPLETE, eSpectrumSoundLoaded);
       	
       	//loader views
       	
-      	myCueLoaderView = new LoaderView(myCueLoaderController);
-      	mySoundLoaderView = new LoaderView(mySoundLoaderController);
-      	mySpectrumSoundLoaderView = new LoaderView(mySpectrumSoundLoaderController);
+      	myCueLoaderView = new LoaderView(myCueLoaderModel);
+      	mySoundLoaderView = new LoaderView(mySoundLoaderModel);
+      	mySpectrumSoundLoaderView = new LoaderView(mySpectrumSoundLoaderModel);
       	loaderWindow = new Sprite();
       	addChild(loaderWindow);
       	myCueLoaderView.x = 100;
@@ -98,7 +98,7 @@ private var myCueController:CueController;
       }
       
       private function eCueLoaded(event:Event):void {
-      	myCueModel = new CueModel(event.target.cuePoints);
+      	myCueModel = new CueModel(event.target.xml);
       	myCueController = new CueController(myCueModel);
       	check();
       }

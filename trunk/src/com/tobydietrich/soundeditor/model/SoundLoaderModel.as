@@ -24,22 +24,27 @@
  * This loads the sound and notifies a controller when it is done
  */
  
- package com.tobydietrich.soundeditor.controller
+ package com.tobydietrich.soundeditor.model
 {
    import flash.events.*;
    import flash.media.Sound;
    import flash.net.URLLoader;
    import flash.net.URLRequest;
+   import com.tobydietrich.soundeditor.view.LoaderView;
 
-   public class SoundLoaderController extends LoaderController
+   public class SoundLoaderModel  extends EventDispatcher implements LoaderModel
    {
-	private var myName:String = 'Sound Loader';
+	private var myName:String;
+	private var myURL:String;
 
       private var mySound:Sound = new Sound();
 
       private var myFractionLoaded:Number = 0;
-
-      public function SoundLoaderController(url:String) {
+	  private var myIsComplete:Boolean = false;
+	  
+      public function SoundLoaderModel(name:String, url:String) {
+      	myName = name;
+      	myURL = url;
          var request:URLRequest = new URLRequest(url);
          mySound.addEventListener(Event.COMPLETE, eComplete);
          mySound.addEventListener(Event.ID3, eId3);
@@ -50,6 +55,7 @@
 
       private function eComplete(event:Event):void {
          dispatchEvent(event);
+         myIsComplete = true;
       }
       
       public function eIoError(event:IOErrorEvent):void {
@@ -68,7 +74,7 @@
          dispatchEvent(event);
       }
       
-      public override function get fractionLoaded():Number {
+      public  function get fractionLoaded():Number {
       	return myFractionLoaded;
       }
 
@@ -76,8 +82,16 @@
          return mySound;
       }
       
-      public override function get name():String {
+      public  function get name():String {
       	return myName;
+      }
+      
+      public  function get url():String {
+      	return myURL;
+      }
+      
+      public function get isComplete():Boolean {
+      	return myIsComplete;
       }
 }
 }
