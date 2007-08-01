@@ -21,47 +21,43 @@
  */
 package com.tobydietrich.soundeditor.view
 {
-	import com.tobydietrich.soundeditor.controller.MusicController;
 	import com.tobydietrich.soundeditor.model.PlayableModelEvent;
 	
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
+	import com.tobydietrich.soundeditor.controller.PlayerController;
 
 	public class CursorView extends Sprite
 	{
-		private var myMusicController:MusicController;
 		private var cursorSprite:Sprite;
-		public function CursorView(musicController:MusicController)
+		private var myPlayerController:PlayerController;
+		
+		public function CursorView(playerController:PlayerController)
 		{
-			myMusicController = musicController;
-			myMusicController.addEventListener(PlayableModelEvent.PROGRESS, 
-			 eUpdate);
-			myMusicController.soundModel.addEventListener(PlayableModelEvent.CHANGE,
-			 eUpdate);
-		  graphics.beginFill(0xFFFFFF, 0.1); // XXX
-	     graphics.drawRect(0, 0, MusicView.SPECTRUM_WIDTH, MusicView.SPECTRUM_HEIGHT);
+		myPlayerController = playerController;
+		 graphics.beginFill(0xFFFFFF, 0.1); // XXX
+	     graphics.drawRect(0, 0, SoundEditorView.SPECTRUM_WIDTH, SoundEditorView.SPECTRUM_HEIGHT);
 	     graphics.endFill();
-	     addEventListener(MouseEvent.CLICK, eClick);
 	     cursorSprite = new Sprite();
-         cursorSprite.graphics.beginFill(MusicView.CURSOR_COLOR);
-         cursorSprite.graphics.drawRect(0,0,1,MusicView.SPECTRUM_HEIGHT);
+         cursorSprite.graphics.beginFill(SoundEditorView.CURSOR_COLOR);
+         cursorSprite.graphics.drawRect(0,0,1,SoundEditorView.SPECTRUM_HEIGHT);
          cursorSprite.graphics.endFill();
          addChild(cursorSprite);
+         
+         playerController.soundModel.addEventListener(PlayableModelEvent.PROGRESS, eUpdate);
+		}
+		
+		private function get playerController():PlayerController {
+			return myPlayerController;
 		}
 		
 		private function eUpdate(event:PlayableModelEvent):void {
-			cursorSprite.x = MusicView.SPECTRUM_WIDTH * 
-			  myMusicController.soundModel.position 
-			  / myMusicController.soundModel.length;
+			updateCursor(playerController.soundModel.fractionComplete);
 		}
 		
-		private function eClick(event:MouseEvent):void {
-		   var playing:Boolean = myMusicController.soundModel.playing;
-		   myMusicController.soundModel.fractionComplete = 
-		     event.localX / MusicView.SPECTRUM_WIDTH;
-		   if(playing) {
-		      myMusicController.soundModel.play();
-		   }
+		private function updateCursor(fractionComplete:Number):void {
+			cursorSprite.x = SoundEditorView.SPECTRUM_WIDTH * fractionComplete;
 		}
+		
 	}
 }

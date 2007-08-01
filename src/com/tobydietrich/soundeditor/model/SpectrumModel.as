@@ -25,14 +25,21 @@
 package com.tobydietrich.soundeditor.model
 {
 	import flash.events.EventDispatcher;
+	import com.tobydietrich.soundeditor.model.PlayableModelEvent;
+	import com.tobydietrich.soundeditor.view.SpectrumView;
 	
 	public class SpectrumModel extends EventDispatcher
 	{
 		private var myArrayLeft:Array = new Array();
 		private var myArrayRight:Array = new Array();
 		
-		public function SpectrumModel() {
-			
+		private var mySoundModel:SoundModel;
+		
+		public function SpectrumModel(soundModel:SoundModel) {
+			mySoundModel = soundModel;
+		 soundModel.volume = 0.01;
+         soundModel.play();
+         soundModel.addEventListener(PlayableModelEvent.PROGRESS, eProgress);
 		}
 		
 		public function getLeftPeak(time:int):Number {
@@ -52,12 +59,23 @@ package com.tobydietrich.soundeditor.model
 			}
 		}
 		
+		public function get soundModel():SoundModel {
+			return mySoundModel;
+		}
+		
 		public function addPeak(leftPeak:Number, rightPeak:Number, 
 		 time:Number):void {
 			myArrayLeft[time] = leftPeak;
 			myArrayRight[time] = rightPeak;
-		   dispatchEvent(new SpectrumModelEvent(SpectrumModelEvent.ADD_TIME, 
-		    false, false, time));
+		}
+		
+		private function eProgress(event:PlayableModelEvent):void {
+			var position:Number = soundModel.position;
+			addPeak(
+			   soundModel.leftPeak / soundModel.volume, 
+			   soundModel.rightPeak/ soundModel.volume, 
+			   position);
+			   dispatchEvent(new PlayableModelEvent(PlayableModelEvent.PROGRESS, false, false, position));
 		}
 	}
 }

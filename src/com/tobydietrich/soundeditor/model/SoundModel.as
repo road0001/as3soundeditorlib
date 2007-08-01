@@ -29,9 +29,14 @@
    import flash.media.Sound;
    import flash.media.SoundChannel;
    import flash.media.SoundTransform;
+   import flash.events.TimerEvent;
+   import flash.utils.Timer;
 
    public class SoundModel extends EventDispatcher implements IPlayableModel
    {
+   	private var TIMER_INTERVAL:int = 10;
+   	
+   	private var myTimer:Timer;
       // enum listing the play state
       private var myPlayState:int;
       
@@ -51,6 +56,9 @@
 		   mySound = sound;
          stop();
          volume = 1.0; 
+         myTimer = new Timer(TIMER_INTERVAL);
+         myTimer.addEventListener("timer", eTimerEvent);
+         myTimer.start();
       }
 
       /* Getters for internal objects */
@@ -123,20 +131,27 @@
       public function stop():void
       {
          position = 0;
+         
+         dispatchEvent(new PlayableModelEvent(PlayableModelEvent.CHANGE));
       }
 
       public function rewindAll():void
       {
          position = 0;
+         
+         dispatchEvent(new PlayableModelEvent(PlayableModelEvent.CHANGE));
       }
       
       public function forwardAll():void {
          position = length;
+         
+         dispatchEvent(new PlayableModelEvent(PlayableModelEvent.CHANGE));
       }
       
       public function pause():void {
          //  this looks silly
          position = position;
+         dispatchEvent(new PlayableModelEvent(PlayableModelEvent.CHANGE));
       }
       
       public function play():void {
@@ -200,8 +215,12 @@
          dispatchEvent(event);
       }
       
-		public function ping():void {
+      private function eTimerEvent(event:TimerEvent):void {
+      	ping();
+      }
+      public function ping():void {
          dispatchEvent(new PlayableModelEvent(PlayableModelEvent.CHANGE));
-		}
+      } 
+      
    }
 }

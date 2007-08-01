@@ -21,7 +21,7 @@
  */
 package com.tobydietrich.soundeditor.view
 {
-	import com.tobydietrich.soundeditor.controller.MusicController;
+	import com.tobydietrich.soundeditor.controller.PlayerController;
 	import com.tobydietrich.soundeditor.utils.PopupLabel;
 	
 	import flash.display.Sprite;
@@ -36,14 +36,11 @@ package com.tobydietrich.soundeditor.view
 	    static public var FORWARD_BUTTON_COLOR:uint = 0x00FF00;
 		static public var PLAY_BUTTON_COLOR:uint = 0x00FF00;
 		static public var PAUSE_BUTTON_COLOR:uint = 0xFF0000;
-	    
-	    protected var myMusicController:MusicController;
 	    	
 	    protected var buttonSprite:Sprite;
 	    	
-		public function ButtonView(musicController:MusicController) {
+		public function ButtonView() {
 			super();
-			myMusicController = musicController;
 			buttonSprite = new Sprite();
 			buttonSprite.graphics.beginFill(BUTTON_COLOR, BUTTON_ALPHA);
 			buttonSprite.graphics.drawCircle(0, 0, BUTTON_SIZE);
