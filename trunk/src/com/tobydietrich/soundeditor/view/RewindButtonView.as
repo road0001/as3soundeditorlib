@@ -24,7 +24,7 @@
  */
 package com.tobydietrich.soundeditor.view
 {
-	import com.tobydietrich.soundeditor.controller.MusicController;
+	import com.tobydietrich.soundeditor.controller.PlayerController;
 	
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
@@ -32,28 +32,16 @@ package com.tobydietrich.soundeditor.view
 
 	public class RewindButtonView extends ButtonView
 	{
-		private var rewindButton:Sprite;
+		private var myRewindButton:Sprite;
 		
-		public function RewindButtonView(musicController:MusicController) {
-			super(musicController);
+		public function RewindButtonView() {
+			super();
 		   
-		   rewindButton = new ButtonLabel('<<');
-			addChildAt(rewindButton, 0);
-			
-			musicController.soundModel.addEventListener(PlayableModelEvent.CHANGE,
-			 eChange);
-			musicController.soundModel.ping();
-			buttonSprite.addEventListener(MouseEvent.CLICK, eRewind);
+		   myRewindButton = new ButtonLabel('<<');
+			addChildAt(myRewindButton, 0);
 		}
-		
-		private function eRewind(event:MouseEvent):void {
-		   trace('pressed rewind');
-			myMusicController.soundModel.rewindAll();
-		   rewindButton.visible = !myMusicController.soundModel.atStart;
-		}
-		
-		private function eChange(event:PlayableModelEvent):void {
-		    rewindButton.visible = !myMusicController.soundModel.atStart;
+		public function get rewindButton():Sprite {
+			return myRewindButton;
 		}
 	}
 }

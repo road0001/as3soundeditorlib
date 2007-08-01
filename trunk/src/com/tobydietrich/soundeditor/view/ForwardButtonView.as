@@ -24,7 +24,7 @@
  */
 package com.tobydietrich.soundeditor.view
 {
-	import com.tobydietrich.soundeditor.controller.MusicController;
+	import com.tobydietrich.soundeditor.controller.PlayerController;
 	
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
@@ -32,28 +32,16 @@ package com.tobydietrich.soundeditor.view
 
 	public class ForwardButtonView extends ButtonView
 	{
-		private var forwardButton:Sprite;
+		private var myForwardButton:Sprite;
 		
-		public function ForwardButtonView(musicController:MusicController) {
-			super(musicController);
+		public function ForwardButtonView() {
+			super();
 			
-			forwardButton = new ButtonLabel('>>');
-			addChildAt(forwardButton, 0);
-			
-			musicController.soundModel.addEventListener(PlayableModelEvent.CHANGE,
-			 eChange);
-			musicController.soundModel.ping();
-			buttonSprite.addEventListener(MouseEvent.CLICK, eForward);
+			myForwardButton = new ButtonLabel('>>');
+			addChildAt(myForwardButton, 0);
 		}
-		
-		private function eForward(event:MouseEvent):void {
-		   trace('pressed forward');
-			myMusicController.soundModel.forwardAll();
-		   forwardButton.visible = !myMusicController.soundModel.atEnd;
-		}
-		
-		private function eChange(event:PlayableModelEvent):void {
-		    forwardButton.visible = !myMusicController.soundModel.atEnd;
+		public function get forwardButton():Sprite {
+			return myForwardButton;
 		}
 	}
 }

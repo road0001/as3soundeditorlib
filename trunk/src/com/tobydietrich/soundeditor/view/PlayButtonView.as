@@ -24,7 +24,7 @@
  */
 package com.tobydietrich.soundeditor.view
 {
-	import com.tobydietrich.soundeditor.controller.MusicController;
+	import com.tobydietrich.soundeditor.controller.PlayerController;
 	
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
@@ -32,38 +32,25 @@ package com.tobydietrich.soundeditor.view
 
 	public class PlayButtonView extends ButtonView
 	{	
-		private var playButton:Sprite;
-		private var pauseButton:Sprite;
+		private var myPlayButton:Sprite;
+		private var myPauseButton:Sprite;
 		
-		public function PlayButtonView(musicController:MusicController) {
-			super(musicController);
+		public function PlayButtonView() {
+			super();
 			
-			playButton = new ButtonLabel('>');
-			addChildAt(playButton, 0);
+			myPlayButton = new ButtonLabel('>');
+			addChildAt(myPlayButton, 0);
 			
-			pauseButton = new ButtonLabel('||');
-			addChildAt(pauseButton, 0);
+			myPauseButton = new ButtonLabel('||');
+			addChildAt(myPauseButton, 0);
 			
-		   musicController.soundModel.addEventListener(PlayableModelEvent.CHANGE,
-			 eChange);
-			musicController.soundModel.ping();
-			buttonSprite.addEventListener(MouseEvent.CLICK, ePlayPause);
 		}
 		
-		private function ePlayPause(event:MouseEvent):void {
-		   trace('pressed play/pause');
-			if(myMusicController.soundModel.playing) {
-				myMusicController.soundModel.pause();
-			} else {
-			    myMusicController.soundModel.play();
-			}
-		    playButton.visible = !myMusicController.soundModel.playing;
-		    pauseButton.visible = myMusicController.soundModel.playing;
-		}
-		
-		private function eChange(event:PlayableModelEvent):void {
-		    playButton.visible = !myMusicController.soundModel.playing;
-		    pauseButton.visible = myMusicController.soundModel.playing;
-		}
+	public function get playButton():Sprite { 
+		return myPlayButton;
+	}
+	public function get pauseButton():Sprite {
+		return myPauseButton;
+	}
 	}
 }

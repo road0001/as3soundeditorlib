@@ -29,10 +29,12 @@ package com.tobydietrich.soundeditor.model
       static public var CHANGE:String = "CHANGE";
       static public var PROGRESS:String = "PROGRESS";
       
+      public var time:Number;
       public function PlayableModelEvent(type:String, bubbles:Boolean=false, 
-        cancelable:Boolean=false)
+        cancelable:Boolean=false, time:Number=0.0)
       {
          super(type, bubbles, cancelable);
+         this.time = time;
       }
       
    }

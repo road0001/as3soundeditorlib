@@ -23,48 +23,53 @@
  * The spectrum graph
  */
 package com.tobydietrich.soundeditor.view
-{
-   import com.tobydietrich.soundeditor.controller.SpectrumController;
-   
+{  
    import flash.display.Sprite;
-   import flash.events.*;
    import com.tobydietrich.soundeditor.model.*;
 
    public class SpectrumView extends Sprite
 	{
-		private var mySpectrumController:SpectrumController;
 		
-		public function SpectrumView(spectrumController:SpectrumController) 
+		private var mySpectrumModel:SpectrumModel;
+		
+		public function SpectrumView(spectrumModel:SpectrumModel) 
 		{
-			mySpectrumController = spectrumController;
-			mySpectrumController.spectrumModel.addEventListener(SpectrumModelEvent.ADD_TIME, 
-			 eAddTime);
+			mySpectrumModel = spectrumModel;
+			spectrumModel.addEventListener(PlayableModelEvent.PROGRESS, eProgress);
+			
 			var midline:Sprite = new Sprite();
 			midline.x = 0;
-			midline.y = MusicView.SPECTRUM_HEIGHT/2;
-			midline.graphics.beginFill(MusicView.FILL_COLOR);
-			midline.graphics.drawRect(0, 0, MusicView.SPECTRUM_WIDTH, 1);
+			midline.y = SoundEditorView.SPECTRUM_HEIGHT/2;
+			midline.graphics.beginFill(SoundEditorView.FILL_COLOR);
+			midline.graphics.drawRect(0, 0, SoundEditorView.SPECTRUM_WIDTH, 1);
 			midline.graphics.endFill();
 			addChild(midline);
+			
 		}
 		
-		private function eAddTime(event:SpectrumModelEvent):void {
-			var myX:int = event.time / mySpectrumController.musicController.soundModel.length * MusicView.SPECTRUM_WIDTH;
+		private function get spectrumModel():SpectrumModel {
+			return mySpectrumModel;
+		}
+		
+		public function eProgress(event:PlayableModelEvent):void {
+			trace("call addthime");
+			addTime(spectrumModel.getLeftPeak(event.time), spectrumModel.getRightPeak(event.time), event.time/ spectrumModel.soundModel.length);
+		}
+		public function addTime(leftPeak:Number, rightPeak:Number, fractionComplete:Number):void {
+			var myX:int = fractionComplete * SoundEditorView.SPECTRUM_WIDTH;
 			var right:Sprite = new Sprite();
 			right.x = myX;
-			right.y = MusicView.SPECTRUM_HEIGHT/2;
-			right.graphics.beginFill(MusicView.FILL_COLOR);
-			right.graphics.drawRect(0, 0, 1, 
-			 mySpectrumController.spectrumModel.getRightPeak(event.time) * MusicView.SPECTRUM_HEIGHT/2);
+			right.y = SoundEditorView.SPECTRUM_HEIGHT/2;
+			right.graphics.beginFill(SoundEditorView.FILL_COLOR);
+			right.graphics.drawRect(0, 0, 1, rightPeak * SoundEditorView.SPECTRUM_HEIGHT/2);
 			right.graphics.endFill();
 			addChild(right);
 			var left:Sprite = new Sprite();
 			left.x = myX;
-			left.y = MusicView.SPECTRUM_HEIGHT/2-mySpectrumController.spectrumModel.getLeftPeak(event.time) * 
-			 MusicView.SPECTRUM_HEIGHT/2;
-			left.graphics.beginFill(MusicView.FILL_COLOR);
-			left.graphics.drawRect(0, 0, 1, 
-			 mySpectrumController.spectrumModel.getLeftPeak(event.time) * MusicView.SPECTRUM_HEIGHT/2);
+			left.y = SoundEditorView.SPECTRUM_HEIGHT/2-leftPeak * 
+			 SoundEditorView.SPECTRUM_HEIGHT/2;
+			left.graphics.beginFill(SoundEditorView.FILL_COLOR);
+			left.graphics.drawRect(0, 0, 1, leftPeak * SoundEditorView.SPECTRUM_HEIGHT/2);
 			left.graphics.endFill();
 			addChild(left);
 		}
