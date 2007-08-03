@@ -31,14 +31,14 @@
    import flash.media.SoundTransform;
    import flash.events.TimerEvent;
    import flash.utils.Timer;
+   
+   import com.tobydietrich.soundeditor.utils.PlayableEvent;
 
    public class SoundModel extends EventDispatcher implements IPlayableModel
    {
    	private var TIMER_INTERVAL:int = 10;
    	
    	private var myTimer:Timer;
-      // enum listing the play state
-      private var myPlayState:int;
       
       // the mp3 file
       private var mySound:Sound;
@@ -53,12 +53,12 @@
 
       /* Constructor */
       public function SoundModel(sound:Sound) {
-		   mySound = sound;
-         stop();
+		 mySound = sound;
          volume = 1.0; 
          myTimer = new Timer(TIMER_INTERVAL);
-         myTimer.addEventListener("timer", eTimerEvent);
-         myTimer.start();
+	     myTimer.addEventListener("timer", eTimerEvent);
+	     
+         stop();
       }
 
       /* Getters for internal objects */
@@ -72,11 +72,11 @@
       
       /* Volume functions */
       public function get leftPeak():Number {
-      	return mySoundChannel.leftPeak;
+      	return (playing) ? soundChannel.leftPeak : 0;
       }
       
       public function get rightPeak():Number {
-      	return mySoundChannel.rightPeak;
+      	return (playing) ? soundChannel.rightPeak : 0;
       }
       
       public function get volume():Number {
@@ -89,37 +89,35 @@
 
 /* Time - based functions */
       public function get length():int {
-	        return mySound.length;
+	     return mySound.length;
       }
 
       public function get position():int {
-         if(mySoundChannel == null) {
-            return myPausePosition;
-         } else {
-            return mySoundChannel.position;
-         }
+         return (playing) ? soundChannel.position : myPausePosition;
       }
 
       /* this is the most important function */
       public function set position(newPosition:int):void {
-         if(soundChannel != null) {
+         if(playing) {
             soundChannel.stop();
             mySoundChannel = null;
+            myTimer.stop();
          }
          myPausePosition = newPosition;
-         if(newPosition == 0) {
-      	   playState = PlayState.STOPPED;
-      	  } else if (newPosition == length) {
-      	     playState = PlayState.STOPPED;
-      	  } else {
-      	     playState = PlayState.PAUSED;
-      	  } 
-         dispatchEvent(new PlayableModelEvent(PlayableModelEvent.CHANGE));
+         dispatchEvent(new PlayableEvent(PlayableEvent.CHANGE));
+      }
+      
+      public function play():void {
+         if(!playing) {
+	         mySoundChannel = sound.play(position, 0, new SoundTransform(volume));
+	         myTimer.start();
+	         mySoundChannel.addEventListener(Event.SOUND_COMPLETE, eComplete);
+	         dispatchEvent(new PlayableEvent(PlayableEvent.CHANGE));
+         }
       }
       
       /* fraction overrides */
-      public function get fractionComplete():Number
-      {
+      public function get fractionComplete():Number {
          return position / length;
       }
       
@@ -128,78 +126,39 @@
       }
       
       // friendly functions
-      public function stop():void
-      {
+      public function stop():void {
          position = 0;
-         
-         dispatchEvent(new PlayableModelEvent(PlayableModelEvent.CHANGE));
       }
 
-      public function rewindAll():void
-      {
+      public function rewindAll():void {
          position = 0;
-         
-         dispatchEvent(new PlayableModelEvent(PlayableModelEvent.CHANGE));
       }
       
       public function forwardAll():void {
          position = length;
-         
-         dispatchEvent(new PlayableModelEvent(PlayableModelEvent.CHANGE));
       }
       
       public function pause():void {
          //  this looks silly
          position = position;
-         dispatchEvent(new PlayableModelEvent(PlayableModelEvent.CHANGE));
       }
       
-      public function play():void {
-         if(soundChannel != null) {
-            return;
-         }
-         if(stopped) {
-            rewindAll();
-         }
-         mySoundChannel = sound.play(position, 0, new SoundTransform(volume));
-         playState = PlayState.PLAYING;
-         mySoundChannel.addEventListener(Event.SOUND_COMPLETE, eComplete);
-         dispatchEvent(new PlayableModelEvent(PlayableModelEvent.CHANGE));
-      }
-      
-      public function get stopped():Boolean
-      {
-         return myPlayState == PlayState.STOPPED;
-      }
-
-      public function get atStart():Boolean
-      {
-         return playPosition == PlayPosition.AT_START;
-      }
-
-      public function get atEnd():Boolean
-      {
-         return playPosition == PlayPosition.AT_END;
-      }
-
-      public function get paused():Boolean
-      {
-         return myPlayState == PlayState.PAUSED;
-      }
-
-      public function get playing():Boolean
-      {
-         return myPlayState == PlayState.PLAYING;
-      }
-
       public function get playState():int {
-         return myPlayState;
-      }
-      
-      public function set playState(newPlayState:int):void {
-      	myPlayState = newPlayState;
+         return (soundChannel == null) ? PlayState.PAUSED : PlayState.PLAYING;
       }
 
+      public function get playing():Boolean {
+			return playState == PlayState.PLAYING;
+      }
+
+      public function get stopped():Boolean {
+			return !playing && atEnd;
+      }
+      
+      public function get paused():Boolean {
+			return !playing && !atEnd;
+      }
+      
       public function get playPosition():int {
          if(position == 0 && !playing) {
             return PlayPosition.AT_START;
@@ -210,17 +169,23 @@
          }
       }
       
+      public function get atStart():Boolean {
+         return playPosition == PlayPosition.AT_START;
+      }
+
+      public function get atEnd():Boolean {
+         return playPosition == PlayPosition.AT_END;
+      }
+
       private function eComplete(event:Event):void {
-         position = length;
-         dispatchEvent(event);
+		forwardAll();
       }
       
       private function eTimerEvent(event:TimerEvent):void {
-      	ping();
+      	 dispatchEvent(new PlayableEvent(PlayableEvent.PROGRESS));
       }
       public function ping():void {
-         dispatchEvent(new PlayableModelEvent(PlayableModelEvent.CHANGE));
+         dispatchEvent(new PlayableEvent(PlayableEvent.CHANGE));
       } 
-      
    }
 }

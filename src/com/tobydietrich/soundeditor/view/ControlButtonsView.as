@@ -1,7 +1,6 @@
 package com.tobydietrich.soundeditor.view
 {
 	import com.tobydietrich.soundeditor.controller.*;
-	import com.tobydietrich.soundeditor.model.*;
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	
@@ -25,9 +24,9 @@ public function ControlButtonsView(playerController:PlayerController) {
       		myForwardButtonView.x = ButtonView.BUTTON_SIZE*4;
       		addChild(myForwardButtonView);
       	
-      		rewindButtonView.addEventListener(MouseEvent.CLICK, playerController.eRewind);
-      		playButtonView.addEventListener(MouseEvent.CLICK, playerController.ePlay);
-      		forwardButtonView.addEventListener(MouseEvent.CLICK, playerController.eForward);
+      		rewindButtonView.addEventListener(MouseEvent.CLICK, eRewind);
+      		playButtonView.addEventListener(MouseEvent.CLICK, ePlay);
+      		forwardButtonView.addEventListener(MouseEvent.CLICK, eForward);
 }	
 		
 		public function get playButtonView():PlayButtonView {
@@ -39,24 +38,28 @@ public function ControlButtonsView(playerController:PlayerController) {
 		public function get forwardButtonView():ForwardButtonView {
 			return myForwardButtonView;
 		}
-		public function playButtonEnabled(enabled:Boolean):void {
-			myPlayButtonView.playButton.visible = enabled;
-		}
-		
-		public function pauseButtonEnabled(enabled:Boolean):void {
-			myPlayButtonView.pauseButton.visible = enabled;
+		public function paused(e:Boolean):void {
+			myPlayButtonView.paused = e;
 		}
 		
 		public function forwardButtonEnabled(enabled:Boolean):void {
-			myForwardButtonView.forwardButton.visible = enabled;
+			myForwardButtonView.enabled = enabled;
 		}
 		
 	    public function rewindButtonEnabled(enabled:Boolean):void {
-			myRewindButtonView.rewindButton.visible = enabled;
+			myRewindButtonView.enabled = enabled;
 		}
 		private function get playerController():PlayerController {
 			return myPlayerController;
 		}
-		
+		private function eRewind(event:MouseEvent):void {
+			playerController.rewindAll();
+		}
+		private function eForward(event:MouseEvent):void {
+			playerController.forwardAll();
+		}
+		private function ePlay(event:MouseEvent):void {
+			playerController.play();
+		}
 	}
 }

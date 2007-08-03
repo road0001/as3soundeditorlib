@@ -26,7 +26,7 @@
 {
 
 	import com.tobydietrich.soundeditor.model.SoundModel;
-	import com.tobydietrich.soundeditor.model.PlayableModelEvent;
+	import com.tobydietrich.soundeditor.utils.PlayableEvent;
 		import flash.events.EventDispatcher;
 		import flash.events.MouseEvent;
 		import com.tobydietrich.soundeditor.view.*;
@@ -41,10 +41,11 @@
 		   mySoundModel = soundModel;
 		   
 		   soundModel.pause();
-      		soundModel.addEventListener(PlayableModelEvent.CHANGE, eUpdate);
+      		soundModel.addEventListener(PlayableEvent.CHANGE, eUpdate);
+      		soundModel.addEventListener(PlayableEvent.PROGRESS, eProgress);
       		soundModel.ping();
 		}
-		public function get soundModel():SoundModel {
+		private function get soundModel():SoundModel {
 			return mySoundModel;
 		}
 		
@@ -55,7 +56,7 @@
 		public function get controlButtonsView():ControlButtonsView {
 			return myControlButtonsView;
 		}
-		public function ePlay(event:MouseEvent):void {
+		public function play():void {
 			if(soundModel.playing) {
 				soundModel.pause();
 			} else {
@@ -63,30 +64,37 @@
 			}
 		}
 		
-		public function eRewind(event:MouseEvent):void {
+		public function rewindAll():void {
 			soundModel.rewindAll();
 		}
 		
-		public function eForward(event:MouseEvent):void {
+		public function forwardAll():void {
 			soundModel.forwardAll();
 		}
 		
-		private function eCursor(event:MouseEvent):void {
+		public function get fractionComplete():Number {
+			return soundModel.fractionComplete;
+		}
+		
+		public function set fractionComplete(fraction:Number):void {
 		   var playing:Boolean = soundModel.playing;
-		   soundModel.fractionComplete = 
-		     event.localX / SoundEditorView.SPECTRUM_WIDTH;
+		   soundModel.fractionComplete = fraction;
 		   if(playing) {
 		      soundModel.play();
 		   }
 		}
 		
-		public function eUpdate(event:PlayableModelEvent):void {
+		public function eProgress(event:PlayableEvent):void {
+			dispatchEvent(new PlayableEvent(PlayableEvent.PROGRESS));
+		}
+		public function eUpdate(event:PlayableEvent):void {
 			if(controlButtonsView != null) {
-		   controlButtonsView.playButtonEnabled(!soundModel.playing);
-		   controlButtonsView.pauseButtonEnabled(soundModel.playing);
-		   controlButtonsView.forwardButtonEnabled(!soundModel.atEnd);
-		   controlButtonsView.rewindButtonEnabled(!soundModel.atStart);
-		 }
+			   controlButtonsView.paused(soundModel.paused);
+			   controlButtonsView.forwardButtonEnabled(!soundModel.atEnd);
+			   controlButtonsView.rewindButtonEnabled(!soundModel.atStart);
+		 	}
+
+			dispatchEvent(new PlayableEvent(PlayableEvent.CHANGE));
 		}
 	}
 }

@@ -28,7 +28,7 @@ package com.tobydietrich.soundeditor.view
 	
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
-	import com.tobydietrich.soundeditor.model.PlayableModelEvent;
+	import com.tobydietrich.soundeditor.utils.PlayableEvent;
 
 	public class PlayButtonView extends ButtonView
 	{	
@@ -43,14 +43,15 @@ package com.tobydietrich.soundeditor.view
 			
 			myPauseButton = new ButtonLabel('||');
 			addChildAt(myPauseButton, 0);
+			paused = true;
 			
 		}
-		
-	public function get playButton():Sprite { 
-		return myPlayButton;
-	}
-	public function get pauseButton():Sprite {
-		return myPauseButton;
-	}
+		public function set paused(e:Boolean):void {
+			myPlayButton.visible = e;
+			myPauseButton.visible = !e;
+		}
+		public function get paused():Boolean {
+			return myPlayButton.visible;
+		}
 	}
 }
