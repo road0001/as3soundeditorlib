@@ -25,7 +25,8 @@
 package com.tobydietrich.soundeditor.view
 {  
    import flash.display.Sprite;
-   import com.tobydietrich.soundeditor.model.*;
+   import com.tobydietrich.soundeditor.model.SpectrumModel;
+   import com.tobydietrich.soundeditor.utils.PlayableEvent;
 
    public class SpectrumView extends Sprite
 	{
@@ -35,7 +36,7 @@ package com.tobydietrich.soundeditor.view
 		public function SpectrumView(spectrumModel:SpectrumModel) 
 		{
 			mySpectrumModel = spectrumModel;
-			spectrumModel.addEventListener(PlayableModelEvent.PROGRESS, eProgress);
+			spectrumModel.addEventListener(PlayableEvent.PROGRESS, eProgress);
 			
 			var midline:Sprite = new Sprite();
 			midline.x = 0;
@@ -51,8 +52,7 @@ package com.tobydietrich.soundeditor.view
 			return mySpectrumModel;
 		}
 		
-		public function eProgress(event:PlayableModelEvent):void {
-			trace("call addthime");
+		public function eProgress(event:PlayableEvent):void {
 			addTime(spectrumModel.getLeftPeak(event.time), spectrumModel.getRightPeak(event.time), event.time/ spectrumModel.soundModel.length);
 		}
 		public function addTime(leftPeak:Number, rightPeak:Number, fractionComplete:Number):void {

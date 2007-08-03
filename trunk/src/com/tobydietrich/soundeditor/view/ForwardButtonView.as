@@ -28,7 +28,7 @@ package com.tobydietrich.soundeditor.view
 	
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
-	import com.tobydietrich.soundeditor.model.PlayableModelEvent;
+	import com.tobydietrich.soundeditor.utils.PlayableEvent;
 
 	public class ForwardButtonView extends ButtonView
 	{
@@ -40,8 +40,11 @@ package com.tobydietrich.soundeditor.view
 			myForwardButton = new ButtonLabel('>>');
 			addChildAt(myForwardButton, 0);
 		}
-		public function get forwardButton():Sprite {
-			return myForwardButton;
+		public function get enabled():Boolean {
+			return myForwardButton.visible;
+		}
+		public function set enabled(e:Boolean):void {
+			myForwardButton.visible = e;
 		}
 	}
 }

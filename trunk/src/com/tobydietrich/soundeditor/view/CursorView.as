@@ -21,11 +21,11 @@
  */
 package com.tobydietrich.soundeditor.view
 {
-	import com.tobydietrich.soundeditor.model.PlayableModelEvent;
 	
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import com.tobydietrich.soundeditor.controller.PlayerController;
+   import com.tobydietrich.soundeditor.utils.PlayableEvent;
 
 	public class CursorView extends Sprite
 	{
@@ -43,20 +43,25 @@ package com.tobydietrich.soundeditor.view
          cursorSprite.graphics.drawRect(0,0,1,SoundEditorView.SPECTRUM_HEIGHT);
          cursorSprite.graphics.endFill();
          addChild(cursorSprite);
-         
-         playerController.soundModel.addEventListener(PlayableModelEvent.PROGRESS, eUpdate);
+         addEventListener(MouseEvent.CLICK, eClick);
+         playerController.addEventListener(PlayableEvent.PROGRESS, eUpdate);
+         playerController.addEventListener(PlayableEvent.CHANGE, eUpdate);
 		}
 		
 		private function get playerController():PlayerController {
 			return myPlayerController;
 		}
 		
-		private function eUpdate(event:PlayableModelEvent):void {
-			updateCursor(playerController.soundModel.fractionComplete);
+		private function eUpdate(event:PlayableEvent):void {
+			updateCursor(playerController.fractionComplete);
 		}
 		
 		private function updateCursor(fractionComplete:Number):void {
 			cursorSprite.x = SoundEditorView.SPECTRUM_WIDTH * fractionComplete;
+		}
+		
+		private function eClick(event:MouseEvent):void {
+		     playerController.fractionComplete = event.localX / SoundEditorView.SPECTRUM_WIDTH;
 		}
 		
 	}

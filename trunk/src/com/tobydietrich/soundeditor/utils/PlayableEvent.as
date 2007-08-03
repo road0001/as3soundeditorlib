@@ -19,18 +19,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
  * THE SOFTWARE.
  */
-package com.tobydietrich.soundeditor.model
+package com.tobydietrich.soundeditor.utils
 {
    import flash.events.Event;
 
-   public class PlayableModelEvent extends Event
+   public class PlayableEvent extends Event
    {
       // the events that can fire.
       static public var CHANGE:String = "CHANGE";
       static public var PROGRESS:String = "PROGRESS";
       
       public var time:Number;
-      public function PlayableModelEvent(type:String, bubbles:Boolean=false, 
+      public function PlayableEvent(type:String, bubbles:Boolean=false, 
         cancelable:Boolean=false, time:Number=0.0)
       {
          super(type, bubbles, cancelable);

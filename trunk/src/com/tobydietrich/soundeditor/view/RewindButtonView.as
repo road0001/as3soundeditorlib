@@ -28,7 +28,7 @@ package com.tobydietrich.soundeditor.view
 	
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
-	import com.tobydietrich.soundeditor.model.PlayableModelEvent;
+	import com.tobydietrich.soundeditor.utils.PlayableEvent;
 
 	public class RewindButtonView extends ButtonView
 	{
@@ -40,8 +40,11 @@ package com.tobydietrich.soundeditor.view
 		   myRewindButton = new ButtonLabel('<<');
 			addChildAt(myRewindButton, 0);
 		}
-		public function get rewindButton():Sprite {
-			return myRewindButton;
+		public function get enabled():Boolean {
+			return myRewindButton.visible;
+		}
+		public function set enabled(e:Boolean):void {
+			myRewindButton.visible = e;
 		}
 	}
 }
