@@ -24,15 +24,10 @@
  */
 package com.tobydietrich.soundeditor.view
 {
-	import com.tobydietrich.soundeditor.controller.PlayerController;
-	
-	import flash.display.Sprite;
-	import flash.events.MouseEvent;
-	import com.tobydietrich.soundeditor.utils.PlayableEvent;
 
 	public class RewindButtonView extends ButtonView
 	{
-		private var myRewindButton:Sprite;
+		private var myRewindButton:ButtonLabel;
 		
 		public function RewindButtonView() {
 			super();

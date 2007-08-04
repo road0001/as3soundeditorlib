@@ -24,15 +24,9 @@
  */
 package com.tobydietrich.soundeditor.view
 {
-	import com.tobydietrich.soundeditor.controller.PlayerController;
-	
-	import flash.display.Sprite;
-	import flash.events.MouseEvent;
-	import com.tobydietrich.soundeditor.utils.PlayableEvent;
-
 	public class ForwardButtonView extends ButtonView
 	{
-		private var myForwardButton:Sprite;
+		private var myForwardButton:ButtonLabel;
 		
 		public function ForwardButtonView() {
 			super();

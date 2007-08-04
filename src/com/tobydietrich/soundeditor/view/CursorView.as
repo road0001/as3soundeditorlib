@@ -24,17 +24,17 @@ package com.tobydietrich.soundeditor.view
 	
 	import flash.display.Sprite;
 	import flash.events.MouseEvent;
-	import com.tobydietrich.soundeditor.controller.PlayerController;
+	import com.tobydietrich.soundeditor.controller.IMediaController;
    import com.tobydietrich.soundeditor.utils.PlayableEvent;
 
 	public class CursorView extends Sprite
 	{
 		private var cursorSprite:Sprite;
-		private var myPlayerController:PlayerController;
+		private var myMediaController:IMediaController;
 		
-		public function CursorView(playerController:PlayerController)
+		public function CursorView(mediaController:IMediaController)
 		{
-		myPlayerController = playerController;
+		 myMediaController = mediaController;
 		 graphics.beginFill(0xFFFFFF, 0.1); // XXX
 	     graphics.drawRect(0, 0, SoundEditorView.SPECTRUM_WIDTH, SoundEditorView.SPECTRUM_HEIGHT);
 	     graphics.endFill();
@@ -44,24 +44,20 @@ package com.tobydietrich.soundeditor.view
          cursorSprite.graphics.endFill();
          addChild(cursorSprite);
          addEventListener(MouseEvent.CLICK, eClick);
-         playerController.addEventListener(PlayableEvent.PROGRESS, eUpdate);
-         playerController.addEventListener(PlayableEvent.CHANGE, eUpdate);
+         mediaController.addEventListener(PlayableEvent.PROGRESS, eUpdate);
+         mediaController.addEventListener(PlayableEvent.CHANGE, eUpdate);
 		}
 		
-		private function get playerController():PlayerController {
-			return myPlayerController;
+		private function get mediaController():IMediaController {
+			return myMediaController;
 		}
 		
 		private function eUpdate(event:PlayableEvent):void {
-			updateCursor(playerController.fractionComplete);
-		}
-		
-		private function updateCursor(fractionComplete:Number):void {
-			cursorSprite.x = SoundEditorView.SPECTRUM_WIDTH * fractionComplete;
+			cursorSprite.x = SoundEditorView.SPECTRUM_WIDTH * mediaController.fractionComplete;
 		}
 		
 		private function eClick(event:MouseEvent):void {
-		     playerController.fractionComplete = event.localX / SoundEditorView.SPECTRUM_WIDTH;
+		     mediaController.fractionComplete = event.localX / SoundEditorView.SPECTRUM_WIDTH;
 		}
 		
 	}

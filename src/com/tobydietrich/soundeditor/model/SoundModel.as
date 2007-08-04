@@ -32,7 +32,7 @@
    import flash.events.TimerEvent;
    import flash.utils.Timer;
    
-   import com.tobydietrich.soundeditor.utils.PlayableEvent;
+   import com.tobydietrich.soundeditor.utils.*;
 
    public class SoundModel extends EventDispatcher implements IPlayableModel
    {
