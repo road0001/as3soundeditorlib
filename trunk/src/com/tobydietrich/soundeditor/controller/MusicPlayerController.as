@@ -31,13 +31,13 @@
 		import flash.events.MouseEvent;
 		import com.tobydietrich.soundeditor.view.*;
 
-	public class PlayerController extends EventDispatcher
+	public class MusicPlayerController extends EventDispatcher implements IMediaController
 	{	
 		private var mySoundModel:SoundModel;
 		private var myControlButtonsView:ControlButtonsView;
 		private var myCursorView:CursorView;
 
-		public function PlayerController(soundModel:SoundModel) {
+		public function MusicPlayerController(soundModel:SoundModel) {
 		   mySoundModel = soundModel;
 		   
 		   soundModel.pause();
@@ -49,9 +49,8 @@
 			return mySoundModel;
 		}
 		
-		public function registerControlButtonsView(controlButtonsView:ControlButtonsView):void {
-			
-		   myControlButtonsView = controlButtonsView;
+		public function set controlButtonsView(c:ControlButtonsView):void {
+		   myControlButtonsView = c;
 		}
 		public function get controlButtonsView():ControlButtonsView {
 			return myControlButtonsView;

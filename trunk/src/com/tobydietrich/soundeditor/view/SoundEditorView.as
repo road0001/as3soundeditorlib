@@ -28,7 +28,9 @@ package com.tobydietrich.soundeditor.view
    import flash.display.Sprite;
    import flash.events.Event;
    
-import com.tobydietrich.soundeditor.controller.SoundEditorController;
+import com.tobydietrich.soundeditor.controller.*;
+import com.tobydietrich.soundeditor.model.*;
+
    public class SoundEditorView extends Sprite
    {
    	
@@ -50,7 +52,7 @@ import com.tobydietrich.soundeditor.controller.SoundEditorController;
  
 
       private var cursorView:CursorView;
-      private var spectrumView:SpectrumView;
+      private var mySpectrumView:SpectrumView;
       
 
     /* Constructor */
@@ -79,21 +81,29 @@ import com.tobydietrich.soundeditor.controller.SoundEditorController;
       	return mySoundEditorController;
       }
       private function eLoaded(event:Event):void {
-      	myControlButtonsView = new ControlButtonsView(soundEditorController.playerController);
-      	soundEditorController.playerController.registerControlButtonsView(myControlButtonsView);
+      	myControlButtonsView = new ControlButtonsView(soundEditorController.musicPlayerController);
+      	soundEditorController.musicPlayerController.controlButtonsView = myControlButtonsView;
   		myControlButtonsView.x = 20;
   		myControlButtonsView.y = SoundEditorView.SPECTRUM_HEIGHT + 20;
   		addChild(myControlButtonsView);
   		
   		var musicView:Sprite = new Sprite();
   		
-  		spectrumView = new SpectrumView(soundEditorController.spectrumModel);
-         musicView.addChild(spectrumView);
-         cursorView = new CursorView(soundEditorController.playerController);
+  		mySpectrumView = new SpectrumView(soundEditorController.spectrumModel);
+         musicView.addChild(mySpectrumView);
+         cursorView = new CursorView(soundEditorController.musicPlayerController);
 		 musicView.addChild(cursorView);
   		
         addChild(musicView);
       		loaderWindow.visible = false;
+      		
+      		
+      		var lightboxCursorModel:LightboxCursorModel = new LightboxCursorModel();
+      		var spectrumViewCopy:SpectrumView = new SpectrumView(soundEditorController.spectrumModel);
+			var lightboxController:LightboxController = new LightboxController(lightboxCursorModel, soundEditorController.musicPlayerController, spectrumViewCopy, 500);
+			var lightboxView:LightboxView = new LightboxView(lightboxController);	
+			addChild(lightboxView);
+			lightboxView.y = 250;
       	}
       public function get cueLoaderView():LoaderView {
       	return myCueLoaderView;
@@ -107,6 +117,10 @@ import com.tobydietrich.soundeditor.controller.SoundEditorController;
       
       public function get controlButtonsView():ControlButtonsView {
       	return myControlButtonsView;
+      }
+      
+      public function get spectrumView():Sprite {
+      	return mySpectrumView;
       }
 }
 }

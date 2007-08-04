@@ -29,7 +29,7 @@ package com.tobydietrich.soundeditor.controller
    import flash.events.Event;
    import flash.events.EventDispatcher;
 
-   public class SoundEditorController  extends EventDispatcher {
+   public class SoundEditorController extends EventDispatcher {
    	// loaders
    	private var myCueLoaderModel:XMLLoaderModel;
    	// for the playhead
@@ -47,7 +47,7 @@ package com.tobydietrich.soundeditor.controller
    	private var mySpectrumModel:SpectrumModel;
             
 // controllers
-      private var myPlayerController:PlayerController;
+      private var myMusicPlayerController:MusicPlayerController;
       
 /* Constructor */
       public function SoundEditorController(sndURL:String, cueURL:String) {
@@ -67,7 +67,7 @@ package com.tobydietrich.soundeditor.controller
       
       private function eSoundLoaded(event:Event):void {
       	mySoundModel = new SoundModel(event.target.sound);
-      	myPlayerController = new PlayerController(mySoundModel);
+      	myMusicPlayerController = new MusicPlayerController(mySoundModel);
       	check(event);
       }
       
@@ -93,12 +93,11 @@ package com.tobydietrich.soundeditor.controller
       public function get spectrumSoundLoaderModel():SoundLoaderModel {
       	return mySpectrumSoundLoaderModel;
       }
-      public function get playerController():PlayerController {
-      	return myPlayerController;
+      public function get musicPlayerController():MusicPlayerController {
+      	return myMusicPlayerController;
       }
       public function get spectrumModel():SpectrumModel {
       	return mySpectrumModel;
-      }
-      
+      }      
 }
 }

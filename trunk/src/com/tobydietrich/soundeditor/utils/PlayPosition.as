@@ -20,14 +20,14 @@
  * THE SOFTWARE.
  */
 /***
- * An enumeration of play states
+ * An enumeration of play position states
  */
- package com.tobydietrich.soundeditor.model
+ package com.tobydietrich.soundeditor.utils
 {
-	public class PlayState
+	public class PlayPosition
 	{
-		static public var PLAYING:int = 0;
-		static public var PAUSED:int = 1;
-		static public var STOPPED:int = 2;
+		static public var AT_START:int = 0;
+		static public var AT_END:int = 1;
+		static public var IN_MIDDLE:int = 2;
 	}
 }

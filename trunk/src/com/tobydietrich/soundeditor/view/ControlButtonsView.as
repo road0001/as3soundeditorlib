@@ -11,10 +11,10 @@ package com.tobydietrich.soundeditor.view
       private var myRewindButtonView:RewindButtonView;
       private var myForwardButtonView:ForwardButtonView;
 
-private var myPlayerController:PlayerController;
+private var myMusicPlayerController:MusicPlayerController;
 
-public function ControlButtonsView(playerController:PlayerController) {
-	myPlayerController = playerController;
+public function ControlButtonsView(musicMusicPlayerController:MusicPlayerController) {
+	myMusicPlayerController = musicMusicPlayerController;
       		myRewindButtonView = new RewindButtonView();
       		addChild(myRewindButtonView);
       		myPlayButtonView = new PlayButtonView();
@@ -49,17 +49,17 @@ public function ControlButtonsView(playerController:PlayerController) {
 	    public function rewindButtonEnabled(enabled:Boolean):void {
 			myRewindButtonView.enabled = enabled;
 		}
-		private function get playerController():PlayerController {
-			return myPlayerController;
+		private function get musicMusicPlayerController():MusicPlayerController {
+			return myMusicPlayerController;
 		}
 		private function eRewind(event:MouseEvent):void {
-			playerController.rewindAll();
+			musicMusicPlayerController.rewindAll();
 		}
 		private function eForward(event:MouseEvent):void {
-			playerController.forwardAll();
+			musicMusicPlayerController.forwardAll();
 		}
 		private function ePlay(event:MouseEvent):void {
-			playerController.play();
+			musicMusicPlayerController.play();
 		}
 	}
 }
