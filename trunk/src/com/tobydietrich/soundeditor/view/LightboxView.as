@@ -14,6 +14,7 @@ package com.tobydietrich.soundeditor.view
       private var myLightboxController:LightboxController;
       
       
+      private var filmstripContainer:Sprite;
         private var lightboxSprite:Sprite;
 		private var cursorSprite:Sprite;      
       
@@ -21,7 +22,12 @@ package com.tobydietrich.soundeditor.view
       {
          myLightboxController = lightboxController;
           
-          addChild(filmstrip);
+          filmstripContainer = new Sprite();
+          filmstripContainer.addChild(filmstrip);
+          filmstripContainer.graphics.beginFill(0x333333);
+          filmstripContainer.graphics.drawRect(0,0,lightboxWidth, filmstrip.height);
+          filmstripContainer.graphics.endFill();
+          addChild(filmstripContainer);
           
 		 lightboxSprite = new Sprite();
 		 lightboxSprite.graphics.beginFill(0xFFFFFF, 0.1);
@@ -53,21 +59,16 @@ package com.tobydietrich.soundeditor.view
 	}
 	
 	private function mouseDownHandler(event:MouseEvent):void {
-            trace("mouseDownHandler");
-            var sprite:Sprite = Sprite(event.target);
-            sprite.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
-            sprite.startDrag();
+             filmstrip.addEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+            filmstrip.startDrag();
         }
 
         private function mouseUpHandler(event:MouseEvent):void {
-            trace("mouseUpHandler");
-            var sprite:Sprite = Sprite(event.target);
-            sprite.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
-            sprite.stopDrag();
+            filmstrip.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMoveHandler);
+            filmstrip.stopDrag();
         }
 
         private function mouseMoveHandler(event:MouseEvent):void {
-            trace("mouseMoveHandler");
             event.updateAfterEvent();
         }
 		
