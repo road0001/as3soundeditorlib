@@ -83,6 +83,10 @@
 		   }
 		}
 		
+		public function get position():Number {
+			return soundModel.position;
+		}
+		
 		public function eProgress(event:PlayableEvent):void {
 			dispatchEvent(new PlayableEvent(PlayableEvent.PROGRESS));
 		}
