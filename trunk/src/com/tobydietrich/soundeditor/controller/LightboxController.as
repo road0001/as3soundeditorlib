@@ -4,7 +4,7 @@
  */
 package com.tobydietrich.soundeditor.controller
 {
-	import com.tobydietrich.soundeditor.model.LightboxCursorModel;
+	import com.tobydietrich.soundeditor.model.*;
 	import com.tobydietrich.soundeditor.utils.PlayableEvent;
 	
 	import flash.display.Sprite;
@@ -14,21 +14,17 @@ package com.tobydietrich.soundeditor.controller
 	public class LightboxController extends EventDispatcher
 	{
 		private var myLightboxCursorModel:LightboxCursorModel;
-		private var myMediaController:IMediaController;
 		private var myFilmstrip:Sprite;
 		private var myLightboxWidth:int;
 		
 		
 		public function LightboxController(lightboxCursorModel:LightboxCursorModel, 
-		 mediaController:IMediaController, filmstrip:Sprite, lightboxWidth:int) {
+		 filmstrip:Sprite, lightboxWidth:int) {
 			myLightboxCursorModel = lightboxCursorModel;
-			myMediaController = mediaController;
 			myFilmstrip = filmstrip;
 			myLightboxWidth = lightboxWidth;
 			
 			myLightboxCursorModel.addEventListener(Event.CHANGE, eChange);
-            myMediaController.addEventListener(PlayableEvent.PROGRESS, eMediaUpdate);
-            myMediaController.addEventListener(PlayableEvent.CHANGE, eMediaUpdate);
 		}
 		
 		public function get frameStart():Number {
@@ -49,9 +45,9 @@ package com.tobydietrich.soundeditor.controller
 			dispatchEvent(new Event(Event.CHANGE));
 		}
 		
-		private function eMediaUpdate(event:PlayableEvent):void {
-			myLightboxCursorModel.update(Math.floor(myMediaController.fractionComplete / lightboxWidth) * lightboxWidth, 
-			 myMediaController.fractionComplete % lightboxWidth);
+		public function eMediaUpdate(event:PlayableEvent):void {
+			myLightboxCursorModel.update(Math.floor(event.target.fractionComplete / lightboxWidth) * lightboxWidth, 
+			 event.target.fractionComplete % lightboxWidth);
 		}
 		
 		public function get lightboxWidth():int {

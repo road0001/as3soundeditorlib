@@ -25,7 +25,9 @@
  */
  package com.tobydietrich.soundeditor.model
 {
-	public interface IPlayableModel
+	import flash.events.IEventDispatcher;
+	
+	public interface IPlayableModel extends IEventDispatcher
 	{
       function get stopped():Boolean;
 

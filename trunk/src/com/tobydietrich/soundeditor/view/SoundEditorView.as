@@ -27,6 +27,7 @@ package com.tobydietrich.soundeditor.view
 {
    import flash.display.Sprite;
    import flash.events.Event;
+   import com.tobydietrich.soundeditor.utils.*;
    
 import com.tobydietrich.soundeditor.controller.*;
 import com.tobydietrich.soundeditor.model.*;
@@ -100,7 +101,9 @@ import com.tobydietrich.soundeditor.model.*;
       		
       		var lightboxCursorModel:LightboxCursorModel = new LightboxCursorModel();
       		var spectrumViewCopy:SpectrumView = new SpectrumView(soundEditorController.spectrumModel);
-			var lightboxController:LightboxController = new LightboxController(lightboxCursorModel, soundEditorController.musicPlayerController, spectrumViewCopy, 500);
+			var lightboxController:LightboxController = new LightboxController(lightboxCursorModel, spectrumViewCopy, 500);
+			soundEditorController.soundModel.addEventListener(PlayableEvent.CHANGE, lightboxController.eMediaUpdate);
+			soundEditorController.soundModel.addEventListener(PlayableEvent.PROGRESS, lightboxController.eMediaUpdate);
 			var lightboxView:LightboxView = new LightboxView(lightboxController);	
 			addChild(lightboxView);
 			lightboxView.y = 250;
