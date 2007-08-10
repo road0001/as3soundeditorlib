@@ -38,6 +38,10 @@ package com.tobydietrich.soundeditor.view
 			mySpectrumModel = spectrumModel;
 			spectrumModel.addEventListener(PlayableEvent.PROGRESS, eProgress);
 			
+			graphics.beginFill(0xFFFFFF, 0.1); // XXX
+	     graphics.drawRect(0, 0, SoundEditorView.SPECTRUM_WIDTH, SoundEditorView.SPECTRUM_HEIGHT);
+	     graphics.endFill();
+	     
 			var midline:Sprite = new Sprite();
 			midline.x = 0;
 			midline.y = SoundEditorView.SPECTRUM_HEIGHT/2;

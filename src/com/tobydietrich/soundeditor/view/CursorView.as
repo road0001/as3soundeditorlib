@@ -35,9 +35,6 @@ package com.tobydietrich.soundeditor.view
 		public function CursorView(mediaController:IMediaController)
 		{
 		 myMediaController = mediaController;
-		 graphics.beginFill(0xFFFFFF, 0.1); // XXX
-	     graphics.drawRect(0, 0, SoundEditorView.SPECTRUM_WIDTH, SoundEditorView.SPECTRUM_HEIGHT);
-	     graphics.endFill();
 	     cursorSprite = new Sprite();
          cursorSprite.graphics.beginFill(SoundEditorView.CURSOR_COLOR);
          cursorSprite.graphics.drawRect(0,0,1,SoundEditorView.SPECTRUM_HEIGHT);

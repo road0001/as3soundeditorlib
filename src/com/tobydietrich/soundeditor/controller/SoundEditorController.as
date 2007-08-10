@@ -99,5 +99,8 @@ package com.tobydietrich.soundeditor.controller
       public function get spectrumModel():SpectrumModel {
       	return mySpectrumModel;
       }      
+      public function get soundModel():SoundModel {
+      	return mySoundModel;
+      }
 }
 }
