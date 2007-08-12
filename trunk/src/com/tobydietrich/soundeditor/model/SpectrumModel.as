@@ -28,8 +28,7 @@ package com.tobydietrich.soundeditor.model
 	import com.tobydietrich.soundeditor.utils.PlayableEvent;
 	import com.tobydietrich.soundeditor.view.SpectrumView;
 	
-	public class SpectrumModel extends EventDispatcher
-	{
+	public class SpectrumModel extends EventDispatcher 	{
 		private var myArrayLeft:Array = new Array();
 		private var myArrayRight:Array = new Array();
 		

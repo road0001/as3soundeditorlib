@@ -21,7 +21,7 @@
  */
  
 /**
- * Synchronizes the player and the sound.
+ * Synchronizes the player and the sound. Wraps the MusicPlayerController
  */
 package com.tobydietrich.soundeditor.controller
 {

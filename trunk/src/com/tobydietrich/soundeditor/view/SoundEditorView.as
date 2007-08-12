@@ -21,7 +21,7 @@
  */
  
 /**
- * Synchronizes the player and the sound.
+ * Synchronizes the player and the sound. Creates views that listens to MusicPlayerController
  */
 package com.tobydietrich.soundeditor.view
 {
@@ -97,16 +97,6 @@ import com.tobydietrich.soundeditor.model.*;
   		
         addChild(musicView);
       		loaderWindow.visible = false;
-      		
-      		
-      		var lightboxCursorModel:LightboxCursorModel = new LightboxCursorModel();
-      		var spectrumViewCopy:SpectrumView = new SpectrumView(soundEditorController.spectrumModel);
-			var lightboxController:LightboxController = new LightboxController(lightboxCursorModel, spectrumViewCopy, 500);
-			soundEditorController.soundModel.addEventListener(PlayableEvent.CHANGE, lightboxController.eMediaUpdate);
-			soundEditorController.soundModel.addEventListener(PlayableEvent.PROGRESS, lightboxController.eMediaUpdate);
-			var lightboxView:LightboxView = new LightboxView(lightboxController);	
-			addChild(lightboxView);
-			lightboxView.y = 250;
       	}
       public function get cueLoaderView():LoaderView {
       	return myCueLoaderView;
