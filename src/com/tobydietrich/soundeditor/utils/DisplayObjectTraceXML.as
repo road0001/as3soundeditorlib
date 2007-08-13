@@ -17,7 +17,7 @@ package com.tobydietrich.soundeditor.utils
             var sp:Sprite = dispObj as Sprite;
             if(sp is LabelSprite) {
                var ls:LabelSprite = sp as LabelSprite;
-               spriteXML = <sprite label={ls.text} x={ls.x} y={ls.y} height={ls.height} width={ls.width} />;
+               spriteXML = <sprite label={ls.label} x={ls.x} y={ls.y} height={ls.height} width={ls.width} />;
             } else {
                spriteXML = <sprite x={sp.x} y={sp.y} height={sp.height} width={sp.width} />;
             }
