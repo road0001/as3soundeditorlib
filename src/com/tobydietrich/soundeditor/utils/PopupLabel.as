@@ -22,8 +22,8 @@
 package com.tobydietrich.soundeditor.utils
 {
    import flash.text.TextField;
-   import flash.text.TextFormat;
    import flash.text.TextFieldAutoSize;
+   import flash.text.TextFormat;
 	
 	public class PopupLabel
 	{

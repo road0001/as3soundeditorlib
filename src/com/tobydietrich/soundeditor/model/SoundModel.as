@@ -23,23 +23,26 @@
  * This is a sound and the position in the sound.
  */
  
- package com.tobydietrich.soundeditor.model
+package com.tobydietrich.soundeditor.model
 {
-   import flash.events.*;
+   import com.tobydietrich.soundeditor.utils.PlayPosition;
+   import com.tobydietrich.soundeditor.utils.PlayState;
+   import com.tobydietrich.soundeditor.utils.PlayableEvent;
+    
+   import flash.events.Event;
+   import flash.events.EventDispatcher;
+   import flash.events.TimerEvent;
    import flash.media.Sound;
    import flash.media.SoundChannel;
    import flash.media.SoundTransform;
-   import flash.events.TimerEvent;
    import flash.utils.Timer;
-   
-   import com.tobydietrich.soundeditor.utils.*;
 
    public class SoundModel extends EventDispatcher implements IPlayableModel
    {
-   	private var TIMER_INTERVAL:int = 10;
-   	
-   	private var myTimer:Timer;
-      
+      private var TIMER_INTERVAL:int = 10;
+
+      private var myTimer:Timer;
+
       // the mp3 file
       private var mySound:Sound;
        
@@ -48,16 +51,16 @@
 
       // the number of milliseconds elapsed.
       private var myPausePosition:int;
-      
+
       private var myVolume:Number;
 
       /* Constructor */
       public function SoundModel(sound:Sound) {
-		 mySound = sound;
-         volume = 1.0; 
+         mySound = sound;
+         volume = 1.0;
          myTimer = new Timer(TIMER_INTERVAL);
-	     myTimer.addEventListener("timer", eTimerEvent);
-	     
+         myTimer.addEventListener("timer", eTimerEvent);
+
          stop();
       }
 
@@ -65,31 +68,31 @@
       public function get sound():Sound {
          return mySound;
       }
-      
+
       public function get soundChannel():SoundChannel {
-      	return mySoundChannel;
-      }
-      
-      /* Volume functions */
-      public function get leftPeak():Number {
-      	return (playing) ? soundChannel.leftPeak : 0;
-      }
-      
-      public function get rightPeak():Number {
-      	return (playing) ? soundChannel.rightPeak : 0;
-      }
-      
-      public function get volume():Number {
-      	return myVolume;
-      }
-      
-      public function set volume(newVolume:Number):void {
-      	myVolume = newVolume;
+         return mySoundChannel;
       }
 
-/* Time - based functions */
+      /* Volume functions */
+      public function get leftPeak():Number {
+         return (playing) ? soundChannel.leftPeak : 0;
+      }
+
+      public function get rightPeak():Number {
+         return (playing) ? soundChannel.rightPeak : 0;
+      }
+
+      public function get volume():Number {
+         return myVolume;
+      }
+
+      public function set volume(newVolume:Number):void {
+         myVolume = newVolume;
+      }
+
+      /* Time - based functions */
       public function get length():int {
-	     return mySound.length;
+         return mySound.length;
       }
 
       public function get position():int {
@@ -106,25 +109,25 @@
          myPausePosition = newPosition;
          dispatchEvent(new PlayableEvent(PlayableEvent.CHANGE));
       }
-      
+
       public function play():void {
          if(!playing) {
-	         mySoundChannel = sound.play(position, 0, new SoundTransform(volume));
-	         myTimer.start();
-	         mySoundChannel.addEventListener(Event.SOUND_COMPLETE, eComplete);
-	         dispatchEvent(new PlayableEvent(PlayableEvent.CHANGE));
+            mySoundChannel = sound.play(position, 0, new SoundTransform(volume));
+            myTimer.start();
+            mySoundChannel.addEventListener(Event.SOUND_COMPLETE, eComplete);
+            dispatchEvent(new PlayableEvent(PlayableEvent.CHANGE));
          }
       }
-      
+
       /* fraction overrides */
       public function get fractionComplete():Number {
          return position / length;
       }
-      
+
       public function set fractionComplete(fraction:Number):void {
          position = fraction * length;
       }
-      
+
       // friendly functions
       public function stop():void {
          position = 0;
@@ -133,32 +136,32 @@
       public function rewindAll():void {
          position = 0;
       }
-      
+
       public function forwardAll():void {
          position = length;
       }
-      
+
       public function pause():void {
          //  this looks silly
          position = position;
       }
-      
+
       public function get playState():int {
          return (soundChannel == null) ? PlayState.PAUSED : PlayState.PLAYING;
       }
 
       public function get playing():Boolean {
-			return playState == PlayState.PLAYING;
+         return playState == PlayState.PLAYING;
       }
 
       public function get stopped():Boolean {
-			return !playing && atEnd;
+         return !playing && atEnd;
       }
-      
+
       public function get paused():Boolean {
-			return !playing && !atEnd;
+         return !playing && !atEnd;
       }
-      
+
       public function get playPosition():int {
          if(position == 0 && !playing) {
             return PlayPosition.AT_START;
@@ -168,7 +171,7 @@
             return PlayPosition.IN_MIDDLE;
          }
       }
-      
+
       public function get atStart():Boolean {
          return playPosition == PlayPosition.AT_START;
       }
@@ -178,14 +181,14 @@
       }
 
       private function eComplete(event:Event):void {
-		forwardAll();
+         forwardAll();
       }
-      
+
       private function eTimerEvent(event:TimerEvent):void {
-      	 dispatchEvent(new PlayableEvent(PlayableEvent.PROGRESS));
+         dispatchEvent(new PlayableEvent(PlayableEvent.PROGRESS));
       }
       public function ping():void {
          dispatchEvent(new PlayableEvent(PlayableEvent.CHANGE));
-      } 
+      }
    }
 }

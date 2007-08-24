@@ -21,99 +21,91 @@
  */
  
 /**
- * Synchronizes the player and the sound. Creates views that listens to MusicPlayerController
+ * Synchronizes the player and the sound. Creates views that listen to MusicPlayerController
  */
 package com.tobydietrich.soundeditor.view
 {
+   import com.tobydietrich.soundeditor.controller.SoundEditorController;
+    
    import flash.display.Sprite;
    import flash.events.Event;
-   import com.tobydietrich.soundeditor.utils.*;
-   
-import com.tobydietrich.soundeditor.controller.*;
-import com.tobydietrich.soundeditor.model.*;
 
    public class SoundEditorView extends Sprite
    {
-   	
-   	
-   	static public var FILL_COLOR:uint = 0x00FF00;
-	   static public var SPECTRUM_HEIGHT:int = 200;
+      private var mySoundEditorController:SoundEditorController;
+
+      static public var FILL_COLOR:uint = 0x00FF00;
+      static public var SPECTRUM_HEIGHT:int = 200;
       static public var CURSOR_COLOR:uint = 0xFF0000;
       static public var SPECTRUM_WIDTH:int = 500;
-   	
-   	// loader views
+
+      // loader views
       private var myCueLoaderView:LoaderView;
-            private var mySoundLoaderView:LoaderView;
-            private var mySpectrumSoundLoaderView:LoaderView;
-            private var loaderWindow:Sprite; 
-      
-      private var mySoundEditorController:SoundEditorController;
-      
-	private var myControlButtonsView:ControlButtonsView;
- 
+      private var mySoundLoaderView:LoaderView;
+      private var mySpectrumSoundLoaderView:LoaderView;
+      private var loaderWindow:Sprite;
+
+      private var myControlButtonsView:ControlButtonsView;
 
       private var cursorView:CursorView;
       private var mySpectrumView:SpectrumView;
-      
 
-    /* Constructor */
+      /* Constructor */
       public function SoundEditorView(soundEditorController:SoundEditorController) {
-      	mySoundEditorController = soundEditorController;
-      	
-      	//loader views
-      	
-      	
-      	myCueLoaderView = new LoaderView(soundEditorController.cueLoaderModel);
-      	mySoundLoaderView = new LoaderView(soundEditorController.soundLoaderModel);
-      	mySpectrumSoundLoaderView = new LoaderView(soundEditorController.spectrumSoundLoaderModel);
-      	loaderWindow = new Sprite();
-      	addChild(loaderWindow);
-      	myCueLoaderView.x = 100;
-      	loaderWindow.addChild(myCueLoaderView);
-      	mySoundLoaderView.x = 200;
-      	loaderWindow.addChild(mySoundLoaderView);
-      	mySpectrumSoundLoaderView.x = 300;
-      	loaderWindow.addChild(mySpectrumSoundLoaderView);
-      	
-  		soundEditorController.addEventListener(Event.COMPLETE, eLoaded);
+         mySoundEditorController = soundEditorController;
+          
+         //loader views          
+         myCueLoaderView = new LoaderView(soundEditorController.cueLoaderModel);
+         mySoundLoaderView = new LoaderView(soundEditorController.soundLoaderModel);
+         mySpectrumSoundLoaderView = new LoaderView(soundEditorController.spectrumSoundLoaderModel);
+         loaderWindow = new Sprite();
+         addChild(loaderWindow);
+         myCueLoaderView.x = 100;
+         loaderWindow.addChild(myCueLoaderView);
+         mySoundLoaderView.x = 200;
+         loaderWindow.addChild(mySoundLoaderView);
+         mySpectrumSoundLoaderView.x = 300;
+         loaderWindow.addChild(mySpectrumSoundLoaderView);
+          
+         soundEditorController.addEventListener(Event.COMPLETE, eLoaded);
       }
-      
+
       private function get soundEditorController():SoundEditorController {
-      	return mySoundEditorController;
+         return mySoundEditorController;
       }
       private function eLoaded(event:Event):void {
-      	myControlButtonsView = new ControlButtonsView(soundEditorController.musicPlayerController);
-      	soundEditorController.musicPlayerController.controlButtonsView = myControlButtonsView;
-  		myControlButtonsView.x = 20;
-  		myControlButtonsView.y = SoundEditorView.SPECTRUM_HEIGHT + 20;
-  		addChild(myControlButtonsView);
-  		
-  		var musicView:Sprite = new Sprite();
-  		
-  		mySpectrumView = new SpectrumView(soundEditorController.spectrumModel);
+         myControlButtonsView = new ControlButtonsView(soundEditorController.musicPlayerController);
+         soundEditorController.musicPlayerController.controlButtonsView = myControlButtonsView;
+         myControlButtonsView.x = 20;
+         myControlButtonsView.y = SoundEditorView.SPECTRUM_HEIGHT + 20;
+         addChild(myControlButtonsView);
+
+         var musicView:Sprite = new Sprite();
+
+         mySpectrumView = new SpectrumView(soundEditorController.spectrumModel);
          musicView.addChild(mySpectrumView);
          cursorView = new CursorView(soundEditorController.musicPlayerController);
-		 musicView.addChild(cursorView);
-  		
-        addChild(musicView);
-      		loaderWindow.visible = false;
-      	}
+         musicView.addChild(cursorView);
+
+         addChild(musicView);
+         loaderWindow.visible = false;
+      }
       public function get cueLoaderView():LoaderView {
-      	return myCueLoaderView;
+         return myCueLoaderView;
       }
       public function get soundLoaderView():LoaderView {
-      	return mySoundLoaderView;
+         return mySoundLoaderView;
       }
       public function get spectrumSoundLoaderView():LoaderView {
-      	return mySpectrumSoundLoaderView;
+         return mySpectrumSoundLoaderView;
       }
-      
+
       public function get controlButtonsView():ControlButtonsView {
-      	return myControlButtonsView;
+         return myControlButtonsView;
       }
-      
+
       public function get spectrumView():Sprite {
-      	return mySpectrumView;
+         return mySpectrumView;
       }
-}
+   }
 }

@@ -25,21 +25,21 @@
 package com.tobydietrich.soundeditor.view
 {
 
-	public class RewindButtonView extends ButtonView
-	{
-		private var myRewindButton:ButtonLabel;
-		
-		public function RewindButtonView() {
-			super();
-		   
-		   myRewindButton = new ButtonLabel('<<');
-			addChildAt(myRewindButton, 0);
-		}
-		public function get enabled():Boolean {
-			return myRewindButton.visible;
-		}
-		public function set enabled(e:Boolean):void {
-			myRewindButton.visible = e;
-		}
-	}
+   public class RewindButtonView extends ButtonView
+   {
+      private var myRewindButton:ButtonLabel;
+
+      public function RewindButtonView() {
+         super();
+          
+         myRewindButton = new ButtonLabel('<<');
+         addChildAt(myRewindButton, 0);
+      }
+      public function get enabled():Boolean {
+         return myRewindButton.visible;
+      }
+      public function set enabled(e:Boolean):void {
+         myRewindButton.visible = e;
+      }
+   }
 }

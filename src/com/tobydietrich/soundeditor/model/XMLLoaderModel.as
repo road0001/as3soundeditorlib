@@ -24,25 +24,27 @@
  */
 package com.tobydietrich.soundeditor.model
 {
-   import flash.events.*;
+   import flash.events.Event;
+   import flash.events.EventDispatcher;
+   import flash.events.IOErrorEvent;
+   import flash.events.ProgressEvent;
    import flash.net.URLLoader;
    import flash.net.URLRequest;
-   import com.tobydietrich.soundeditor.view.LoaderView;
 
-   public class XMLLoaderModel extends EventDispatcher implements LoaderModel 
+   public class XMLLoaderModel extends EventDispatcher implements ILoaderModel
    {
-   	
-   	private var myName:String;
-   	private var myURL:String;
+
+      private var myName:String;
+      private var myURL:String;
       private var myXML:XML = new XML();
 
       private var myFractionLoaded:Number = 0;
 
-	  private var myIsComplete:Boolean = false;
-	  
+      private var myIsComplete:Boolean = false;
+       
       public function XMLLoaderModel (name:String, url:String) {
-      	myName = name;
-      	myURL = url;
+         myName = name;
+         myURL = url;
          var request:URLRequest = new URLRequest(url);
          var loader:URLLoader = new URLLoader(request);
          loader.addEventListener(Event.COMPLETE, eComplete);
@@ -53,14 +55,14 @@ package com.tobydietrich.soundeditor.model
       private function eComplete(event:Event):void {
          var loader:URLLoader = URLLoader(event.target);
          myXML = XML(loader.data);
-      	myIsComplete = true;   
+         myIsComplete = true;
          dispatchEvent(event);
       }
-      
+
       public function eIoError(event:Event):void {
          dispatchEvent(event);
       }
-      
+
       public function eProgress(event:ProgressEvent):void {
          var nTotal:Number = event.bytesTotal;
          if (nTotal>0) {
@@ -68,25 +70,25 @@ package com.tobydietrich.soundeditor.model
          }
          dispatchEvent(event);
       }
-      
+
       public function get fractionLoaded():Number {
-      	return myFractionLoaded;
+         return myFractionLoaded;
       }
-      
-      public function get xml():XML { 
-      	return myXML;
+
+      public function get xml():XML {
+         return myXML;
       }
-      
+
       public function get name():String {
-      	return myName;
+         return myName;
       }
-      
+
       public function get url():String {
-      	return myURL;
+         return myURL;
       }
-      
+
       public function get isComplete():Boolean {
-      	return myIsComplete;
+         return myIsComplete;
       }
-}
+   }
 }
