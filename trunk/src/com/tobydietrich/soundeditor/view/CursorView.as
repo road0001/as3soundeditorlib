@@ -21,21 +21,22 @@
  */
 package com.tobydietrich.soundeditor.view
 {
-	
-	import flash.display.Sprite;
-	import flash.events.MouseEvent;
-	import com.tobydietrich.soundeditor.controller.IMediaController;
+
+   import com.tobydietrich.soundeditor.controller.IMediaController;
    import com.tobydietrich.soundeditor.utils.PlayableEvent;
 
-	public class CursorView extends Sprite
-	{
-		private var cursorSprite:Sprite;
-		private var myMediaController:IMediaController;
-		
-		public function CursorView(mediaController:IMediaController)
-		{
-		 myMediaController = mediaController;
-	     cursorSprite = new Sprite();
+   import flash.display.Sprite;
+   import flash.events.MouseEvent;
+
+   public class CursorView extends Sprite
+   {
+      private var cursorSprite:Sprite;
+      private var myMediaController:IMediaController;
+
+      public function CursorView(mediaController:IMediaController)
+      {
+         myMediaController = mediaController;
+         cursorSprite = new Sprite();
          cursorSprite.graphics.beginFill(SoundEditorView.CURSOR_COLOR);
          cursorSprite.graphics.drawRect(0,0,1,SoundEditorView.SPECTRUM_HEIGHT);
          cursorSprite.graphics.endFill();
@@ -43,19 +44,19 @@ package com.tobydietrich.soundeditor.view
          addEventListener(MouseEvent.CLICK, eClick);
          mediaController.addEventListener(PlayableEvent.PROGRESS, eUpdate);
          mediaController.addEventListener(PlayableEvent.CHANGE, eUpdate);
-		}
-		
-		private function get mediaController():IMediaController {
-			return myMediaController;
-		}
-		
-		private function eUpdate(event:PlayableEvent):void {
-			cursorSprite.x = SoundEditorView.SPECTRUM_WIDTH * mediaController.fractionComplete;
-		}
-		
-		private function eClick(event:MouseEvent):void {
-		     mediaController.fractionComplete = event.localX / SoundEditorView.SPECTRUM_WIDTH;
-		}
-		
-	}
+      }
+
+      private function get mediaController():IMediaController {
+         return myMediaController;
+      }
+
+      private function eUpdate(event:PlayableEvent):void {
+         cursorSprite.x = SoundEditorView.SPECTRUM_WIDTH * mediaController.fractionComplete;
+      }
+
+      private function eClick(event:MouseEvent):void {
+         mediaController.fractionComplete = event.localX / SoundEditorView.SPECTRUM_WIDTH;
+      }
+
+   }
 }

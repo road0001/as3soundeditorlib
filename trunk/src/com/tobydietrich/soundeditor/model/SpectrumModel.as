@@ -24,57 +24,57 @@
  */
 package com.tobydietrich.soundeditor.model
 {
-	import flash.events.EventDispatcher;
-	import com.tobydietrich.soundeditor.utils.PlayableEvent;
-	import com.tobydietrich.soundeditor.view.SpectrumView;
-	
-	public class SpectrumModel extends EventDispatcher 	{
-		private var myArrayLeft:Array = new Array();
-		private var myArrayRight:Array = new Array();
-		
-		private var mySoundModel:SoundModel;
-		
-		public function SpectrumModel(soundModel:SoundModel) {
-			mySoundModel = soundModel;
-		 soundModel.volume = 0.01;
+   import com.tobydietrich.soundeditor.utils.PlayableEvent;
+
+   import flash.events.EventDispatcher;
+
+   public class SpectrumModel extends EventDispatcher 	{
+      private var myArrayLeft:Array = new Array();
+      private var myArrayRight:Array = new Array();
+
+      private var mySoundModel:SoundModel;
+
+      public function SpectrumModel(soundModel:SoundModel) {
+         mySoundModel = soundModel;
+         soundModel.volume = 0.01;
          soundModel.play();
          soundModel.addEventListener(PlayableEvent.PROGRESS, eProgress);
-		}
-		
-		public function getLeftPeak(time:int):Number {
-			return getPeak(myArrayLeft, time);
-		}
-		
-		public function getRightPeak(time:int):Number {
-			return getPeak(myArrayRight, time);
-		}
-		
-		private function getPeak(myArray:Array, time:int):Number {
-			// TODO: have it return the previous time, or something??
-			if (myArray[time] == null) { 
-			   return 0; 
-			} else {
-			   return myArray[time];
-			}
-		}
-		
-		public function get soundModel():SoundModel {
-			return mySoundModel;
-		}
-		
-		public function addPeak(leftPeak:Number, rightPeak:Number, 
-		 time:Number):void {
-			myArrayLeft[time] = leftPeak;
-			myArrayRight[time] = rightPeak;
-		}
-		
-		private function eProgress(event:PlayableEvent):void {
-			var position:Number = soundModel.position;
-			addPeak(
-			   soundModel.leftPeak / soundModel.volume, 
-			   soundModel.rightPeak/ soundModel.volume, 
-			   position);
-			   dispatchEvent(new PlayableEvent(PlayableEvent.PROGRESS, false, false, position));
-		}
-	}
+      }
+
+      public function getLeftPeak(time:int):Number {
+         return getPeak(myArrayLeft, time);
+      }
+
+      public function getRightPeak(time:int):Number {
+         return getPeak(myArrayRight, time);
+      }
+
+      private function getPeak(myArray:Array, time:int):Number {
+         // TODO: have it return the previous time, or something??
+         if (myArray[time] == null) {
+            return 0;
+         } else {
+            return myArray[time];
+         }
+      }
+
+      public function get soundModel():SoundModel {
+         return mySoundModel;
+      }
+
+      public function addPeak(leftPeak:Number, rightPeak:Number,
+      time:Number):void {
+         myArrayLeft[time] = leftPeak;
+         myArrayRight[time] = rightPeak;
+      }
+
+      private function eProgress(event:PlayableEvent):void {
+         var position:Number = soundModel.position;
+         addPeak(
+         soundModel.leftPeak / soundModel.volume,
+         soundModel.rightPeak/ soundModel.volume,
+         position);
+         dispatchEvent(new PlayableEvent(PlayableEvent.PROGRESS, false, false, position));
+      }
+   }
 }

@@ -24,27 +24,28 @@
  * This loads the sound and notifies a controller when it is done
  */
  
- package com.tobydietrich.soundeditor.model
+package com.tobydietrich.soundeditor.model
 {
-   import flash.events.*;
+   import flash.events.EventDispatcher;
+   import flash.events.ProgressEvent;
+   import flash.events.IOErrorEvent;
+   import flash.events.Event;
    import flash.media.Sound;
-   import flash.net.URLLoader;
    import flash.net.URLRequest;
-   import com.tobydietrich.soundeditor.view.LoaderView;
 
-   public class SoundLoaderModel  extends EventDispatcher implements LoaderModel
+   public class SoundLoaderModel  extends EventDispatcher implements ILoaderModel
    {
-	private var myName:String;
-	private var myURL:String;
+      private var myName:String;
+      private var myURL:String;
 
       private var mySound:Sound = new Sound();
 
       private var myFractionLoaded:Number = 0;
-	  private var myIsComplete:Boolean = false;
-	  
+      private var myIsComplete:Boolean = false;
+       
       public function SoundLoaderModel(name:String, url:String) {
-      	myName = name;
-      	myURL = url;
+         myName = name;
+         myURL = url;
          var request:URLRequest = new URLRequest(url);
          mySound.addEventListener(Event.COMPLETE, eComplete);
          mySound.addEventListener(Event.ID3, eId3);
@@ -57,11 +58,12 @@
          dispatchEvent(event);
          myIsComplete = true;
       }
-      
+
       public function eIoError(event:IOErrorEvent):void {
+         trace("io error occurred" + event.toString());
          dispatchEvent(event);
       }
-      
+
       public function eProgress(event:ProgressEvent):void {
          var nTotal:Number = event.bytesTotal;
          if (nTotal>0) {
@@ -69,29 +71,30 @@
          }
          dispatchEvent(event);
       }
-      
+
       private function eId3(event:Event):void {
+      	trace("id3 event occurred");
          dispatchEvent(event);
       }
-      
-      public  function get fractionLoaded():Number {
-      	return myFractionLoaded;
+
+      public function get fractionLoaded():Number {
+         return myFractionLoaded;
       }
 
       public function get sound():Sound {
          return mySound;
       }
-      
-      public  function get name():String {
-      	return myName;
+
+      public function get name():String {
+         return myName;
       }
-      
-      public  function get url():String {
-      	return myURL;
+
+      public function get url():String {
+         return myURL;
       }
-      
+
       public function get isComplete():Boolean {
-      	return myIsComplete;
+         return myIsComplete;
       }
-}
+   }
 }

@@ -28,14 +28,14 @@ package com.tobydietrich.soundeditor.utils
       // the events that can fire.
       static public var CHANGE:String = "CHANGE";
       static public var PROGRESS:String = "PROGRESS";
-      
+
       public var time:Number;
-      public function PlayableEvent(type:String, bubbles:Boolean=false, 
-        cancelable:Boolean=false, time:Number=0.0)
+      public function PlayableEvent(type:String, bubbles:Boolean=false,
+      cancelable:Boolean=false, time:Number=0.0)
       {
          super(type, bubbles, cancelable);
          this.time = time;
       }
-      
+
    }
 }

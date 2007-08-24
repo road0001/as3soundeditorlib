@@ -21,30 +21,27 @@
  */
 package com.tobydietrich.soundeditor.view
 {
-	import com.tobydietrich.soundeditor.utils.PopupLabel;
-	
-	import flash.display.Sprite;
-	import flash.text.TextField;
+   import flash.display.Sprite;
 
-	public class ButtonView extends Sprite
-	{
-	    static public var BUTTON_COLOR:uint = 0xFFFFFFF;
-	    static public var BUTTON_ALPHA:Number = 0.2;
-	    static public var BUTTON_SIZE:int = 10;
-	    static public var REWIND_BUTTON_COLOR:uint = 0x00FF00;
-	    static public var FORWARD_BUTTON_COLOR:uint = 0x00FF00;
-		static public var PLAY_BUTTON_COLOR:uint = 0x00FF00;
-		static public var PAUSE_BUTTON_COLOR:uint = 0xFF0000;
-	    	
-	    protected var buttonSprite:Sprite;
-	    	
-		public function ButtonView() {
-			super();
-			buttonSprite = new Sprite();
-			buttonSprite.graphics.beginFill(BUTTON_COLOR, BUTTON_ALPHA);
-			buttonSprite.graphics.drawCircle(0, 0, BUTTON_SIZE);
-			buttonSprite.graphics.endFill();
-			addChild(buttonSprite);
-		}
-	}
+   public class ButtonView extends Sprite
+   {
+      static public var BUTTON_COLOR:uint = 0xFFFFFFF;
+      static public var BUTTON_ALPHA:Number = 0.2;
+      static public var BUTTON_SIZE:int = 10;
+      static public var REWIND_BUTTON_COLOR:uint = 0x00FF00;
+      static public var FORWARD_BUTTON_COLOR:uint = 0x00FF00;
+      static public var PLAY_BUTTON_COLOR:uint = 0x00FF00;
+      static public var PAUSE_BUTTON_COLOR:uint = 0xFF0000;
+
+      protected var buttonSprite:Sprite;
+
+      public function ButtonView() {
+         super();
+         buttonSprite = new Sprite();
+         buttonSprite.graphics.beginFill(BUTTON_COLOR, BUTTON_ALPHA);
+         buttonSprite.graphics.drawCircle(0, 0, BUTTON_SIZE);
+         buttonSprite.graphics.endFill();
+         addChild(buttonSprite);
+      }
+   }
 }

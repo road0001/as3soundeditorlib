@@ -24,21 +24,21 @@
  */
 package com.tobydietrich.soundeditor.view
 {
-	public class ForwardButtonView extends ButtonView
-	{
-		private var myForwardButton:ButtonLabel;
-		
-		public function ForwardButtonView() {
-			super();
-			
-			myForwardButton = new ButtonLabel('>>');
-			addChildAt(myForwardButton, 0);
-		}
-		public function get enabled():Boolean {
-			return myForwardButton.visible;
-		}
-		public function set enabled(e:Boolean):void {
-			myForwardButton.visible = e;
-		}
-	}
+   public class ForwardButtonView extends ButtonView
+   {
+      private var myForwardButton:ButtonLabel;
+
+      public function ForwardButtonView() {
+         super();
+         	
+         myForwardButton = new ButtonLabel('>>');
+         addChildAt(myForwardButton, 0);
+      }
+      public function get enabled():Boolean {
+         return myForwardButton.visible;
+      }
+      public function set enabled(e:Boolean):void {
+         myForwardButton.visible = e;
+      }
+   }
 }

@@ -23,12 +23,12 @@
 /***
  * A model of something that is playable
  */
- package com.tobydietrich.soundeditor.model
+package com.tobydietrich.soundeditor.model
 {
-	import flash.events.IEventDispatcher;
-	
-	public interface IPlayableModel extends IEventDispatcher
-	{
+   import flash.events.IEventDispatcher;
+
+   public interface IPlayableModel extends IEventDispatcher
+   {
       function get stopped():Boolean;
 
       function get atStart():Boolean;
@@ -40,21 +40,21 @@
       function get playing():Boolean;
 
       function get playState():int;
-      
+
       function get playPosition():int;
 
       function rewindAll():void;
-		
-		function forwardAll():void;
-		
-		function play():void;
-		
-		function pause():void;
-		
-		function stop():void;
-		
-		function get fractionComplete():Number;
-		
-		function set fractionComplete(fraction:Number):void;
-	}
+
+      function forwardAll():void;
+
+      function play():void;
+
+      function pause():void;
+
+      function stop():void;
+
+      function get fractionComplete():Number;
+
+      function set fractionComplete(fraction:Number):void;
+   }
 }

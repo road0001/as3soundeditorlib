@@ -24,30 +24,30 @@
  */
 package com.tobydietrich.soundeditor.view
 {
-	import flash.display.Sprite;
+   import flash.display.Sprite;
 
-	public class PlayButtonView extends ButtonView
-	{	
-		private var myPlayButton:Sprite;
-		private var myPauseButton:Sprite;
-		
-		public function PlayButtonView() {
-			super();
-			
-			myPlayButton = new ButtonLabel('>');
-			addChildAt(myPlayButton, 0);
-			
-			myPauseButton = new ButtonLabel('||');
-			addChildAt(myPauseButton, 0);
-			paused = true;
-			
-		}
-		public function set paused(e:Boolean):void {
-			myPlayButton.visible = e;
-			myPauseButton.visible = !e;
-		}
-		public function get paused():Boolean {
-			return myPlayButton.visible;
-		}
-	}
+   public class PlayButtonView extends ButtonView
+   {
+      private var myPlayButton:Sprite;
+      private var myPauseButton:Sprite;
+
+      public function PlayButtonView() {
+         super();
+         	
+         myPlayButton = new ButtonLabel('>');
+         addChildAt(myPlayButton, 0);
+         	
+         myPauseButton = new ButtonLabel('||');
+         addChildAt(myPauseButton, 0);
+         paused = true;
+         	
+      }
+      public function set paused(e:Boolean):void {
+         myPlayButton.visible = e;
+         myPauseButton.visible = !e;
+      }
+      public function get paused():Boolean {
+         return myPlayButton.visible;
+      }
+   }
 }

@@ -24,56 +24,57 @@
  */
 package com.tobydietrich.soundeditor.view
 {
-	import flash.display.Sprite;
-	import flash.text.TextField;
-	import com.tobydietrich.soundeditor.model.*;
-	import com.tobydietrich.soundeditor.utils.*;
-	import flash.events.Event;
-	import flash.events.ProgressEvent;
+   import com.tobydietrich.soundeditor.model.ILoaderModel;
+   import com.tobydietrich.soundeditor.utils.PopupLabel;
 
-	public class LoaderView extends Sprite
-	{
-		static private var LOADER_HEIGHT:int = 10;
-		static private var LOADER_WIDTH:int = 50;
-		static private var TEXT_HEIGHT:int = 20;
-		static private var BG_COLOR:uint = 0x000000;
-		static private var FG_COLOR:uint = 0x00FF00;
+   import flash.display.Sprite;
+   import flash.events.Event;
+   import flash.events.ProgressEvent;
+   import flash.text.TextField;
 
-		private var progressBar:Sprite;
-		private var myLoaderModel:LoaderModel;
-		
-		public function LoaderView(loaderModel:LoaderModel) {
-			myLoaderModel = loaderModel;
-			loaderModel.addEventListener(ProgressEvent.PROGRESS, eUpdate);
-			loaderModel.addEventListener(Event.COMPLETE, eComplete);
-		   var label:TextField = 
-		      PopupLabel.createPopupLabel(loaderModel.name + " load progress");
-		   addChild(label);
-		   
-		   var box:Sprite = new Sprite();
-		   box.graphics.beginFill(BG_COLOR);
-		   box.graphics.drawRect(0, TEXT_HEIGHT, LOADER_WIDTH, LOADER_HEIGHT);
-		   box.graphics.endFill();
-		   addChild(box);
-		   
-		   progressBar = new Sprite();
-		   progressBar.graphics.beginFill(FG_COLOR);
-		   progressBar.graphics.drawRect(1,TEXT_HEIGHT+1, LOADER_WIDTH-2, LOADER_HEIGHT-2);
-		   progressBar.scaleX = 0;
-		   progressBar.graphics.endFill();
-		   box.addChild(progressBar);
-	   }
-	   
-	   private function get loaderModel():LoaderModel {
-	   	return myLoaderModel;
-	   }
-	   
-	   private function eUpdate(event:ProgressEvent):void {
-	   	   progressBar.scaleX = loaderModel.fractionLoaded;
-	   }
-	   
-	   private function eComplete(event:Event):void {
-	   	progressBar.scaleX = 1;
-	   }
-	}
+   public class LoaderView extends Sprite
+   {
+      static private var LOADER_HEIGHT:int = 10;
+      static private var LOADER_WIDTH:int = 50;
+      static private var TEXT_HEIGHT:int = 20;
+      static private var BG_COLOR:uint = 0x000000;
+      static private var FG_COLOR:uint = 0x00FF00;
+
+      private var progressBar:Sprite;
+      private var myLoaderModel:ILoaderModel;
+
+      public function LoaderView(loaderModel:ILoaderModel) {
+         myLoaderModel = loaderModel;
+         loaderModel.addEventListener(ProgressEvent.PROGRESS, eUpdate);
+         loaderModel.addEventListener(Event.COMPLETE, eComplete);
+         var label:TextField =
+         PopupLabel.createPopupLabel(loaderModel.name + " load progress");
+         addChild(label);
+          
+         var box:Sprite = new Sprite();
+         box.graphics.beginFill(BG_COLOR);
+         box.graphics.drawRect(0, TEXT_HEIGHT, LOADER_WIDTH, LOADER_HEIGHT);
+         box.graphics.endFill();
+         addChild(box);
+          
+         progressBar = new Sprite();
+         progressBar.graphics.beginFill(FG_COLOR);
+         progressBar.graphics.drawRect(1,TEXT_HEIGHT+1, LOADER_WIDTH-2, LOADER_HEIGHT-2);
+         progressBar.scaleX = 0;
+         progressBar.graphics.endFill();
+         box.addChild(progressBar);
+      }
+
+      private function get loaderModel():ILoaderModel {
+         return myLoaderModel;
+      }
+
+      private function eUpdate(event:ProgressEvent):void {
+         progressBar.scaleX = loaderModel.fractionLoaded;
+      }
+
+      private function eComplete(event:Event):void {
+         progressBar.scaleX = 1;
+      }
+   }
 }

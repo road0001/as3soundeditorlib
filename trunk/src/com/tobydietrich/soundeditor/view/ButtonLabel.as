@@ -23,21 +23,20 @@
 package com.tobydietrich.soundeditor.view
 {
    import flash.display.Sprite;
-      import flash.text.TextField;
+   import flash.text.TextField;
    import flash.text.TextFormat;
-   import flash.text.TextFieldAutoSize;
 
    public class ButtonLabel extends Sprite
    {
       public function ButtonLabel(labelText:String)
       {
-		   var labelFormat:TextFormat = new TextFormat("Verdana", 8, 0xFFFFFF);
-           var label:TextField = new TextField();
-           label.text = labelText;
-           label.defaultTextFormat = labelFormat;
-           label.x = -10;
-           label.y = -10;
-           addChild(label);
+         var labelFormat:TextFormat = new TextFormat("Verdana", 8, 0xFFFFFF);
+         var label:TextField = new TextField();
+         label.text = labelText;
+         label.defaultTextFormat = labelFormat;
+         label.x = -10;
+         label.y = -10;
+         addChild(label);
       }
    }
 }
