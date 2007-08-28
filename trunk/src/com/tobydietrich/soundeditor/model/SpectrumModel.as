@@ -29,9 +29,8 @@ package com.tobydietrich.soundeditor.model
    import flash.events.EventDispatcher;
 
    public class SpectrumModel extends EventDispatcher 	{
-      private var myArrayLeft:Array = new Array();
-      private var myArrayRight:Array = new Array();
-
+      private var mySpectrumModelXML:XML = <spectrummodel></spectrummodel>;
+      
       private var mySoundModel:SoundModel;
 
       public function SpectrumModel(soundModel:SoundModel) {
@@ -41,40 +40,28 @@ package com.tobydietrich.soundeditor.model
          soundModel.addEventListener(PlayableEvent.PROGRESS, eProgress);
       }
 
-      public function getLeftPeak(time:int):Number {
-         return getPeak(myArrayLeft, time);
-      }
-
-      public function getRightPeak(time:int):Number {
-         return getPeak(myArrayRight, time);
-      }
-
-      private function getPeak(myArray:Array, time:int):Number {
-         // TODO: have it return the previous time, or something??
-         if (myArray[time] == null) {
-            return 0;
+      public function getPeak(time:int):XML {
+         var peaks:XMLList = mySpectrumModelXML.peak.(@position <= time);
+         if(peaks.length() == 0) {
+         	return null;
          } else {
-            return myArray[time];
+         	return peaks[peaks.length()-1];
          }
       }
 
       public function get soundModel():SoundModel {
          return mySoundModel;
       }
-
-      public function addPeak(leftPeak:Number, rightPeak:Number,
-      time:Number):void {
-         myArrayLeft[time] = leftPeak;
-         myArrayRight[time] = rightPeak;
-      }
-
+      
       private function eProgress(event:PlayableEvent):void {
-         var position:Number = soundModel.position;
-         addPeak(
-         soundModel.leftPeak / soundModel.volume,
-         soundModel.rightPeak/ soundModel.volume,
-         position);
-         dispatchEvent(new PlayableEvent(PlayableEvent.PROGRESS, false, false, position));
+      	var peak:XML = <peak position={soundModel.position} 
+      	left={soundModel.leftPeak / soundModel.volume}
+      	right={soundModel.rightPeak / soundModel.volume} />;
+      	mySpectrumModelXML.appendChild(peak);
+        dispatchEvent(new PlayableEvent(PlayableEvent.PROGRESS, false, false, peak.@position));
+      }
+      public function get spectrumModelXML():XML {
+      	return mySpectrumModelXML;
       }
    }
 }

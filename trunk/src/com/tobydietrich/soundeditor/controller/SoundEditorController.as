@@ -25,7 +25,7 @@
  */
 package com.tobydietrich.soundeditor.controller
 {
-   import com.tobydietrich.soundeditor.model.CueModel;
+   import com.tobydietrich.soundeditor.model.CuePointModel;
    import com.tobydietrich.soundeditor.model.ILoaderModel;
    import com.tobydietrich.soundeditor.model.SoundLoaderModel;
    import com.tobydietrich.soundeditor.model.SoundModel;
@@ -45,7 +45,7 @@ package com.tobydietrich.soundeditor.controller
 
       // models
 
-      private var myCueModel:CueModel;
+      private var myCuePointModel:CuePointModel;
       // for the playhead
       private var mySoundModel:SoundModel;
       // to generate the spectrum
@@ -67,26 +67,29 @@ package com.tobydietrich.soundeditor.controller
       }
 
       private function eCueLoaded(event:Event):void {
-         myCueModel = new CueModel(event.target.xml);
+         myCuePointModel = new CuePointModel(event.target.xml);
+         trace("loaded cue");
          check(event);
       }
 
       private function eSoundLoaded(event:Event):void {
          mySoundModel = new SoundModel(event.target.sound);
+         trace("loaded sound");
          check(event);
       }
 
       private function eSpectrumSoundLoaded(event:Event):void {
          mySpectrumSoundModel = new SoundModel(event.target.sound);
+         trace("loaded spectrum sound");
          check(event);
       }
 
       private function check(event:Event):void {
-         if(myCueModel != null && mySoundModel != null
-         && mySpectrumModel != null) {
+         if(myCuePointModel != null && mySoundModel != null
+         && mySpectrumSoundModel != null) {
          	myMusicPlayerController = new MusicPlayerController(mySoundModel);
             mySpectrumModel = new SpectrumModel(mySpectrumSoundModel);
-            dispatchEvent(event);
+            dispatchEvent(new Event(Event.COMPLETE));
          }
       }
 
@@ -107,6 +110,9 @@ package com.tobydietrich.soundeditor.controller
       }
       public function get soundModel():SoundModel {
          return mySoundModel;
+      }
+      public function get cuePointModel():CuePointModel {
+         return myCuePointModel;
       }
    }
 }

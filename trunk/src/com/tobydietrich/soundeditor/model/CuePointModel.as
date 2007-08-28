@@ -25,16 +25,16 @@
  */
 package com.tobydietrich.soundeditor.model
 {
-   public class CueModel
+   public class CuePointModel
    {
-      // stores the CueModel file
+      // stores the CuePointModel file
       public var myXML:XML = new XML();
 
       // how many cue points are there?
       public var numCuePoints:int;
 
 
-      public function CueModel(m_xml:XML) {
+      public function CuePointModel(m_xml:XML) {
 		 myXML = m_xml;
       }
       
@@ -149,6 +149,9 @@ package com.tobydietrich.soundeditor.model
       	var m:XML = getMeasureFromTime(time);
       	return (m == null) ? 0 : ((m.Name=='End')?  
       	  ((lastMeasure == null) ? 0 : int(lastMeasure.Name)) : int(m.Name));
+      }
+      public function get xml():XML {
+      	return myXML;
       }
    }
 }

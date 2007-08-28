@@ -58,8 +58,12 @@ package com.tobydietrich.soundeditor.view
       }
 
       public function eProgress(event:PlayableEvent):void {
-         addTime(spectrumModel.getLeftPeak(event.time), spectrumModel.getRightPeak(event.time), event.time/ spectrumModel.soundModel.length);
+      	var peak:XML = spectrumModel.getPeak(event.time);
+      	if(peak != null) {
+      		addTime(peak.@left, peak.@right, event.time/ spectrumModel.soundModel.length);
+      	}
       }
+      
       public function addTime(leftPeak:Number, rightPeak:Number, fractionComplete:Number):void {
          var myX:int = fractionComplete * SoundEditorView.SPECTRUM_WIDTH;
          var right:Sprite = new Sprite();
