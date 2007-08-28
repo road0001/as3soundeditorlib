@@ -49,6 +49,7 @@ package com.tobydietrich.soundeditor.view
 
       private var cursorView:CursorView;
       private var mySpectrumView:SpectrumView;
+      private var myCuePointView:CuePointView;
 
       /* Constructor */
       public function SoundEditorView(soundEditorController:SoundEditorController) {
@@ -60,13 +61,13 @@ package com.tobydietrich.soundeditor.view
          mySpectrumSoundLoaderView = new LoaderView(soundEditorController.spectrumSoundLoaderModel);
          loaderWindow = new Sprite();
          addChild(loaderWindow);
-         myCueLoaderView.x = 100;
          loaderWindow.addChild(myCueLoaderView);
-         mySoundLoaderView.x = 200;
          loaderWindow.addChild(mySoundLoaderView);
-         mySpectrumSoundLoaderView.x = 300;
          loaderWindow.addChild(mySpectrumSoundLoaderView);
-          
+         myCueLoaderView.y = 0;
+         mySoundLoaderView.y = 50;
+         mySpectrumSoundLoaderView.y = 100; 
+         
          soundEditorController.addEventListener(Event.COMPLETE, eLoaded);
       }
 
@@ -81,12 +82,12 @@ package com.tobydietrich.soundeditor.view
          addChild(myControlButtonsView);
 
          var musicView:Sprite = new Sprite();
-
+         myCuePointView = new CuePointView(soundEditorController.cuePointModel, soundEditorController.soundModel);
+         musicView.addChild(cuePointView);
          mySpectrumView = new SpectrumView(soundEditorController.spectrumModel);
          musicView.addChild(mySpectrumView);
          cursorView = new CursorView(soundEditorController.musicPlayerController);
          musicView.addChild(cursorView);
-
          addChild(musicView);
          loaderWindow.visible = false;
       }
@@ -106,6 +107,9 @@ package com.tobydietrich.soundeditor.view
 
       public function get spectrumView():Sprite {
          return mySpectrumView;
+      }
+      public function get cuePointView():Sprite {
+         return myCuePointView;
       }
    }
 }

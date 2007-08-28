@@ -29,7 +29,6 @@ package com.tobydietrich.soundeditor
    public class SoundEditor extends Sprite
    {
       public function SoundEditor(sndURL:String, cueURL:String) {
-         	
          var soundEditorController:SoundEditorController =
          new SoundEditorController(sndURL, cueURL);
          var soundEditorView:SoundEditorView = new SoundEditorView(soundEditorController);
