@@ -50,6 +50,7 @@ package com.tobydietrich.soundeditor.view
       private var cursorView:CursorView;
       private var mySpectrumView:SpectrumView;
       private var myCuePointView:CuePointView;
+      private var myCuePointListView:CuePointListView;
 
       /* Constructor */
       public function SoundEditorView(soundEditorController:SoundEditorController) {
@@ -68,28 +69,30 @@ package com.tobydietrich.soundeditor.view
          mySoundLoaderView.y = 50;
          mySpectrumSoundLoaderView.y = 100; 
          
-         soundEditorController.addEventListener(Event.COMPLETE, eLoaded);
+         soundEditorController.addEventListener(Event.COMPLETE, function eLoaded(event:Event):void {
+	         myControlButtonsView = new ControlButtonsView(soundEditorController.musicPlayerController);
+	         soundEditorController.musicPlayerController.controlButtonsView = myControlButtonsView;
+	         myControlButtonsView.x = 20;
+	         myControlButtonsView.y = SoundEditorView.SPECTRUM_HEIGHT + 20;
+	         addChild(myControlButtonsView);
+	
+	         var musicView:Sprite = new Sprite();
+	         myCuePointView = new CuePointView(soundEditorController.cuePointModel, soundEditorController.soundModel);
+	         musicView.addChild(cuePointView);
+	         myCuePointListView = new CuePointListView(soundEditorController.cuePointModel, soundEditorController.soundModel);
+	         myCuePointListView.x = SoundEditorView.SPECTRUM_WIDTH + 20;
+	         musicView.addChild(cuePointListView);
+	         mySpectrumView = new SpectrumView(soundEditorController.spectrumModel);
+	         musicView.addChild(mySpectrumView);
+	         cursorView = new CursorView(soundEditorController.musicPlayerController);
+	         musicView.addChild(cursorView);
+	         addChild(musicView);
+	         loaderWindow.visible = false;
+	      });
       }
 
       private function get soundEditorController():SoundEditorController {
          return mySoundEditorController;
-      }
-      private function eLoaded(event:Event):void {
-         myControlButtonsView = new ControlButtonsView(soundEditorController.musicPlayerController);
-         soundEditorController.musicPlayerController.controlButtonsView = myControlButtonsView;
-         myControlButtonsView.x = 20;
-         myControlButtonsView.y = SoundEditorView.SPECTRUM_HEIGHT + 20;
-         addChild(myControlButtonsView);
-
-         var musicView:Sprite = new Sprite();
-         myCuePointView = new CuePointView(soundEditorController.cuePointModel, soundEditorController.soundModel);
-         musicView.addChild(cuePointView);
-         mySpectrumView = new SpectrumView(soundEditorController.spectrumModel);
-         musicView.addChild(mySpectrumView);
-         cursorView = new CursorView(soundEditorController.musicPlayerController);
-         musicView.addChild(cursorView);
-         addChild(musicView);
-         loaderWindow.visible = false;
       }
       public function get cueLoaderView():LoaderView {
          return myCueLoaderView;
@@ -110,6 +113,9 @@ package com.tobydietrich.soundeditor.view
       }
       public function get cuePointView():Sprite {
          return myCuePointView;
+      }
+      public function get cuePointListView():Sprite {
+         return myCuePointListView;
       }
    }
 }

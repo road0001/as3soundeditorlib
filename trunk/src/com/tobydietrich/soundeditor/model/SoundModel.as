@@ -59,7 +59,9 @@ package com.tobydietrich.soundeditor.model
          mySound = sound;
          volume = 1.0;
          myTimer = new Timer(TIMER_INTERVAL);
-         myTimer.addEventListener("timer", eTimerEvent);
+         myTimer.addEventListener("timer", function eTimerEvent(event:TimerEvent):void {
+	         dispatchEvent(new PlayableEvent(PlayableEvent.PROGRESS));
+	      });
 
          stop();
       }
@@ -101,6 +103,7 @@ package com.tobydietrich.soundeditor.model
 
       /* this is the most important function */
       public function set position(newPosition:int):void {
+      	var wasPlaying:Boolean = playing;
          if(playing) {
             soundChannel.stop();
             mySoundChannel = null;
@@ -108,13 +111,16 @@ package com.tobydietrich.soundeditor.model
          }
          myPausePosition = newPosition;
          dispatchEvent(new PlayableEvent(PlayableEvent.CHANGE));
+         
       }
 
       public function play():void {
          if(!playing) {
             mySoundChannel = sound.play(position, 0, new SoundTransform(volume));
             myTimer.start();
-            mySoundChannel.addEventListener(Event.SOUND_COMPLETE, eComplete);
+            mySoundChannel.addEventListener(Event.SOUND_COMPLETE, function eComplete(event:Event):void {
+		         forwardAll();
+		      });
             dispatchEvent(new PlayableEvent(PlayableEvent.CHANGE));
          }
       }
@@ -180,13 +186,6 @@ package com.tobydietrich.soundeditor.model
          return playPosition == PlayPosition.AT_END;
       }
 
-      private function eComplete(event:Event):void {
-         forwardAll();
-      }
-
-      private function eTimerEvent(event:TimerEvent):void {
-         dispatchEvent(new PlayableEvent(PlayableEvent.PROGRESS));
-      }
       public function ping():void {
          dispatchEvent(new PlayableEvent(PlayableEvent.CHANGE));
       }

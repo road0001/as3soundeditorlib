@@ -43,8 +43,22 @@ package com.tobydietrich.soundeditor.controller
          mySoundModel = soundModel;
 
          soundModel.pause();
-         soundModel.addEventListener(PlayableEvent.CHANGE, eUpdate);
-         soundModel.addEventListener(PlayableEvent.PROGRESS, eProgress);
+         soundModel.addEventListener(PlayableEvent.CHANGE, 
+	         function eUpdate(event:PlayableEvent):void {
+		         if(controlButtonsView != null) {
+		            controlButtonsView.paused(soundModel.paused);
+		            controlButtonsView.forwardButtonEnabled(!soundModel.atEnd);
+		            controlButtonsView.rewindButtonEnabled(!soundModel.atStart);
+		         }
+		
+		         dispatchEvent(new PlayableEvent(PlayableEvent.CHANGE));
+		      }
+	      );
+         soundModel.addEventListener(PlayableEvent.PROGRESS, 
+	         function eProgress(event:PlayableEvent):void {
+	         	dispatchEvent(new PlayableEvent(PlayableEvent.PROGRESS));
+	      	 }
+      	 );
          soundModel.ping();
       }
       private function get soundModel():SoundModel {
@@ -87,19 +101,6 @@ package com.tobydietrich.soundeditor.controller
 
       public function get position():Number {
          return soundModel.position;
-      }
-
-      public function eProgress(event:PlayableEvent):void {
-         dispatchEvent(new PlayableEvent(PlayableEvent.PROGRESS));
-      }
-      public function eUpdate(event:PlayableEvent):void {
-         if(controlButtonsView != null) {
-            controlButtonsView.paused(soundModel.paused);
-            controlButtonsView.forwardButtonEnabled(!soundModel.atEnd);
-            controlButtonsView.rewindButtonEnabled(!soundModel.atStart);
-         }
-
-         dispatchEvent(new PlayableEvent(PlayableEvent.CHANGE));
       }
    }
 }

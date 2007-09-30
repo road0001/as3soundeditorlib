@@ -28,6 +28,7 @@ package com.tobydietrich.soundeditor.utils
 
    public class LabelSprite extends Sprite
    {
+   	public var metadata:XML;
       private var myLabel:String;
       public function get label():String {
          return myLabel;

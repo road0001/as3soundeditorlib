@@ -46,9 +46,15 @@ package com.tobydietrich.soundeditor.view
          myForwardButtonView.x = ButtonView.BUTTON_SIZE*4;
          addChild(myForwardButtonView);
           
-         rewindButtonView.addEventListener(MouseEvent.CLICK, eRewind);
-         playButtonView.addEventListener(MouseEvent.CLICK, ePlay);
-         forwardButtonView.addEventListener(MouseEvent.CLICK, eForward);
+         rewindButtonView.addEventListener(MouseEvent.CLICK, function eRewind(event:MouseEvent):void {
+	         musicMusicPlayerController.rewindAll();
+	      });
+         playButtonView.addEventListener(MouseEvent.CLICK, function ePlay(event:MouseEvent):void {
+	         musicMusicPlayerController.play();
+	      });
+         forwardButtonView.addEventListener(MouseEvent.CLICK, function eForward(event:MouseEvent):void {
+	         musicMusicPlayerController.forwardAll();
+	      });
       }
 
       public function get playButtonView():PlayButtonView {
@@ -73,15 +79,6 @@ package com.tobydietrich.soundeditor.view
       }
       private function get musicMusicPlayerController():MusicPlayerController {
          return myMusicPlayerController;
-      }
-      private function eRewind(event:MouseEvent):void {
-         musicMusicPlayerController.rewindAll();
-      }
-      private function eForward(event:MouseEvent):void {
-         musicMusicPlayerController.forwardAll();
-      }
-      private function ePlay(event:MouseEvent):void {
-         musicMusicPlayerController.play();
       }
    }
 }
