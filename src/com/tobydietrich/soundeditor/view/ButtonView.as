@@ -37,6 +37,8 @@ package com.tobydietrich.soundeditor.view
 
       public function ButtonView() {
          super();
+         this.mouseChildren = false;
+         this.buttonMode = true;
          buttonSprite = new Sprite();
          buttonSprite.graphics.beginFill(BUTTON_COLOR, BUTTON_ALPHA);
          buttonSprite.graphics.drawCircle(0, 0, BUTTON_SIZE);

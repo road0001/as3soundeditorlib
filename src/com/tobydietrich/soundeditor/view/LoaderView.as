@@ -45,8 +45,12 @@ package com.tobydietrich.soundeditor.view
 
       public function LoaderView(loaderModel:ILoaderModel) {
          myLoaderModel = loaderModel;
-         loaderModel.addEventListener(ProgressEvent.PROGRESS, eUpdate);
-         loaderModel.addEventListener(Event.COMPLETE, eComplete);
+         loaderModel.addEventListener(ProgressEvent.PROGRESS, function eUpdate(event:ProgressEvent):void {
+	         progressBar.scaleX = loaderModel.fractionLoaded;
+	      });
+         loaderModel.addEventListener(Event.COMPLETE, function eComplete(event:Event):void {
+	         progressBar.scaleX = 1;
+	      });
          var label:TextField =
          PopupLabel.createPopupLabel(loaderModel.name + " load progress");
          addChild(label);
@@ -67,14 +71,6 @@ package com.tobydietrich.soundeditor.view
 
       private function get loaderModel():ILoaderModel {
          return myLoaderModel;
-      }
-
-      private function eUpdate(event:ProgressEvent):void {
-         progressBar.scaleX = loaderModel.fractionLoaded;
-      }
-
-      private function eComplete(event:Event):void {
-         progressBar.scaleX = 1;
       }
    }
 }

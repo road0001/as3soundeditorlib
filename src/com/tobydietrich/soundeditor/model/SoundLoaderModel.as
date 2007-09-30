@@ -47,36 +47,28 @@ package com.tobydietrich.soundeditor.model
          myName = name;
          myURL = url;
          var request:URLRequest = new URLRequest(url);
-         mySound.addEventListener(Event.COMPLETE, eComplete);
-         mySound.addEventListener(Event.ID3, eId3);
-         mySound.addEventListener(IOErrorEvent.IO_ERROR, eIoError);
-         mySound.addEventListener(ProgressEvent.PROGRESS, eProgress);
+         mySound.addEventListener(Event.COMPLETE, function eComplete(event:Event):void {
+	         dispatchEvent(event);
+	         myIsComplete = true;
+	      });
+         mySound.addEventListener(Event.ID3, function eId3(event:Event):void {
+	      	trace("id3 event occurred");
+	         dispatchEvent(event);
+	      });
+         mySound.addEventListener(IOErrorEvent.IO_ERROR, function eIoError(event:IOErrorEvent):void {
+	         trace("io error occurred" + event.toString());
+	         dispatchEvent(event);
+	      });
+         mySound.addEventListener(ProgressEvent.PROGRESS, function eProgress(event:ProgressEvent):void {
+	         var nTotal:Number = event.bytesTotal;
+	         if (nTotal>0) {
+	            myFractionLoaded = event.bytesLoaded / nTotal;
+	         }
+	         dispatchEvent(event);
+	      });
          mySound.load(request);
       }
-
-      private function eComplete(event:Event):void {
-         dispatchEvent(event);
-         myIsComplete = true;
-      }
-
-      public function eIoError(event:IOErrorEvent):void {
-         trace("io error occurred" + event.toString());
-         dispatchEvent(event);
-      }
-
-      public function eProgress(event:ProgressEvent):void {
-         var nTotal:Number = event.bytesTotal;
-         if (nTotal>0) {
-            myFractionLoaded = event.bytesLoaded / nTotal;
-         }
-         dispatchEvent(event);
-      }
-
-      private function eId3(event:Event):void {
-      	trace("id3 event occurred");
-         dispatchEvent(event);
-      }
-
+      
       public function get fractionLoaded():Number {
          return myFractionLoaded;
       }

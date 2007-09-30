@@ -37,7 +37,15 @@ package com.tobydietrich.soundeditor.model
          mySoundModel = soundModel;
          soundModel.volume = 0.01;
          soundModel.play();
-         soundModel.addEventListener(PlayableEvent.PROGRESS, eProgress);
+         soundModel.addEventListener(PlayableEvent.PROGRESS, 
+         	function eProgress(event:PlayableEvent):void {
+		      	var peak:XML = <peak position={soundModel.position} 
+		      	left={soundModel.leftPeak / soundModel.volume}
+		      	right={soundModel.rightPeak / soundModel.volume} />;
+		      	mySpectrumModelXML.appendChild(peak);
+		        dispatchEvent(new PlayableEvent(PlayableEvent.PROGRESS, false, false, peak.@position));
+      		}
+      	 );
       }
 
       public function getPeak(time:int):XML {
@@ -53,13 +61,6 @@ package com.tobydietrich.soundeditor.model
          return mySoundModel;
       }
       
-      private function eProgress(event:PlayableEvent):void {
-      	var peak:XML = <peak position={soundModel.position} 
-      	left={soundModel.leftPeak / soundModel.volume}
-      	right={soundModel.rightPeak / soundModel.volume} />;
-      	mySpectrumModelXML.appendChild(peak);
-        dispatchEvent(new PlayableEvent(PlayableEvent.PROGRESS, false, false, peak.@position));
-      }
       public function get spectrumModelXML():XML {
       	return mySpectrumModelXML;
       }

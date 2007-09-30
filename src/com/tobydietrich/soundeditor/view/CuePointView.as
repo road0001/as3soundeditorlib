@@ -33,6 +33,8 @@ package com.tobydietrich.soundeditor.view
 		
 		public function CuePointView(cuePointModel:CuePointModel, soundModel:SoundModel) 
 		{
+			this.mouseChildren = false;
+			this.buttonMode = true;
 		 graphics.beginFill(0xFFFFFF, 0.01); // XXX
          graphics.drawRect(0, 0, SoundEditorView.SPECTRUM_WIDTH, SoundEditorView.SPECTRUM_HEIGHT);
          graphics.endFill();

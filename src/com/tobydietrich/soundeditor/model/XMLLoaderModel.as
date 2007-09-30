@@ -37,6 +37,7 @@ package com.tobydietrich.soundeditor.model
       private var myName:String;
       private var myURL:String;
       private var myXML:XML = new XML();
+      public var metadata:XML;
 
       private var myFractionLoaded:Number = 0;
 
@@ -47,28 +48,22 @@ package com.tobydietrich.soundeditor.model
          myURL = url;
          var request:URLRequest = new URLRequest(url);
          var loader:URLLoader = new URLLoader(request);
-         loader.addEventListener(Event.COMPLETE, eComplete);
-         loader.addEventListener(ProgressEvent.PROGRESS, eProgress);
-         loader.addEventListener(IOErrorEvent.IO_ERROR, eIoError);
-      }
-
-      private function eComplete(event:Event):void {
-         var loader:URLLoader = URLLoader(event.target);
-         myXML = XML(loader.data);
-         myIsComplete = true;
-         dispatchEvent(event);
-      }
-
-      public function eIoError(event:Event):void {
-         dispatchEvent(event);
-      }
-
-      public function eProgress(event:ProgressEvent):void {
-         var nTotal:Number = event.bytesTotal;
-         if (nTotal>0) {
-            myFractionLoaded = event.bytesLoaded / nTotal;
-         }
-         dispatchEvent(event);
+         loader.addEventListener(Event.COMPLETE, function eComplete(event:Event):void {
+	         var loader:URLLoader = URLLoader(event.target);
+	         myXML = XML(loader.data);
+	         myIsComplete = true;
+	         dispatchEvent(event);
+	      });
+         loader.addEventListener(ProgressEvent.PROGRESS, function eIoError(event:Event):void {
+	         dispatchEvent(event);
+	      });
+         loader.addEventListener(IOErrorEvent.IO_ERROR, function eProgress(event:ProgressEvent):void {
+	         var nTotal:Number = event.bytesTotal;
+	         if (nTotal>0) {
+	            myFractionLoaded = event.bytesLoaded / nTotal;
+	         }
+	         dispatchEvent(event);
+	      });
       }
 
       public function get fractionLoaded():Number {

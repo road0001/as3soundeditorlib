@@ -59,29 +59,29 @@ package com.tobydietrich.soundeditor.controller
       public function SoundEditorController(sndURL:String, cueURL:String) {
          //loaders
          myCueLoaderModel = new XMLLoaderModel("cue", cueURL);
-         myCueLoaderModel.addEventListener(Event.COMPLETE, eCueLoaded);
+         myCueLoaderModel.addEventListener(Event.COMPLETE, 
+	         function eCueLoaded(event:Event):void {
+		         myCuePointModel = new CuePointModel(event.target.xml);
+		         trace("loaded cue");
+		         check(event);
+	      	 }
+      	 );
          mySoundLoaderModel = new SoundLoaderModel("mp3", sndURL);
-         mySoundLoaderModel.addEventListener(Event.COMPLETE, eSoundLoaded);
+         mySoundLoaderModel.addEventListener(Event.COMPLETE, 
+	         function eSoundLoaded(event:Event):void {
+		         mySoundModel = new SoundModel(event.target.sound);
+		         trace("loaded sound");
+		         check(event);
+      	 	 }
+      	 );
          mySpectrumSoundLoaderModel = new SoundLoaderModel("mp3 for spectrum", sndURL);
-         mySpectrumSoundLoaderModel.addEventListener(Event.COMPLETE, eSpectrumSoundLoaded);
-      }
-
-      private function eCueLoaded(event:Event):void {
-         myCuePointModel = new CuePointModel(event.target.xml);
-         trace("loaded cue");
-         check(event);
-      }
-
-      private function eSoundLoaded(event:Event):void {
-         mySoundModel = new SoundModel(event.target.sound);
-         trace("loaded sound");
-         check(event);
-      }
-
-      private function eSpectrumSoundLoaded(event:Event):void {
-         mySpectrumSoundModel = new SoundModel(event.target.sound);
-         trace("loaded spectrum sound");
-         check(event);
+         mySpectrumSoundLoaderModel.addEventListener(Event.COMPLETE, 
+	         function eSpectrumSoundLoaded(event:Event):void {
+		         mySpectrumSoundModel = new SoundModel(event.target.sound);
+		         trace("loaded spectrum sound");
+		         check(event);
+	         }
+         );
       }
 
       private function check(event:Event):void {
@@ -89,6 +89,7 @@ package com.tobydietrich.soundeditor.controller
          && mySpectrumSoundModel != null) {
          	myMusicPlayerController = new MusicPlayerController(mySoundModel);
             mySpectrumModel = new SpectrumModel(mySpectrumSoundModel);
+            mySpectrumSoundModel.addEventListener(Event.COMPLETE, function traceSpectrum(event:Event):void { trace(event.target.spectrumModelXML); });
             dispatchEvent(new Event(Event.COMPLETE));
          }
       }

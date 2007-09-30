@@ -37,7 +37,12 @@ package com.tobydietrich.soundeditor.view
       public function SpectrumView(spectrumModel:SpectrumModel)
       {
          mySpectrumModel = spectrumModel;
-         spectrumModel.addEventListener(PlayableEvent.PROGRESS, eProgress);
+         spectrumModel.addEventListener(PlayableEvent.PROGRESS, function eProgress(event:PlayableEvent):void {
+	      	var peak:XML = spectrumModel.getPeak(event.time);
+	      	if(peak != null) {
+	      		addTime(peak.@left, peak.@right, event.time/ spectrumModel.soundModel.length);
+	      	}
+	      });
          	
          graphics.beginFill(0xFFFFFF, 0.1); // XXX
          graphics.drawRect(0, 0, SoundEditorView.SPECTRUM_WIDTH, SoundEditorView.SPECTRUM_HEIGHT);
@@ -56,15 +61,8 @@ package com.tobydietrich.soundeditor.view
       private function get spectrumModel():SpectrumModel {
          return mySpectrumModel;
       }
-
-      public function eProgress(event:PlayableEvent):void {
-      	var peak:XML = spectrumModel.getPeak(event.time);
-      	if(peak != null) {
-      		addTime(peak.@left, peak.@right, event.time/ spectrumModel.soundModel.length);
-      	}
-      }
       
-      public function addTime(leftPeak:Number, rightPeak:Number, fractionComplete:Number):void {
+      private function addTime(leftPeak:Number, rightPeak:Number, fractionComplete:Number):void {
          var myX:int = fractionComplete * SoundEditorView.SPECTRUM_WIDTH;
          var right:Sprite = new Sprite();
          right.x = myX;
