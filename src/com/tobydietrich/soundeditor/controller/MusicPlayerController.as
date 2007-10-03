@@ -28,55 +28,34 @@ package com.tobydietrich.soundeditor.controller
 
    import com.tobydietrich.soundeditor.model.SoundModel;
    import com.tobydietrich.soundeditor.utils.PlayableEvent;
-   import com.tobydietrich.soundeditor.view.ControlButtonsView;
-   import com.tobydietrich.soundeditor.view.CursorView;
-
+   
    import flash.events.EventDispatcher;
 
    public class MusicPlayerController extends EventDispatcher implements IMediaController
    {
       private var mySoundModel:SoundModel;
-      private var myControlButtonsView:ControlButtonsView;
-      private var myCursorView:CursorView;
 
       public function MusicPlayerController(soundModel:SoundModel) {
          mySoundModel = soundModel;
 
-         soundModel.pause();
-         soundModel.addEventListener(PlayableEvent.CHANGE, 
-	         function eUpdate(event:PlayableEvent):void {
-		         if(controlButtonsView != null) {
-		            controlButtonsView.paused(soundModel.paused);
-		            controlButtonsView.forwardButtonEnabled(!soundModel.atEnd);
-		            controlButtonsView.rewindButtonEnabled(!soundModel.atStart);
-		         }
-		
-		         dispatchEvent(new PlayableEvent(PlayableEvent.CHANGE));
-		      }
-	      );
-         soundModel.addEventListener(PlayableEvent.PROGRESS, 
-	         function eProgress(event:PlayableEvent):void {
-	         	dispatchEvent(new PlayableEvent(PlayableEvent.PROGRESS));
-	      	 }
-      	 );
+         soundModel.play(false);
+         soundModel.addEventListener(PlayableEvent.PROGRESS, function eProgress(event:PlayableEvent):void {
+	     	dispatchEvent(new PlayableEvent(PlayableEvent.PROGRESS));
+	     });
+      	 soundModel.addEventListener(PlayableEvent.CHANGE, function eChange(event:PlayableEvent):void {
+      	 	dispatchEvent(new PlayableEvent(PlayableEvent.CHANGE));
+      	 });
          soundModel.ping();
       }
       private function get soundModel():SoundModel {
          return mySoundModel;
       }
 
-      public function set controlButtonsView(c:ControlButtonsView):void {
-         myControlButtonsView = c;
+      public function play(isPlayCommand:Boolean):void {
+            soundModel.play(isPlayCommand);
       }
-      public function get controlButtonsView():ControlButtonsView {
-         return myControlButtonsView;
-      }
-      public function play():void {
-         if(soundModel.playing) {
-            soundModel.pause();
-         } else {
-            soundModel.play();
-         }
+      public function togglePlay():void {
+      	soundModel.play(!soundModel.playing);
       }
 
       public function rewindAll():void {
@@ -87,20 +66,29 @@ package com.tobydietrich.soundeditor.controller
          soundModel.forwardAll();
       }
 
-      public function get fractionComplete():Number {
-         return soundModel.fractionComplete;
+      public function get position():int {
+         return soundModel.position;
       }
 
-      public function set fractionComplete(fraction:Number):void {
+      public function set position(p:int):void {
          var playing:Boolean = soundModel.playing;
-         soundModel.fractionComplete = fraction;
+         soundModel.position = p;
          if(playing) {
-            soundModel.play();
+            soundModel.play(true);
          }
       }
 
-      public function get position():Number {
-         return soundModel.position;
+      public function get atEnd():Boolean {
+      	return soundModel.atEnd;
+      }
+      public function get atStart():Boolean {
+      	return soundModel.atStart;
+      }
+      public function get paused():Boolean {
+      	return soundModel.paused;
+      }
+      public function get soundLength():int {
+      	return soundModel.length;
       }
    }
 }

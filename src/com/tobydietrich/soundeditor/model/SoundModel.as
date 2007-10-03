@@ -39,7 +39,7 @@ package com.tobydietrich.soundeditor.model
 
    public class SoundModel extends EventDispatcher implements IPlayableModel
    {
-      private var TIMER_INTERVAL:int = 10;
+      private var TIMER_DELAY:int = 10;
 
       private var myTimer:Timer;
 
@@ -58,8 +58,8 @@ package com.tobydietrich.soundeditor.model
       public function SoundModel(sound:Sound) {
          mySound = sound;
          volume = 1.0;
-         myTimer = new Timer(TIMER_INTERVAL);
-         myTimer.addEventListener("timer", function eTimerEvent(event:TimerEvent):void {
+         myTimer = new Timer(TIMER_DELAY);
+         myTimer.addEventListener(TimerEvent.TIMER, function eTimerEvent(event:TimerEvent):void {
 	         dispatchEvent(new PlayableEvent(PlayableEvent.PROGRESS));
 	      });
 
@@ -105,34 +105,48 @@ package com.tobydietrich.soundeditor.model
       public function set position(newPosition:int):void {
       	var wasPlaying:Boolean = playing;
          if(playing) {
-            soundChannel.stop();
-            mySoundChannel = null;
-            myTimer.stop();
+         	innerStop();
          }
          myPausePosition = newPosition;
+         if(wasPlaying) {
+         	innerStart();
+         }
          dispatchEvent(new PlayableEvent(PlayableEvent.CHANGE));
          
       }
 
-      public function play():void {
-         if(!playing) {
-            mySoundChannel = sound.play(position, 0, new SoundTransform(volume));
-            myTimer.start();
-            mySoundChannel.addEventListener(Event.SOUND_COMPLETE, function eComplete(event:Event):void {
-		         forwardAll();
-		      });
+      public function play(isPlayCommand:Boolean):void {
+         if(!playing && isPlayCommand) {
+            innerStart();
             dispatchEvent(new PlayableEvent(PlayableEvent.CHANGE));
          }
+         else if(playing && !isPlayCommand) {
+         	innerStop();
+         	dispatchEvent(new PlayableEvent(PlayableEvent.CHANGE));	
+         }
+      }
+      
+      /**
+      * starts playing at the saved position
+      */
+      private function innerStart():void {
+      	mySoundChannel = sound.play(position, 0, new SoundTransform(volume));
+        myTimer.start();
+        mySoundChannel.addEventListener(Event.SOUND_COMPLETE, function eComplete(event:Event):void {
+	         forwardAll();
+	      });
+        
+      }
+      /**
+      * saves position and stops playing
+      */
+      private function innerStop():void {
+      	myPausePosition = soundChannel.position;
+      	soundChannel.stop();
+        mySoundChannel = null;
+        myTimer.stop();
       }
 
-      /* fraction overrides */
-      public function get fractionComplete():Number {
-         return position / length;
-      }
-
-      public function set fractionComplete(fraction:Number):void {
-         position = fraction * length;
-      }
 
       // friendly functions
       public function stop():void {
@@ -145,11 +159,6 @@ package com.tobydietrich.soundeditor.model
 
       public function forwardAll():void {
          position = length;
-      }
-
-      public function pause():void {
-         //  this looks silly
-         position = position;
       }
 
       public function get playState():int {

@@ -47,14 +47,12 @@ package com.tobydietrich.soundeditor.model
 
       function forwardAll():void;
 
-      function play():void;
-
-      function pause():void;
+      function play(isPlayCommand:Boolean):void;
 
       function stop():void;
 
-      function get fractionComplete():Number;
+      function get position():int;
 
-      function set fractionComplete(fraction:Number):void;
+      function set position(p:int):void;
    }
 }

@@ -21,7 +21,7 @@
  */
  
 /**
- * Synchronizes the player and the sound. Creates views that listen to MusicPlayerController
+ * Synchronizes the player and the sound.
  */
 package com.tobydietrich.soundeditor.view
 {
@@ -70,24 +70,27 @@ package com.tobydietrich.soundeditor.view
          mySpectrumSoundLoaderView.y = 100; 
          
          soundEditorController.addEventListener(Event.COMPLETE, function eLoaded(event:Event):void {
-	         myControlButtonsView = new ControlButtonsView(soundEditorController.musicPlayerController);
-	         soundEditorController.musicPlayerController.controlButtonsView = myControlButtonsView;
-	         myControlButtonsView.x = 20;
-	         myControlButtonsView.y = SoundEditorView.SPECTRUM_HEIGHT + 20;
-	         addChild(myControlButtonsView);
-	
-	         var musicView:Sprite = new Sprite();
-	         myCuePointView = new CuePointView(soundEditorController.cuePointModel, soundEditorController.soundModel);
-	         musicView.addChild(cuePointView);
-	         myCuePointListView = new CuePointListView(soundEditorController.cuePointModel, soundEditorController.soundModel);
-	         myCuePointListView.x = SoundEditorView.SPECTRUM_WIDTH + 20;
-	         musicView.addChild(cuePointListView);
-	         mySpectrumView = new SpectrumView(soundEditorController.spectrumModel);
-	         musicView.addChild(mySpectrumView);
-	         cursorView = new CursorView(soundEditorController.musicPlayerController);
-	         musicView.addChild(cursorView);
-	         addChild(musicView);
-	         loaderWindow.visible = false;
+         	//update visibility
+			loaderWindow.visible = false;
+			
+         	// create the control buttons
+			myControlButtonsView = new ControlButtonsView(soundEditorController);
+			myControlButtonsView.x = 20;
+			myControlButtonsView.y = SoundEditorView.SPECTRUM_HEIGHT + 20;
+			addChild(myControlButtonsView);
+			
+			// create the cue point list
+			myCuePointListView = new CuePointListView(soundEditorController);
+			myCuePointListView.x = SoundEditorView.SPECTRUM_WIDTH + 20;
+			addChild(cuePointListView);
+			
+			// create the music view. Order is important.
+			mySpectrumView = new SpectrumView(soundEditorController);
+			addChild(mySpectrumView);
+			cursorView = new CursorView(soundEditorController);
+			spectrumView.addChild(cursorView);
+			myCuePointView = new CuePointView(soundEditorController);
+			cursorView.addChild(cuePointView);
 	      });
       }
 

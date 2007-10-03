@@ -35,25 +35,32 @@ package com.tobydietrich.soundeditor.view
 
       public function CursorView(mediaController:IMediaController)
       {
+      	// cache the controller
          myMediaController = mediaController;
+         
+         // create the cursor
          cursorSprite = new Sprite();
-         cursorSprite.mouseChildren = false;
-         cursorSprite.buttonMode = true;
          cursorSprite.graphics.beginFill(SoundEditorView.CURSOR_COLOR);
          cursorSprite.graphics.drawRect(0,0,1,SoundEditorView.SPECTRUM_HEIGHT);
          cursorSprite.graphics.endFill();
          addChild(cursorSprite);
+         
+         // add click event handlers
          addEventListener(MouseEvent.CLICK, 
 	         function eClick(event:MouseEvent):void {
-	         	mediaController.fractionComplete = event.localX / SoundEditorView.SPECTRUM_WIDTH;
+	         	//trace("clicked on cursorview");
+	         	mediaController.position = event.localX * mediaController.soundLength / width;
 	         }
          );
+         
+         // add update handlers
          mediaController.addEventListener(PlayableEvent.PROGRESS, eUpdate);
          mediaController.addEventListener(PlayableEvent.CHANGE, eUpdate);
       }
 
 	  private function eUpdate(event:PlayableEvent):void {
-	     cursorSprite.x = SoundEditorView.SPECTRUM_WIDTH * mediaController.fractionComplete;
+	  	//trace("updating cursor position from " + cursorSprite.x + " to " + mediaController.position * width / mediaController.soundLength);
+	     cursorSprite.x = mediaController.position * width / mediaController.soundLength;
 	  }
 	  
       private function get mediaController():IMediaController {

@@ -19,6 +19,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN 
  * THE SOFTWARE.
  */
+ /** 
+  * Contains events that happen to the playhead
+  */
 package com.tobydietrich.soundeditor.utils
 {
    import flash.events.Event;
@@ -26,15 +29,15 @@ package com.tobydietrich.soundeditor.utils
    public class PlayableEvent extends Event
    {
       // the events that can fire.
-      static public var CHANGE:String = "CHANGE";
-      static public var PROGRESS:String = "PROGRESS";
+      // change: changes in the playstate
+      static public var CHANGE:String = "PLAYABLE_CHANGE";
+      // progress: progress of the playhead.
+      static public var PROGRESS:String = "PLAYABLE_PROGRESS";
 
-      public var time:Number;
       public function PlayableEvent(type:String, bubbles:Boolean=false,
-      cancelable:Boolean=false, time:Number=0.0)
+      cancelable:Boolean=false)
       {
          super(type, bubbles, cancelable);
-         this.time = time;
       }
 
    }

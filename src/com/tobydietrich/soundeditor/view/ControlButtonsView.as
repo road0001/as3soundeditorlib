@@ -21,7 +21,9 @@
  */
 package com.tobydietrich.soundeditor.view
 {
-   import com.tobydietrich.soundeditor.controller.MusicPlayerController;
+   import com.tobydietrich.soundeditor.controller.IMediaController;
+   
+   import com.tobydietrich.soundeditor.utils.PlayableEvent;
 
    import flash.display.Sprite;
    import flash.events.MouseEvent;
@@ -33,10 +35,10 @@ package com.tobydietrich.soundeditor.view
       private var myRewindButtonView:RewindButtonView;
       private var myForwardButtonView:ForwardButtonView;
 
-      private var myMusicPlayerController:MusicPlayerController;
+      private var myMediaController:IMediaController;
 
-      public function ControlButtonsView(musicMusicPlayerController:MusicPlayerController) {
-         myMusicPlayerController = musicMusicPlayerController;
+      public function ControlButtonsView(mediaController:IMediaController) {
+         myMediaController = mediaController;
          myRewindButtonView = new RewindButtonView();
          addChild(myRewindButtonView);
          myPlayButtonView = new PlayButtonView();
@@ -47,14 +49,22 @@ package com.tobydietrich.soundeditor.view
          addChild(myForwardButtonView);
           
          rewindButtonView.addEventListener(MouseEvent.CLICK, function eRewind(event:MouseEvent):void {
-	         musicMusicPlayerController.rewindAll();
+	         mediaController.rewindAll();
 	      });
          playButtonView.addEventListener(MouseEvent.CLICK, function ePlay(event:MouseEvent):void {
-	         musicMusicPlayerController.play();
+	         mediaController.togglePlay();
 	      });
          forwardButtonView.addEventListener(MouseEvent.CLICK, function eForward(event:MouseEvent):void {
-	         musicMusicPlayerController.forwardAll();
+	         mediaController.forwardAll();
 	      });
+	      
+	      mediaController.addEventListener(PlayableEvent.CHANGE, 
+	         function eUpdate(event:PlayableEvent):void {
+		            paused(mediaController.paused);
+		            forwardButtonEnabled(!mediaController.atEnd);
+		            rewindButtonEnabled(!mediaController.atStart);
+		      }
+	      );
       }
 
       public function get playButtonView():PlayButtonView {
@@ -77,8 +87,8 @@ package com.tobydietrich.soundeditor.view
       public function rewindButtonEnabled(enabled:Boolean):void {
          myRewindButtonView.enabled = enabled;
       }
-      private function get musicMusicPlayerController():MusicPlayerController {
-         return myMusicPlayerController;
+      private function get mediaController():IMediaController {
+         return myMediaController;
       }
    }
 }

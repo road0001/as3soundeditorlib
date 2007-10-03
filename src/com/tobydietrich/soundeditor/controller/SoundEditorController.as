@@ -31,11 +31,16 @@ package com.tobydietrich.soundeditor.controller
    import com.tobydietrich.soundeditor.model.SoundModel;
    import com.tobydietrich.soundeditor.model.SpectrumModel;
    import com.tobydietrich.soundeditor.model.XMLLoaderModel;
-
+   import com.tobydietrich.soundeditor.utils.CuePointEvent;
+   import com.tobydietrich.soundeditor.utils.PlayableEvent;
+   import com.tobydietrich.soundeditor.utils.SpectrumEvent;
+   
    import flash.events.Event;
    import flash.events.EventDispatcher;
+   import flash.events.TimerEvent;
+   import flash.utils.Timer;
 
-   public class SoundEditorController extends EventDispatcher {
+   public class SoundEditorController extends EventDispatcher implements IMediaController {
       // loaders
       private var myCueLoaderModel:XMLLoaderModel;
       // for the playhead
@@ -52,9 +57,6 @@ package com.tobydietrich.soundeditor.controller
       private var mySpectrumSoundModel:SoundModel;
       private var mySpectrumModel:SpectrumModel;
 
-      // controllers
-      private var myMusicPlayerController:MusicPlayerController;
-
       /* Constructor */
       public function SoundEditorController(sndURL:String, cueURL:String) {
          //loaders
@@ -62,7 +64,14 @@ package com.tobydietrich.soundeditor.controller
          myCueLoaderModel.addEventListener(Event.COMPLETE, 
 	         function eCueLoaded(event:Event):void {
 		         myCuePointModel = new CuePointModel(event.target.xml);
-		         trace("loaded cue");
+		         cuePointModel.addEventListener(CuePointEvent.SELECT_NEW, function eSelectNew(event:CuePointEvent):void {
+		         	dispatchEvent(new CuePointEvent(CuePointEvent.SELECT_NEW));
+		         	dispatchEvent(new PlayableEvent(PlayableEvent.CHANGE));
+		         });
+		         cuePointModel.addEventListener(CuePointEvent.UPDATE, function eChange(event:CuePointEvent):void {
+		         	dispatchEvent(new CuePointEvent(CuePointEvent.UPDATE));
+		         });
+		         //trace("loaded cue");
 		         check(event);
 	      	 }
       	 );
@@ -70,7 +79,13 @@ package com.tobydietrich.soundeditor.controller
          mySoundLoaderModel.addEventListener(Event.COMPLETE, 
 	         function eSoundLoaded(event:Event):void {
 		         mySoundModel = new SoundModel(event.target.sound);
-		         trace("loaded sound");
+		         soundModel.addEventListener(PlayableEvent.PROGRESS, function eProgress(event:PlayableEvent):void {
+		         	dispatchEvent(new PlayableEvent(PlayableEvent.PROGRESS));
+		         });
+		         soundModel.addEventListener(PlayableEvent.CHANGE, function eChange(event:PlayableEvent):void {
+		         	dispatchEvent(new PlayableEvent(PlayableEvent.CHANGE));
+		         });
+		         //trace("loaded sound");
 		         check(event);
       	 	 }
       	 );
@@ -78,18 +93,49 @@ package com.tobydietrich.soundeditor.controller
          mySpectrumSoundLoaderModel.addEventListener(Event.COMPLETE, 
 	         function eSpectrumSoundLoaded(event:Event):void {
 		         mySpectrumSoundModel = new SoundModel(event.target.sound);
-		         trace("loaded spectrum sound");
+		         /* Don't think I need this */
+		         /*
+		         spectrumSoundModel.addEventListener(PlayableEvent.PROGRESS, function eProgress(event:PlayableEvent):void {
+		         	dispatchEvent(new Event(PlayableEvent.PROGRESS));
+		         });
+		         spectrumSoundModel.addEventListener(PlayableEvent.CHANGE, function eChange(event:PlayableEvent):void {
+		         	dispatchEvent(new Event(PlayableEvent.CHANGE));
+		         });
+		         */
+		         mySpectrumModel = new SpectrumModel(mySpectrumSoundModel);
+		         spectrumModel.addEventListener(SpectrumEvent.PROGRESS, function eProgress(event:SpectrumEvent):void {
+		         	dispatchEvent(new SpectrumEvent(SpectrumEvent.PROGRESS, false, false, event.time));
+		         });
+		         var t:Timer = new Timer(10000);
+		         t.addEventListener(TimerEvent.TIMER, reportSpectrum);
+            	 t.start();
+            	 mySpectrumSoundModel.addEventListener(Event.COMPLETE, reportSpectrum);
+            	 
+		         //trace("loaded spectrum sound");
 		         check(event);
 	         }
          );
+         
+
       }
+      
+      private function reportSpectrum(event:Event):void {
+ 	 	//trace("reporting spectrum");
+ 	 	//trace(spectrumModel.spectrumModelXML); 
+ 	 }
 
       private function check(event:Event):void {
          if(myCuePointModel != null && mySoundModel != null
          && mySpectrumSoundModel != null) {
-         	myMusicPlayerController = new MusicPlayerController(mySoundModel);
-            mySpectrumModel = new SpectrumModel(mySpectrumSoundModel);
-            mySpectrumSoundModel.addEventListener(Event.COMPLETE, function traceSpectrum(event:Event):void { trace(event.target.spectrumModelXML); });
+         	 // IMediaController functionality
+	         soundModel.play(false);
+	         soundModel.addEventListener(PlayableEvent.PROGRESS, function eProgress(event:PlayableEvent):void {
+		     	dispatchEvent(new PlayableEvent(PlayableEvent.PROGRESS));
+		     });
+	      	 soundModel.addEventListener(PlayableEvent.CHANGE, function eChange(event:PlayableEvent):void {
+	      	 	dispatchEvent(new PlayableEvent(PlayableEvent.CHANGE));
+	      	 });
+	         soundModel.ping();
             dispatchEvent(new Event(Event.COMPLETE));
          }
       }
@@ -103,17 +149,73 @@ package com.tobydietrich.soundeditor.controller
       public function get spectrumSoundLoaderModel():SoundLoaderModel {
          return mySpectrumSoundLoaderModel;
       }
-      public function get musicPlayerController():MusicPlayerController {
-         return myMusicPlayerController;
-      }
-      public function get spectrumModel():SpectrumModel {
+      private function get spectrumModel():SpectrumModel {
          return mySpectrumModel;
       }
-      public function get soundModel():SoundModel {
+      private function get soundModel():SoundModel {
          return mySoundModel;
       }
-      public function get cuePointModel():CuePointModel {
+      private function get cuePointModel():CuePointModel {
          return myCuePointModel;
       }
+      public function get cuePointList():XMLList {
+      	return cuePointModel.xml.CuePoint;
+      }
+      public function get numCuePoints():int {
+      	return cuePointModel.numCuePoints;
+      }
+      public function get selectedCuePoint():XML {
+      	return cuePointModel.selectedCuePoint;
+      }
+      public function set selectedCuePoint(s:XML):void {
+      	//trace("selected a cue point in the controller " + s.toXMLString());
+      	cuePointModel.selectedCuePoint = s;
+      	position = s.Time[0];
+      }
+      public function get soundLength():int {
+      	return soundModel.length;
+      }
+      public function getPeak(time:int):XML {
+      	return spectrumModel.getPeak(time);
+      }
+      
+      // IMediaController
+      public function play(isPlayCommand:Boolean):void {
+            soundModel.play(isPlayCommand);
+      }
+      public function togglePlay():void {
+      	soundModel.play(!soundModel.playing);
+      }
+
+      public function rewindAll():void {
+         soundModel.rewindAll();
+      }
+
+      public function forwardAll():void {
+         soundModel.forwardAll();
+      }
+
+      public function get position():int {
+         return soundModel.position;
+      }
+
+      public function set position(p:int):void {
+         var playing:Boolean = soundModel.playing;
+         soundModel.position = p;
+         if(playing) {
+            soundModel.play(true);
+         }
+      }
+
+      public function get atEnd():Boolean {
+      	return soundModel.atEnd;
+      }
+      public function get atStart():Boolean {
+      	return soundModel.atStart;
+      }
+      public function get paused():Boolean {
+      	return soundModel.paused;
+      }
+      
    }
 }
