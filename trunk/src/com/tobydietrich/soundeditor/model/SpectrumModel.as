@@ -24,7 +24,8 @@
  */
 package com.tobydietrich.soundeditor.model
 {
-   import com.tobydietrich.soundeditor.utils.PlayableEvent;
+	import com.tobydietrich.soundeditor.utils.PlayableEvent;
+	import com.tobydietrich.soundeditor.utils.SpectrumEvent;
 
    import flash.events.EventDispatcher;
 
@@ -36,14 +37,14 @@ package com.tobydietrich.soundeditor.model
       public function SpectrumModel(soundModel:SoundModel) {
          mySoundModel = soundModel;
          soundModel.volume = 0.01;
-         soundModel.play();
+         soundModel.play(true);
          soundModel.addEventListener(PlayableEvent.PROGRESS, 
          	function eProgress(event:PlayableEvent):void {
 		      	var peak:XML = <peak position={soundModel.position} 
 		      	left={soundModel.leftPeak / soundModel.volume}
 		      	right={soundModel.rightPeak / soundModel.volume} />;
 		      	mySpectrumModelXML.appendChild(peak);
-		        dispatchEvent(new PlayableEvent(PlayableEvent.PROGRESS, false, false, peak.@position));
+		        dispatchEvent(new SpectrumEvent(SpectrumEvent.PROGRESS, false, false, peak.@position));
       		}
       	 );
       }

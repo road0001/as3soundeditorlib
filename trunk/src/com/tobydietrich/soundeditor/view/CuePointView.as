@@ -21,46 +21,67 @@
  */
 package com.tobydietrich.soundeditor.view
 {
-	import com.tobydietrich.soundeditor.model.CuePointModel;
-	import com.tobydietrich.soundeditor.model.SoundModel;
+
+	import com.tobydietrich.soundeditor.controller.SoundEditorController;
+	import com.tobydietrich.soundeditor.utils.CuePointEvent;
 	
 	import flash.display.Sprite;
+	import flash.events.MouseEvent;
 
 	public class CuePointView extends Sprite
 	{
-		private var myCuePointModel:CuePointModel;
-		private var mySoundModel:SoundModel
+		private var mySoundEditorController:SoundEditorController;
+		private var cuePointLayer:Sprite = new Sprite();
 		
-		public function CuePointView(cuePointModel:CuePointModel, soundModel:SoundModel) 
+		public function CuePointView(soundEditorController:SoundEditorController) 
 		{
-			this.mouseChildren = false;
-			this.buttonMode = true;
-		 graphics.beginFill(0xFFFFFF, 0.01); // XXX
-         graphics.drawRect(0, 0, SoundEditorView.SPECTRUM_WIDTH, SoundEditorView.SPECTRUM_HEIGHT);
-         graphics.endFill();
-         
-			myCuePointModel = cuePointModel;
-			mySoundModel = soundModel;
-			for each(var cuePoint:XML in cuePointModel.xml.CuePoint) {
+			// cache the controller
+			mySoundEditorController = soundEditorController;
+			
+			// create the bounding box
+		 	graphics.beginFill(0xFFFFFF, 0.01); // XXX
+         	graphics.drawRect(0, 0, SoundEditorView.SPECTRUM_WIDTH, SoundEditorView.SPECTRUM_HEIGHT);
+         	graphics.endFill();
+         	
+         	// create the layer for cue points
+         	addChild(cuePointLayer);
+			
+			
+			// attach event listeners
+			soundEditorController.addEventListener(CuePointEvent.UPDATE, function eUpdate(event:CuePointEvent):void {
+				trace ("updating " + event.target);
+			});
+			
+			soundEditorController.addEventListener(CuePointEvent.SELECT_NEW, function eSelectNew(event:CuePointEvent):void {
+				//trace ("selecting new @ " + soundEditorController.selectedCuePoint.Time[0]);
+			});
+			
+			// add the cue points
+			addCuePoints(soundEditorController.cuePointList);
+		}
+		
+		private function addCuePoints(cuePointList:XMLList):void {
+			for each(var cuePoint:XML in cuePointList) {
 				if(cuePoint.Type != null && cuePoint.Type[0] == 'event') {
-					drawEvent(cuePoint.Time[0], cuePoint.Name[0]);
+					var s:Sprite = new Sprite();
+					s.name = cuePoint.toXMLString()
+					s.mouseChildren = false;
+					s.buttonMode = true;
+					s.x = cuePoint.Time[0]* width/soundEditorController.soundLength;
+					cuePointLayer.addChild(s);
+					s.graphics.beginFill(0x00FFFF);
+					s.graphics.drawRect(0, 0, 1, height)
+					s.graphics.endFill();
+					s.addEventListener(MouseEvent.CLICK, function eClick(event:MouseEvent):void {
+						//trace("clicked a cue point on the spectrum Display" + event.target.name);
+						soundEditorController.selectedCuePoint = new XML(event.target.name);
+					});
 				}
 			}
 		}
 		
-		
-		
-		public function get cuePointModel():CuePointModel {
-			return myCuePointModel;
-		}
-		public function get soundModel():SoundModel {
-			return mySoundModel;
-		}
-		
-		private function drawEvent(time:int, name:int):void {
-			graphics.beginFill(0x00FFFF);
-			graphics.drawRect(time/soundModel.length*width, 0, 1, height);
-			graphics.endFill();
+		private function get soundEditorController():SoundEditorController {
+			return mySoundEditorController;
 		}
 	}
 }

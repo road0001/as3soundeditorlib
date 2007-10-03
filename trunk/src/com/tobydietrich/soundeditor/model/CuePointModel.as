@@ -25,7 +25,11 @@
  */
 package com.tobydietrich.soundeditor.model
 {
-   public class CuePointModel
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	import com.tobydietrich.soundeditor.utils.CuePointEvent;
+	
+   public class CuePointModel extends EventDispatcher
    {
       // stores the CuePointModel file
       public var myXML:XML = new XML();
@@ -33,6 +37,7 @@ package com.tobydietrich.soundeditor.model
       // how many cue points are there?
       public var numCuePoints:int;
 
+      private var mySelectedCuePoint:XML;
 
       public function CuePointModel(m_xml:XML) {
 		 myXML = m_xml;
@@ -152,6 +157,15 @@ package com.tobydietrich.soundeditor.model
       }
       public function get xml():XML {
       	return myXML;
+      }
+      
+      public function set selectedCuePoint(cuePoint:XML):void {
+      	mySelectedCuePoint = cuePoint;
+      	dispatchEvent(new CuePointEvent(CuePointEvent.SELECT_NEW));
+      }
+      
+      public function get selectedCuePoint():XML {
+      	return mySelectedCuePoint;
       }
    }
 }

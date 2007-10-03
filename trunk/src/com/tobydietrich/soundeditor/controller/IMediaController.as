@@ -25,25 +25,29 @@
  */
 package com.tobydietrich.soundeditor.controller
 {
-   import com.tobydietrich.soundeditor.view.ControlButtonsView;
-
    import flash.events.IEventDispatcher;
 
    public interface IMediaController extends IEventDispatcher
    {
-      function set controlButtonsView(c:ControlButtonsView):void;
 
-      function get controlButtonsView():ControlButtonsView;
-
-      function play():void;
+      function play(isPlayCommand:Boolean):void;
+      
+      function togglePlay():void;
 
       function rewindAll():void;
 
       function forwardAll():void;
 
-      function get fractionComplete():Number;
+      function get position():int;
 
-      function set fractionComplete(fraction:Number):void;
-
+      function set position(p:int):void;
+      
+      function get atEnd():Boolean;
+      
+      function get atStart():Boolean;
+      
+      function get paused():Boolean;
+      
+      function get soundLength():int;
    }
 }

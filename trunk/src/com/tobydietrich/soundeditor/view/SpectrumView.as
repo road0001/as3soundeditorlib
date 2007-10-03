@@ -24,23 +24,24 @@
  */
 package com.tobydietrich.soundeditor.view
 {
-   import com.tobydietrich.soundeditor.model.SpectrumModel;
+   import com.tobydietrich.soundeditor.controller.SoundEditorController;
    import com.tobydietrich.soundeditor.utils.PlayableEvent;
-    
+   import com.tobydietrich.soundeditor.utils.SpectrumEvent;
+   
    import flash.display.Sprite;
 
    public class SpectrumView extends Sprite
    {
 
-      private var mySpectrumModel:SpectrumModel;
+      private var mySoundEditorController:SoundEditorController;
 
-      public function SpectrumView(spectrumModel:SpectrumModel)
+      public function SpectrumView(soundEditorController:SoundEditorController)
       {
-         mySpectrumModel = spectrumModel;
-         spectrumModel.addEventListener(PlayableEvent.PROGRESS, function eProgress(event:PlayableEvent):void {
-	      	var peak:XML = spectrumModel.getPeak(event.time);
+         mySoundEditorController = soundEditorController;
+         soundEditorController.addEventListener(SpectrumEvent.PROGRESS, function eProgress(event:SpectrumEvent):void {
+	      	var peak:XML = soundEditorController.getPeak(event.time);
 	      	if(peak != null) {
-	      		addTime(peak.@left, peak.@right, event.time/ spectrumModel.soundModel.length);
+	      		addTime(peak.@left, peak.@right, event.time);
 	      	}
 	      });
          	
@@ -57,12 +58,9 @@ package com.tobydietrich.soundeditor.view
          addChild(midline);
          	
       }
-
-      private function get spectrumModel():SpectrumModel {
-         return mySpectrumModel;
-      }
       
-      private function addTime(leftPeak:Number, rightPeak:Number, fractionComplete:Number):void {
+      private function addTime(leftPeak:Number, rightPeak:Number, time:Number):void {
+      	 var fractionComplete:Number = time/ soundEditorController.soundLength;
          var myX:int = fractionComplete * SoundEditorView.SPECTRUM_WIDTH;
          var right:Sprite = new Sprite();
          right.x = myX;
@@ -79,6 +77,9 @@ package com.tobydietrich.soundeditor.view
          left.graphics.drawRect(0, 0, 1, leftPeak * SoundEditorView.SPECTRUM_HEIGHT/2);
          left.graphics.endFill();
          addChild(left);
+      }
+      private function get soundEditorController():SoundEditorController {
+      	return mySoundEditorController;
       }
    }
 }

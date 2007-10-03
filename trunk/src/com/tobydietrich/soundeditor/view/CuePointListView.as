@@ -21,103 +21,128 @@
  */
 package com.tobydietrich.soundeditor.view
 {
-	import com.tobydietrich.soundeditor.model.CuePointModel;
-	import com.tobydietrich.soundeditor.model.SoundModel;
-	import com.tobydietrich.soundeditor.utils.LabelSprite;
+	import com.tobydietrich.soundeditor.controller.SoundEditorController;
+	import com.tobydietrich.soundeditor.utils.CuePointEvent;
 	
 	import flash.display.*;
-	import flash.text.*;
 	import flash.events.*;
+	import flash.text.*;
 
 	public class CuePointListView extends Sprite
 	{
 		public static var CUE_POINT_LIST_VIEW_WIDTH:int = 200;
 		public static var CUE_POINT_LIST_VIEW_ITEM_HEIGHT:int = 20;
-		private var myCuePointModel:CuePointModel;
-		private var mySoundModel:SoundModel
+		private var mySoundEditorController:SoundEditorController;
+		private var style:StyleSheet = new StyleSheet();
+		private var overArr:Object = {};
 		
-		public function CuePointListView(cuePointModel:CuePointModel, soundModel:SoundModel) 
+		public function CuePointListView(soundEditorController:SoundEditorController) 
 		{
-		 graphics.beginFill(0xFFFFFF, 0.01); // XXX
-         graphics.drawRect(0, 0, CUE_POINT_LIST_VIEW_WIDTH, cuePointModel.numCuePoints * CUE_POINT_LIST_VIEW_ITEM_HEIGHT);
-         graphics.endFill();
-         
-			myCuePointModel = cuePointModel;
-			mySoundModel = soundModel;
+			// cache the controller
+			mySoundEditorController = soundEditorController;
 			
-			var style:StyleSheet = new StyleSheet();
+			// attach event listeners
+			soundEditorController.addEventListener(CuePointEvent.SELECT_NEW, function eSelectNew(event:CuePointEvent):void {
+				//trace("selecting " + event.target.selectedCuePoint.toXMLString());
+				for each(var key:Object in overArr) {
+					key.visible = false;
+				}
+				overArr[event.target.selectedCuePoint.Time[0]].visible = true;
+			});
 			
+			soundEditorController.addEventListener(CuePointEvent.UPDATE, function eUpdate(event:CuePointEvent):void {
+				trace ("updating" + event.target);
+			});
+			
+			// create stylesheet
 			var styleObj:Object = new Object();
 			styleObj.fontSize = "bold";
 			styleObj.color = "#000000";
 			style.setStyle(".time", styleObj);
 			style.setStyle(".name", styleObj);
+			
+			// create the bounding box
+		 	graphics.beginFill(0xFFFFFF, 0.01); // XXX
+         	graphics.drawRect(0, 0, CUE_POINT_LIST_VIEW_WIDTH, soundEditorController.numCuePoints * CUE_POINT_LIST_VIEW_ITEM_HEIGHT);
+         	graphics.endFill();
+			
+			// create the initial table
+			addCuePoints(soundEditorController.cuePointList);
+			
+
+		}
+		
+		private function addCuePoints(cuePointList:XMLList):void {
+			// create the table
 			var tf:TextField = new TextField();
 			tf.styleSheet = style;
 			tf.htmlText = "<span class = 'name'>Event </span> <span class = 'time'>Time</span>";
 			
 			this.addChild(tf);
 			var s:DisplayObject;
-			s = drawEventLink("0", "Start");
+			s = drawEventLink(<CuePoint>
+			    <Time>0</Time>
+			    <Type>event</Type>
+			    <Name>Start</Name>
+			  </CuePoint>);
 			s.y = 1 * CUE_POINT_LIST_VIEW_ITEM_HEIGHT;
 			this.addChild(s);
 			var i:int = 2;
-			for each(var cuePoint:XML in cuePointModel.xml.CuePoint) {
+			for each(var cuePoint:XML in cuePointList) {
 				if(cuePoint.Type != null && cuePoint.Type[0] == 'event') {
-					s = drawEventLink(cuePoint.Time[0], cuePoint.Name[0]);
+					s = drawEventLink(cuePoint);
 					s.y = i * CUE_POINT_LIST_VIEW_ITEM_HEIGHT;
 					this.addChild(s);
 					i++;
 				}
 			}
-			s = drawEventLink(new String(soundModel.length), "End");
+			s = drawEventLink(<CuePoint>
+			    <Time>{new String(soundEditorController.soundLength)}</Time>
+			    <Type>event</Type>
+			    <Name>End</Name>
+			  </CuePoint>);
 			s.y = i * CUE_POINT_LIST_VIEW_ITEM_HEIGHT;
 			this.addChild(s);
 		}
 		
-		
-		
-		public function get cuePointModel():CuePointModel {
-			return myCuePointModel;
-		}
-		public function get soundModel():SoundModel {
-			return mySoundModel;
-		}
-		
-		private function drawEventLink(time:String, name:String):DisplayObject {
+		private function drawEventLink(cuePoint:XML):DisplayObject {
 			
-
-			var style:StyleSheet = new StyleSheet();
-			
-			var styleObj:Object = new Object();
-			styleObj.fontSize = "bold";
-			styleObj.color = "#000000";
-			style.setStyle(".time", styleObj);
-			style.setStyle(".name", styleObj);
 			var tf:TextField = new TextField();
 			tf.styleSheet = style;
-			tf.htmlText = "<span class = 'name'>" + pad(name, " ", 5, false) + "</span> <span class = 'time'> " + getMusicTime(time) +  "</span>";
+			tf.htmlText = "<span class = 'name'>" + pad(cuePoint.Name[0], " ", 5, false) + 
+			"</span> <span class = 'time'> " + getMusicTime(cuePoint.Time[0]) +  "</span>";
 			
 			var up:Sprite = new Sprite();
 			up.graphics.beginFill(0xCCCCCC, 0.3);
-			up.graphics.drawRect(0,0,tf.width, tf.height);
+			up.graphics.drawRect(0,0,tf.width, 30);
 			up.graphics.endFill();
 			
+			var over:Sprite = new Sprite();
+			over.graphics.beginFill(0x00FF00, 0.3);
+			over.graphics.drawRect(0,0,tf.width, tf.height);
+			over.graphics.endFill();
+			over.visible = false;
+			overArr[cuePoint.Time[0]] = over;
+			
 			var s:Sprite = new Sprite();
-			s.name = new XML(<event name={name} time={time} />).toXMLString();
+			s.name = cuePoint.toXMLString();
 			s.mouseChildren = false;
 			s.buttonMode = true;
 			s.addChild(up);
+			s.addChild(over);
 			s.addChild(tf);
-			s.addEventListener(MouseEvent.CLICK, function click(event:Event):void { 
-				trace("click " + event.target.name); 
-				soundModel.position = new XML(event.target.name).@time; 
+			
+			s.addEventListener(MouseEvent.CLICK, function eClick(event:MouseEvent):void { 
+				//trace("cue point clicked");
+				soundEditorController.selectedCuePoint = new XML(event.target.name);
 			});
 			
 			return s;
 		}
-		
-		// these functions should be somewhere in Flash...
+		private function get soundEditorController():SoundEditorController {
+			return mySoundEditorController;
+		}
+		// these functions should be somewhere in Flash libraries
 		private function getMusicTime(time:String):String {
 			var date:Date = new Date(new Number(time));
 			return date.getUTCHours() + ":" + 
@@ -142,5 +167,6 @@ package com.tobydietrich.soundeditor.view
 		private function tripleDigitFormat(num:uint):String {
 			return pad(new String(num), "0", 3);
 		}
+		
 	}
 }
