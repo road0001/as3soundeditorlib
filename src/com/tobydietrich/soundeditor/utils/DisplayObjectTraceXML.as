@@ -25,29 +25,34 @@ package com.tobydietrich.soundeditor.utils
 
    public class DisplayObjectTraceXML
    {
-      public static function traceXML(dispObj:DisplayObject):XML {
-         var temp:XML = innerTraceXML(dispObj);
+ 
+      public static function traceXML(dispObj:DisplayObject, depth:int=-1):XML {
+         var tmp:XML = innerTraceXML(dispObj, depth);
 
          return new XML('<?xml version="1.0" encoding="UTF-8" standalone="no"?>'
-         + temp.toXMLString());
+         + tmp.toXMLString());
       }
 
-      private static function innerTraceXML(dispObj:DisplayObject):XML {
+      private static function innerTraceXML(dispObj:DisplayObject, depth:int=-1):XML {
+  	    if(dispObj.width > 100000 || dispObj.width < 0 || dispObj.height > 100000 || dispObj.height < 0) {
+				var tmp2:XML = <insane name={dispObj.name} width={dispObj.width} height={dispObj.height} />;
+				trace("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + tmp2.toXMLString());
+		}
          var spriteXML:XML;
          if(dispObj is DisplayObjectContainer) {
             var sp:DisplayObjectContainer = dispObj as DisplayObjectContainer;
-            if(sp is LabelSprite) {
-               var ls:LabelSprite = sp as LabelSprite;
-               spriteXML = <sprite label={ls.label} x={ls.x} y={ls.y} height={ls.height} width={ls.width} />;
-            } else {
-               spriteXML = <sprite x={sp.x} y={sp.y} height={sp.height} width={sp.width} />;
-            }
+
+            spriteXML = <sprite name={sp.name} x={sp.x} y={sp.y} height={sp.height} width={sp.width} />;
             for (var i:int = 0; i< sp.numChildren; i++) {
                var child:DisplayObject = sp.getChildAt(i);
+               if(depth == -1) {
                spriteXML.appendChild(innerTraceXML(child));
+               } else if (depth > 1) {
+               	spriteXML.appendChild(innerTraceXML(child,depth-1));
+               }
             }
          } else {
-            spriteXML = <dispObj x={dispObj.x} y={dispObj.y} height={dispObj.height} width={dispObj.width} />;
+            spriteXML = <dispObj name={dispObj.name} x={dispObj.x} y={dispObj.y} height={dispObj.height} width={dispObj.width} />;
          }
          return spriteXML;
       }

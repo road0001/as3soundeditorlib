@@ -109,7 +109,7 @@ package com.tobydietrich.soundeditor.controller
 		         var t:Timer = new Timer(10000);
 		         t.addEventListener(TimerEvent.TIMER, reportSpectrum);
             	 t.start();
-            	 mySpectrumSoundModel.addEventListener(Event.COMPLETE, reportSpectrum);
+            	 mySpectrumSoundModel.addEventListener(Event.SOUND_COMPLETE, reportSpectrum);
             	 
 		         //trace("loaded spectrum sound");
 		         check(event);
