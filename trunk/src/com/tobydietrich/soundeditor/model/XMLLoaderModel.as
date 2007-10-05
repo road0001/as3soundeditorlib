@@ -54,10 +54,10 @@ package com.tobydietrich.soundeditor.model
 	         myIsComplete = true;
 	         dispatchEvent(event);
 	      });
-         loader.addEventListener(ProgressEvent.PROGRESS, function eIoError(event:Event):void {
+         loader.addEventListener(IOErrorEvent.IO_ERROR, function eIoError(event:IOErrorEvent):void {
 	         dispatchEvent(event);
 	      });
-         loader.addEventListener(IOErrorEvent.IO_ERROR, function eProgress(event:ProgressEvent):void {
+         loader.addEventListener(ProgressEvent.PROGRESS, function eProgress(event:ProgressEvent):void {
 	         var nTotal:Number = event.bytesTotal;
 	         if (nTotal>0) {
 	            myFractionLoaded = event.bytesLoaded / nTotal;
