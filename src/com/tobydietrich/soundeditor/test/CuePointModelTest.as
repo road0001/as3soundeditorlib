@@ -247,8 +247,9 @@ public static var xml3:XML =
 		private var cuePointModel2:CuePointModel = new CuePointModel(xml2);
 		private var cuePointModel3:CuePointModel = new CuePointModel(xml3);
 		
-		public function CuePointModelTest() {
-			super();
+		public function CuePointModelTest(methodName:String=null)
+		{
+			super(methodName);
 		}
 		public function testEndCuePoint():void {
 			// model 1
