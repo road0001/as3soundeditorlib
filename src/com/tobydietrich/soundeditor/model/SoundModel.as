@@ -98,7 +98,7 @@ package com.tobydietrich.soundeditor.model
       }
 
       public function get position():int {
-         return (playing) ? soundChannel.position : myPausePosition;
+      	 return (playing) ? soundChannel.position : myPausePosition;
       }
 
       /* this is the most important function */
@@ -133,7 +133,7 @@ package com.tobydietrich.soundeditor.model
       	mySoundChannel = sound.play(position, 0, new SoundTransform(volume));
         myTimer.start();
         mySoundChannel.addEventListener(Event.SOUND_COMPLETE, function eComplete(event:Event):void {
-	         forwardAll();
+	         stop();
 	      });
         
       }
@@ -141,15 +141,20 @@ package com.tobydietrich.soundeditor.model
       * saves position and stops playing
       */
       private function innerStop():void {
-      	myPausePosition = soundChannel.position;
-      	soundChannel.stop();
-        mySoundChannel = null;
-        myTimer.stop();
+      	if(soundChannel != null) {
+      		myPausePosition = soundChannel.position;
+      		soundChannel.stop();
+        	mySoundChannel = null;
+      	}
+      	if(myTimer != null) {
+        	myTimer.stop();
+        }
       }
 
 
       // friendly functions
       public function stop():void {
+      	innerStop();
          position = 0;
       }
 
@@ -170,11 +175,11 @@ package com.tobydietrich.soundeditor.model
       }
 
       public function get stopped():Boolean {
-         return !playing && atEnd;
+         return !playing && atStart;
       }
 
       public function get paused():Boolean {
-         return !playing && !atEnd;
+         return !playing && !atStart;
       }
 
       public function get playPosition():int {
