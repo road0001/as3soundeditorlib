@@ -33,7 +33,7 @@ package com.tobydietrich.soundeditor.model
    import flash.media.Sound;
    import flash.net.URLRequest;
 
-   public class SoundLoaderModel  extends EventDispatcher implements ILoaderModel
+   public class SoundLoaderModel extends EventDispatcher implements ILoaderModel
    {
       private var myName:String;
       private var myURL:String;

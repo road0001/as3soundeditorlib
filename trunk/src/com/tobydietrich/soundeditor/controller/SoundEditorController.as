@@ -40,7 +40,7 @@ package com.tobydietrich.soundeditor.controller
    import flash.events.TimerEvent;
    import flash.utils.Timer;
 
-   public class SoundEditorController extends EventDispatcher implements IMediaController {
+   public class SoundEditorController extends EventDispatcher implements IMediaController, ISpectrumSoundController {
       // loaders
       private var myCueLoaderModel:XMLLoaderModel;
       // for the playhead
@@ -93,15 +93,6 @@ package com.tobydietrich.soundeditor.controller
          mySpectrumSoundLoaderModel.addEventListener(Event.COMPLETE, 
 	         function eSpectrumSoundLoaded(event:Event):void {
 		         mySpectrumSoundModel = new SoundModel(event.target.sound);
-		         /* Don't think I need this */
-		         /*
-		         spectrumSoundModel.addEventListener(PlayableEvent.PROGRESS, function eProgress(event:PlayableEvent):void {
-		         	dispatchEvent(new Event(PlayableEvent.PROGRESS));
-		         });
-		         spectrumSoundModel.addEventListener(PlayableEvent.CHANGE, function eChange(event:PlayableEvent):void {
-		         	dispatchEvent(new Event(PlayableEvent.CHANGE));
-		         });
-		         */
 		         mySpectrumModel = new SpectrumModel(mySpectrumSoundModel);
 		         spectrumModel.addEventListener(SpectrumEvent.PROGRESS, function eProgress(event:SpectrumEvent):void {
 		         	dispatchEvent(new SpectrumEvent(SpectrumEvent.PROGRESS, false, false, event.time));
@@ -140,24 +131,6 @@ package com.tobydietrich.soundeditor.controller
          }
       }
 
-      public function get cueLoaderModel():ILoaderModel {
-         return myCueLoaderModel;
-      }
-      public function get soundLoaderModel():SoundLoaderModel {
-         return mySoundLoaderModel;
-      }
-      public function get spectrumSoundLoaderModel():SoundLoaderModel {
-         return mySpectrumSoundLoaderModel;
-      }
-      private function get spectrumModel():SpectrumModel {
-         return mySpectrumModel;
-      }
-      private function get soundModel():SoundModel {
-         return mySoundModel;
-      }
-      private function get cuePointModel():CuePointModel {
-         return myCuePointModel;
-      }
       public function get cuePointList():XMLList {
       	return cuePointModel.xml.CuePoint;
       }
@@ -217,5 +190,27 @@ package com.tobydietrich.soundeditor.controller
       	return soundModel.paused;
       }
       
+      public function get cuePointModel():CuePointModel {
+        	return myCuePointModel;	
+        }
+        public function get soundModel():SoundModel {
+        	return mySoundModel;
+        }
+        public function get spectrumSoundModel():SoundModel {
+        	return mySpectrumSoundModel;	
+        }
+        public function get spectrumModel():SpectrumModel {
+        	return mySpectrumModel;	
+        }
+        
+        public function get soundLoaderModel():SoundLoaderModel {
+        	return mySoundLoaderModel;	
+        }
+      	public function get spectrumSoundLoaderModel():SoundLoaderModel {
+      		return mySpectrumSoundLoaderModel;	
+      	}
+      	public function get cueLoaderModel():XMLLoaderModel {
+      		return myCueLoaderModel;
+      	}
    }
 }
