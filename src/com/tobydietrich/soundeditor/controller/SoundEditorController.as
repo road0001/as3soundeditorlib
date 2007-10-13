@@ -31,9 +31,7 @@ package com.tobydietrich.soundeditor.controller
    import com.tobydietrich.soundeditor.model.SoundModel;
    import com.tobydietrich.soundeditor.model.SpectrumModel;
    import com.tobydietrich.soundeditor.model.XMLLoaderModel;
-   import com.tobydietrich.soundeditor.utils.CuePointEvent;
-   import com.tobydietrich.soundeditor.utils.PlayableEvent;
-   import com.tobydietrich.soundeditor.utils.SpectrumEvent;
+   import com.tobydietrich.soundeditor.utils.SoundEditorEvent;
    
    import flash.events.Event;
    import flash.events.EventDispatcher;
@@ -64,12 +62,12 @@ package com.tobydietrich.soundeditor.controller
          myCueLoaderModel.addEventListener(Event.COMPLETE, 
 	         function eCueLoaded(event:Event):void {
 		         myCuePointModel = new CuePointModel(event.target.xml);
-		         cuePointModel.addEventListener(CuePointEvent.SELECT_NEW, function eSelectNew(event:CuePointEvent):void {
-		         	dispatchEvent(new CuePointEvent(CuePointEvent.SELECT_NEW));
-		         	dispatchEvent(new PlayableEvent(PlayableEvent.CHANGE));
+		         cuePointModel.addEventListener(SoundEditorEvent.CUE_POINT_SELECT_NEW, function eSelectNew(event:SoundEditorEvent):void {
+		         	dispatchEvent(new SoundEditorEvent(SoundEditorEvent.CUE_POINT_SELECT_NEW));
+		         	dispatchEvent(new SoundEditorEvent(SoundEditorEvent.PLAYABLE_CHANGE));
 		         });
-		         cuePointModel.addEventListener(CuePointEvent.UPDATE, function eChange(event:CuePointEvent):void {
-		         	dispatchEvent(new CuePointEvent(CuePointEvent.UPDATE));
+		         cuePointModel.addEventListener(SoundEditorEvent.CUE_POINT_UPDATE, function eChange(event:SoundEditorEvent):void {
+		         	dispatchEvent(new SoundEditorEvent(SoundEditorEvent.CUE_POINT_UPDATE));
 		         });
 		         //trace("loaded cue");
 		         check(event);
@@ -79,11 +77,11 @@ package com.tobydietrich.soundeditor.controller
          mySoundLoaderModel.addEventListener(Event.COMPLETE, 
 	         function eSoundLoaded(event:Event):void {
 		         mySoundModel = new SoundModel(event.target.sound);
-		         soundModel.addEventListener(PlayableEvent.PROGRESS, function eProgress(event:PlayableEvent):void {
-		         	dispatchEvent(new PlayableEvent(PlayableEvent.PROGRESS));
+		         soundModel.addEventListener(SoundEditorEvent.PLAYABLE_PROGRESS, function eProgress(event:SoundEditorEvent):void {
+		         	dispatchEvent(new SoundEditorEvent(SoundEditorEvent.PLAYABLE_PROGRESS));
 		         });
-		         soundModel.addEventListener(PlayableEvent.CHANGE, function eChange(event:PlayableEvent):void {
-		         	dispatchEvent(new PlayableEvent(PlayableEvent.CHANGE));
+		         soundModel.addEventListener(SoundEditorEvent.PLAYABLE_CHANGE, function eChange(event:SoundEditorEvent):void {
+		         	dispatchEvent(new SoundEditorEvent(SoundEditorEvent.PLAYABLE_CHANGE));
 		         });
 		         //trace("loaded sound");
 		         check(event);
@@ -94,8 +92,8 @@ package com.tobydietrich.soundeditor.controller
 	         function eSpectrumSoundLoaded(event:Event):void {
 		         mySpectrumSoundModel = new SoundModel(event.target.sound);
 		         mySpectrumModel = new SpectrumModel(mySpectrumSoundModel);
-		         spectrumModel.addEventListener(SpectrumEvent.PROGRESS, function eProgress(event:SpectrumEvent):void {
-		         	dispatchEvent(new SpectrumEvent(SpectrumEvent.PROGRESS, false, false, event.time));
+		         spectrumModel.addEventListener(SoundEditorEvent.SPECTRUM_PROGRESS, function eProgress(event:SoundEditorEvent):void {
+		         	dispatchEvent(new SoundEditorEvent(SoundEditorEvent.SPECTRUM_PROGRESS, false, false, event.data));
 		         });
 		         var t:Timer = new Timer(10000);
 		         t.addEventListener(TimerEvent.TIMER, reportSpectrum);
@@ -120,11 +118,11 @@ package com.tobydietrich.soundeditor.controller
          && mySpectrumSoundModel != null) {
          	 // IMediaController functionality
 	         soundModel.play(false);
-	         soundModel.addEventListener(PlayableEvent.PROGRESS, function eProgress(event:PlayableEvent):void {
-		     	dispatchEvent(new PlayableEvent(PlayableEvent.PROGRESS));
+	         soundModel.addEventListener(SoundEditorEvent.PLAYABLE_PROGRESS, function eProgress(event:SoundEditorEvent):void {
+		     	dispatchEvent(new SoundEditorEvent(SoundEditorEvent.PLAYABLE_PROGRESS));
 		     });
-	      	 soundModel.addEventListener(PlayableEvent.CHANGE, function eChange(event:PlayableEvent):void {
-	      	 	dispatchEvent(new PlayableEvent(PlayableEvent.CHANGE));
+	      	 soundModel.addEventListener(SoundEditorEvent.PLAYABLE_CHANGE, function eChange(event:SoundEditorEvent):void {
+	      	 	dispatchEvent(new SoundEditorEvent(SoundEditorEvent.PLAYABLE_CHANGE));
 	      	 });
 	         soundModel.ping();
             dispatchEvent(new Event(Event.COMPLETE));

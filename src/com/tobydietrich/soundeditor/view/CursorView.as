@@ -23,7 +23,7 @@ package com.tobydietrich.soundeditor.view
 {
 
    import com.tobydietrich.soundeditor.controller.IMediaController;
-   import com.tobydietrich.soundeditor.utils.PlayableEvent;
+   import com.tobydietrich.soundeditor.utils.SoundEditorEvent;
 
    import flash.display.Sprite;
    import flash.events.MouseEvent;
@@ -54,11 +54,11 @@ package com.tobydietrich.soundeditor.view
          );
          
          // add update handlers
-         mediaController.addEventListener(PlayableEvent.PROGRESS, eUpdate);
-         mediaController.addEventListener(PlayableEvent.CHANGE, eUpdate);
+         mediaController.addEventListener(SoundEditorEvent.PLAYABLE_PROGRESS, eUpdate);
+         mediaController.addEventListener(SoundEditorEvent.PLAYABLE_CHANGE, eUpdate);
       }
 
-	  private function eUpdate(event:PlayableEvent):void {
+	  private function eUpdate(event:SoundEditorEvent):void {
 	  	//trace("updating cursor position from " + cursorSprite.x + " to " + mediaController.position * width / mediaController.soundLength);
 	     cursorSprite.x = mediaController.position * width / mediaController.soundLength;
 	  }

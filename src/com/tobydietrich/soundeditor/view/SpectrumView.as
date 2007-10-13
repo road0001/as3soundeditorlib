@@ -25,8 +25,7 @@
 package com.tobydietrich.soundeditor.view
 {
    import com.tobydietrich.soundeditor.controller.ISpectrumSoundController;
-   import com.tobydietrich.soundeditor.utils.PlayableEvent;
-   import com.tobydietrich.soundeditor.utils.SpectrumEvent;
+   import com.tobydietrich.soundeditor.utils.SoundEditorEvent;
    
    import flash.display.Sprite;
 
@@ -38,10 +37,10 @@ package com.tobydietrich.soundeditor.view
       public function SpectrumView(spectrumSoundController:ISpectrumSoundController)
       {
          mySpectrumSoundController = spectrumSoundController;
-         spectrumSoundController.addEventListener(SpectrumEvent.PROGRESS, function eProgress(event:SpectrumEvent):void {
-	      	var peak:XML = spectrumSoundController.getPeak(event.time);
+         spectrumSoundController.addEventListener(SoundEditorEvent.SPECTRUM_PROGRESS, function eProgress(event:SoundEditorEvent):void {
+	      	var peak:XML = event.data;
 	      	if(peak != null) {
-	      		addTime(peak.@left, peak.@right, event.time);
+	      		addTime(peak.@left, peak.@right, peak.@position);
 	      	}
 	      });
          	

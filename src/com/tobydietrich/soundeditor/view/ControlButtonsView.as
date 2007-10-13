@@ -23,7 +23,7 @@ package com.tobydietrich.soundeditor.view
 {
    import com.tobydietrich.soundeditor.controller.IMediaController;
    
-   import com.tobydietrich.soundeditor.utils.PlayableEvent;
+   import com.tobydietrich.soundeditor.utils.SoundEditorEvent;
 
    import flash.display.Sprite;
    import flash.events.MouseEvent;
@@ -58,8 +58,8 @@ package com.tobydietrich.soundeditor.view
 	         mediaController.forwardAll();
 	      });
 	      
-	      mediaController.addEventListener(PlayableEvent.CHANGE, 
-	         function eUpdate(event:PlayableEvent):void {
+	      mediaController.addEventListener(SoundEditorEvent.PLAYABLE_CHANGE, 
+	         function eUpdate(event:SoundEditorEvent):void {
 		            paused(mediaController.paused);
 		            forwardButtonEnabled(!mediaController.atEnd);
 		            rewindButtonEnabled(!mediaController.atStart);

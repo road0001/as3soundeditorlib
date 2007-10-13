@@ -24,11 +24,13 @@ package com.tobydietrich.soundeditor
    import com.tobydietrich.soundeditor.controller.SoundEditorController;
    import com.tobydietrich.soundeditor.view.SoundEditorView;
 
-   import flash.display.Sprite;
+   import mx.core.UIComponent;
 
-   public class SoundEditor extends Sprite
+   public class SoundEditor extends UIComponent
    {
-      public function SoundEditor(sndURL:String, cueURL:String) {
+      public function SoundEditor(
+      	sndURL:String="http://localhost/audeto/data/firstMVT2006/sound.mp3", 
+      	cueURL:String="http://localhost/audeto/data/firstMVT2006/cue.xml") {
          var soundEditorController:SoundEditorController =
          new SoundEditorController(sndURL, cueURL);
          var soundEditorView:SoundEditorView = new SoundEditorView(soundEditorController);

@@ -25,7 +25,7 @@
  */
 package com.tobydietrich.soundeditor.model
 {
-	import com.tobydietrich.soundeditor.utils.CuePointEvent;
+	import com.tobydietrich.soundeditor.utils.SoundEditorEvent;
 	
 	import flash.events.EventDispatcher;
 	
@@ -174,7 +174,7 @@ package com.tobydietrich.soundeditor.model
       */
       public function set selectedCuePoint(cuePoint:XML):void {
       	mySelectedCuePoint = cuePoint;
-      	dispatchEvent(new CuePointEvent(CuePointEvent.SELECT_NEW));
+      	dispatchEvent(new SoundEditorEvent(SoundEditorEvent.CUE_POINT_SELECT_NEW));
       }
       
       /**

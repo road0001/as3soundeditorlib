@@ -22,7 +22,7 @@
 package com.tobydietrich.soundeditor.view
 {
 	import com.tobydietrich.soundeditor.controller.SoundEditorController;
-	import com.tobydietrich.soundeditor.utils.CuePointEvent;
+	import com.tobydietrich.soundeditor.utils.SoundEditorEvent;
 	
 	import flash.display.*;
 	import flash.events.*;
@@ -42,7 +42,7 @@ package com.tobydietrich.soundeditor.view
 			mySoundEditorController = soundEditorController;
 			
 			// attach event listeners
-			soundEditorController.addEventListener(CuePointEvent.SELECT_NEW, function eSelectNew(event:CuePointEvent):void {
+			soundEditorController.addEventListener(SoundEditorEvent.CUE_POINT_SELECT_NEW, function eSelectNew(event:SoundEditorEvent):void {
 				//trace("selecting " + event.target.selectedCuePoint.toXMLString());
 				for each(var key:Object in overArr) {
 					key.visible = false;
@@ -50,7 +50,7 @@ package com.tobydietrich.soundeditor.view
 				overArr[event.target.selectedCuePoint.Time[0]].visible = true;
 			});
 			
-			soundEditorController.addEventListener(CuePointEvent.UPDATE, function eUpdate(event:CuePointEvent):void {
+			soundEditorController.addEventListener(SoundEditorEvent.CUE_POINT_UPDATE, function eUpdate(event:SoundEditorEvent):void {
 				trace ("updating" + event.target);
 			});
 			
@@ -73,17 +73,20 @@ package com.tobydietrich.soundeditor.view
 		}
 		
 		private function addCuePoints(cuePointList:XMLList):void {
+			var table:XML = <p>Event__________Time___________(ms)</p>;
 			// create the table
 			var tf:TextField = new TextField();
 			tf.styleSheet = style;
-			tf.htmlText = "<span class = 'name'>Event </span> <span class = 'time'>Time</span>";
+			tf.width = CUE_POINT_LIST_VIEW_WIDTH;
+			tf.height = CUE_POINT_LIST_VIEW_ITEM_HEIGHT;
+			tf.htmlText = table.toXMLString();
 			
 			this.addChild(tf);
 			var s:DisplayObject;
 			s = drawEventLink(<CuePoint>
 			    <Time>0</Time>
 			    <Type>event</Type>
-			    <Name>Start</Name>
+			    <Name>Mp3 Start</Name>
 			  </CuePoint>);
 			s.y = 1 * CUE_POINT_LIST_VIEW_ITEM_HEIGHT;
 			this.addChild(s);
@@ -99,27 +102,30 @@ package com.tobydietrich.soundeditor.view
 			s = drawEventLink(<CuePoint>
 			    <Time>{new String(soundEditorController.soundLength)}</Time>
 			    <Type>event</Type>
-			    <Name>End</Name>
+			    <Name>MP3 End</Name>
 			  </CuePoint>);
 			s.y = i * CUE_POINT_LIST_VIEW_ITEM_HEIGHT;
 			this.addChild(s);
 		}
 		
 		private function drawEventLink(cuePoint:XML):DisplayObject {
+			var table:XML = <p>{pad(cuePoint.Name[0], " ", 5, false) + "___" + 
+			getMusicTime(cuePoint.Time[0]) + "___" + cuePoint.Time[0]}</p>;
 			
 			var tf:TextField = new TextField();
 			tf.styleSheet = style;
-			tf.htmlText = "<span class = 'name'>" + pad(cuePoint.Name[0], " ", 5, false) + 
-			"</span> <span class = 'time'> " + getMusicTime(cuePoint.Time[0]) +  "</span>";
+			tf.width = CUE_POINT_LIST_VIEW_WIDTH;
+			tf.height = CUE_POINT_LIST_VIEW_ITEM_HEIGHT;
+			tf.htmlText = table.toXMLString();
 			
 			var up:Sprite = new Sprite();
 			up.graphics.beginFill(0xCCCCCC, 0.3);
-			up.graphics.drawRect(0,0,tf.width, 30);
+			up.graphics.drawRect(0,0,CUE_POINT_LIST_VIEW_WIDTH, CUE_POINT_LIST_VIEW_ITEM_HEIGHT-1);
 			up.graphics.endFill();
 			
 			var over:Sprite = new Sprite();
 			over.graphics.beginFill(0x00FF00, 0.3);
-			over.graphics.drawRect(0,0,tf.width, tf.height);
+			over.graphics.drawRect(0,0,CUE_POINT_LIST_VIEW_WIDTH, CUE_POINT_LIST_VIEW_ITEM_HEIGHT-1);
 			over.graphics.endFill();
 			over.visible = false;
 			overArr[cuePoint.Time[0]] = over;
