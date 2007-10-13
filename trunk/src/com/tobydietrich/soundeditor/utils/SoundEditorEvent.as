@@ -26,18 +26,29 @@ package com.tobydietrich.soundeditor.utils
 {
    import flash.events.Event;
 
-   public class PlayableEvent extends Event
+   public class SoundEditorEvent extends Event
    {
       // the events that can fire.
       // change: changes in the playstate
-      static public var CHANGE:String = "PLAYABLE_CHANGE";
+      public static var PLAYABLE_CHANGE:String = "PLAYABLE_CHANGE";
       // progress: progress of the playhead.
-      static public var PROGRESS:String = "PLAYABLE_PROGRESS";
+      public static var PLAYABLE_PROGRESS:String = "PLAYABLE_PROGRESS";
+      
+      public static var SPECTRUM_PROGRESS:String = "SPECTRUM_PROGRESS";
+      
+      public static var CUE_POINT_SELECT_NEW:String = "CUE_POINT_SELECT_NEW";
+      
+      public static var CUE_POINT_UPDATE:String = "CUE_POINT_UPDATE";
+      
+      public static var FILMSTRIP_MODEL_LOADED:String = "FILMSTRIP_MODEL_LOADED";
+      
+      public var data:XML = null;
 
-      public function PlayableEvent(type:String, bubbles:Boolean=false,
-      cancelable:Boolean=false)
+      public function SoundEditorEvent(type:String, bubbles:Boolean=false,
+      cancelable:Boolean=false, data:XML = null)
       {
          super(type, bubbles, cancelable);
+         this.data = data;
       }
 
    }
