@@ -42,6 +42,8 @@ package com.tobydietrich.soundeditor.utils
       
       public static var FILMSTRIP_MODEL_LOADED:String = "FILMSTRIP_MODEL_LOADED";
       
+      public static var MOUSE_OVER_SPRITE:String = "MOUSE_OVER_SPRITE";
+      
       public var data:XML = null;
 
       public function SoundEditorEvent(type:String, bubbles:Boolean=false,

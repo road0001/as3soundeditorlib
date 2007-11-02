@@ -42,7 +42,7 @@ package com.tobydietrich.soundeditor.utils
          if(dispObj is DisplayObjectContainer) {
             var sp:DisplayObjectContainer = dispObj as DisplayObjectContainer;
 
-            spriteXML = <sprite name={sp.name} x={sp.x} y={sp.y} height={sp.height} width={sp.width} />;
+            spriteXML = <sprite name={sp.name} x={sp.x} y={sp.y} height={sp.height} width={sp.width} scaleX={sp.scaleX} scaleY={sp.scaleY} scale9Grid={sp.scale9Grid} />;
             for (var i:int = 0; i< sp.numChildren; i++) {
                var child:DisplayObject = sp.getChildAt(i);
                if(depth == -1) {
@@ -52,7 +52,7 @@ package com.tobydietrich.soundeditor.utils
                }
             }
          } else {
-            spriteXML = <dispObj name={dispObj.name} x={dispObj.x} y={dispObj.y} height={dispObj.height} width={dispObj.width} />;
+            spriteXML = <dispObj name={dispObj.name} x={dispObj.x} y={dispObj.y} height={dispObj.height} width={dispObj.width} scaleX={sp.scaleX} scaleY={sp.scaleY} scale9Grid={sp.scale9Grid} />;
          }
          return spriteXML;
       }
