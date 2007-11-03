@@ -26,6 +26,7 @@
 package com.tobydietrich.soundeditor.view
 {
    import com.tobydietrich.soundeditor.controller.SoundEditorController;
+   import com.tobydietrich.view.*;
     
    import flash.display.Sprite;
    import flash.events.Event;

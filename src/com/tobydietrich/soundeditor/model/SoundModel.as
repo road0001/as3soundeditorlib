@@ -25,9 +25,8 @@
  
 package com.tobydietrich.soundeditor.model
 {
-   import com.tobydietrich.soundeditor.utils.PlayPosition;
-   import com.tobydietrich.soundeditor.utils.PlayState;
-   import com.tobydietrich.soundeditor.utils.SoundEditorEvent;
+   import com.tobydietrich.soundeditor.utils.*;
+   import com.tobydietrich.utils.*;
     
    import flash.events.Event;
    import flash.events.EventDispatcher;
@@ -60,7 +59,7 @@ package com.tobydietrich.soundeditor.model
          volume = 1.0;
          myTimer = new Timer(TIMER_DELAY);
          myTimer.addEventListener(TimerEvent.TIMER, function eTimerEvent(event:TimerEvent):void {
-	         dispatchEvent(new SoundEditorEvent(SoundEditorEvent.PLAYABLE_PROGRESS));
+	         dispatchEvent(new TobyDietrichEvent(TobyDietrichEvent.PLAYABLE_PROGRESS));
 	      });
 
          stop();
@@ -111,18 +110,18 @@ package com.tobydietrich.soundeditor.model
          if(wasPlaying) {
          	innerStart();
          }
-         dispatchEvent(new SoundEditorEvent(SoundEditorEvent.PLAYABLE_CHANGE));
+         dispatchEvent(new TobyDietrichEvent(TobyDietrichEvent.PLAYABLE_CHANGE));
          
       }
 
       public function play(isPlayCommand:Boolean):void {
          if(!playing && isPlayCommand) {
             innerStart();
-            dispatchEvent(new SoundEditorEvent(SoundEditorEvent.PLAYABLE_CHANGE));
+            dispatchEvent(new TobyDietrichEvent(TobyDietrichEvent.PLAYABLE_CHANGE));
          }
          else if(playing && !isPlayCommand) {
          	innerStop();
-         	dispatchEvent(new SoundEditorEvent(SoundEditorEvent.PLAYABLE_CHANGE));	
+         	dispatchEvent(new TobyDietrichEvent(TobyDietrichEvent.PLAYABLE_CHANGE));	
          }
       }
       
@@ -201,7 +200,7 @@ package com.tobydietrich.soundeditor.model
       }
 
       public function ping():void {
-         dispatchEvent(new SoundEditorEvent(SoundEditorEvent.PLAYABLE_CHANGE));
+         dispatchEvent(new TobyDietrichEvent(TobyDietrichEvent.PLAYABLE_CHANGE));
       }
    }
 }

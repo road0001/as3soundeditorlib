@@ -26,6 +26,8 @@
  
 package com.tobydietrich.soundeditor.model
 {
+	import com.tobydietrich.model.*;
+	
    import flash.events.EventDispatcher;
    import flash.events.ProgressEvent;
    import flash.events.IOErrorEvent;
