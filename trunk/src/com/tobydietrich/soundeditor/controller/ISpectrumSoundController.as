@@ -1,6 +1,7 @@
 package com.tobydietrich.soundeditor.controller
 {
 	import com.tobydietrich.soundeditor.model.*;
+	import com.tobydietrich.model.*;
 	
 	public interface ISpectrumSoundController extends IMediaController
 	{

@@ -22,7 +22,7 @@
 package com.tobydietrich.soundeditor.view
 {
 	import com.tobydietrich.soundeditor.controller.SoundEditorController;
-	import com.tobydietrich.soundeditor.utils.SoundEditorEvent;
+	import com.tobydietrich.utils.TobyDietrichEvent;
 	
 	import flash.display.*;
 	import flash.events.*;
@@ -42,7 +42,7 @@ package com.tobydietrich.soundeditor.view
 			mySoundEditorController = soundEditorController;
 			
 			// attach event listeners
-			soundEditorController.addEventListener(SoundEditorEvent.CUE_POINT_SELECT_NEW, function eSelectNew(event:SoundEditorEvent):void {
+			soundEditorController.addEventListener(TobyDietrichEvent.CUE_POINT_SELECT_NEW, function eSelectNew(event:TobyDietrichEvent):void {
 				//trace("selecting " + event.target.selectedCuePoint.toXMLString());
 				for each(var key:Object in overArr) {
 					key.visible = false;
@@ -50,7 +50,7 @@ package com.tobydietrich.soundeditor.view
 				overArr[event.target.selectedCuePoint.Time[0]].visible = true;
 			});
 			
-			soundEditorController.addEventListener(SoundEditorEvent.CUE_POINT_UPDATE, function eUpdate(event:SoundEditorEvent):void {
+			soundEditorController.addEventListener(TobyDietrichEvent.CUE_POINT_UPDATE, function eUpdate(event:TobyDietrichEvent):void {
 				trace ("updating" + event.target);
 			});
 			
