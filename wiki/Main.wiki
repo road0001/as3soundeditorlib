@@ -14,5 +14,5 @@ The graph is of time (x-axis) versus volume (y-axis, with the right channel abov
 
 = Contact =
 
-Charles "Toby" Dietrich
-http://www.tobydietrich.com/contact
+Charles Dietrich
+http://www.charlesdietrich.com/contact
